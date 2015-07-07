@@ -1,0 +1,155 @@
+/* -------------------------------------------------------- */
+/*        CONFIG DATA . FONTS, GENERALS and VARIABLES       */
+/*            12.03.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+
+  // GENERAL BREAKPOINTS
+  $s-screen:					480px;
+  $m-screen:					768px;
+
+
+/* -------------------------------------------------------- */
+/*                 COLORSCHEME, DO IT!                      */
+/* -------------------------------------------------------- */
+
+  // GENERAL COLORS
+  $color-white:                  #FFF;
+  $color-lightgrey:              #d9d9d9;
+  $color-grey:                   #989898;
+  $color-darkgrey:               #6d6d6d;
+  $color-black:                  #151515;
+
+  // THEME COLORS
+  $color-theme-blue:             #1A222F;
+  $color-theme-green:            #008E74;
+  $color-theme-lemon:            #B2E097;
+  $color-theme-yellow:           #FFE9AD;
+  $color-theme-red:              #D24335;
+
+
+  // BACKGROUND COLORS
+  $color-mainbackground:         #FFF;
+
+
+/* -------------------------------------------------------- */
+/*                 LETS ROCK THE FONTS                      */
+/* -------------------------------------------------------- */
+
+  @import url(http://fonts.googleapis.com/css?family=Hind:400,600,300);
+
+  $font-size-default:			19px;
+  $font-line-height-default:	1.6;
+  $font-letter-spacing:         0.3px;
+
+  $font-size-h1:				19px;
+  $font-size-h2:				19px;
+  $font-size-h3:				19px;
+  $font-size-h4:				19px;
+  $font-size-h5:				19px;
+  $font-size-h6:				19px;
+
+  $font-weight-light:			300;
+  $font-weight-normal:			400;
+  $font-weight-bold:			600;
+
+  $font-family:			        'Hind', Arial, sans-serif;
+  $font-family-monospace:		Consolas, "Lucida Console", Monaco, monospace;
+
+  // FONT COLORS
+  $font-color:                  $color-white;
+
+  // LINK STYLES
+  $font-link-color:				#111;
+  $font-link-color-hover:		#222;
+  $font-text-decoration:		none;
+
+/* -------------------------------------------------------- */
+/*                FAIHTFULLY STYLE MIXINS                   */
+/* -------------------------------------------------------- */
+
+  // CSS3 MIXINS WITH PREFIXES
+  @mixin textshadow($x, $y, $blur,$color){
+    text-shadow: $x $y $blur $color;
+  }
+
+  @mixin boxshadow($radius, $blur, $opacity){
+    -webkit-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
+    -moz-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
+    box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
+  }
+
+  @mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+    -ms-border-radius: $radius;
+  }
+
+  @mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie);
+  }
+
+  @mixin transition($args) {
+    -webkit-transition: $args;
+    -moz-transition: $args;
+    -ms-transition: $args;
+    -o-transition: $args;
+    transition: $args;
+  }
+
+  // CARET MIXINS FOR BUBBLES
+  @mixin caret($caret-size, $color) {
+    content: '';
+    border-top: solid $caret-size $color;
+    border-right: solid $caret-size transparent;
+    border-left: solid $caret-size transparent;
+    bottom:  -$caret-size;
+    margin-right: -($caret-size / 2);
+    right: 50%;
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+
+/* -------------------------------------------------------- */
+/*               FAIHTFULLY POSITION MIXINS                 */
+/* -------------------------------------------------------- */
+
+  // POSITIONING BOX ABOVE ALL IN THE WHOLE WINDOW
+  @mixin coverer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+  }
+
+  // POSITIONING BOX IN CENTER
+  @mixin centerer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
+
+  // NORMAL CLEARFIX FOR DESTROY FLOATS
+  @mixin clearfix {
+    &:before,
+    &:after {
+      content: "";
+      display: table;
+    }
+    &:after {
+      clear: both;
+    }
+  }

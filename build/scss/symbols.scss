@@ -1,0 +1,36 @@
+/* -------------------------------------------------------- */
+/*       SYMBOLES . SYMBOLS FROM FONTELLO FOR ICONS         */
+/*            15.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+
+@font-face {
+  font-family: 'symbols';
+  src: url('../font/symbols.eot?38570642');
+  src: url('../font/symbols.eot?38570642#iefix') format('embedded-opentype'),
+  url('../font/symbols.woff?38570642') format('woff'),
+  url('../font/symbols.ttf?38570642') format('truetype'),
+  url('../font/symbols.svg?38570642#symbols') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "symbols";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1em;
+  margin-left: .2em;
+}
+
+.icon-twitter-circled:before { content: '\e800'; } /* '' */
+.icon-gplus-circled:before { content: '\e801'; } /* '' */
+.icon-facebook-circled:before { content: '\e802'; } /* '' */
+.icon-search:before { content: '\e803'; } /* '' */

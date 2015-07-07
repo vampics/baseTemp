@@ -1,0 +1,90 @@
+/* -------------------------------------------------------- */
+/*           BASE . THE BASEMENT OF YOUR STYLE              */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+
+body {
+  background: $color-mainbackground;
+}
+
+/* -------------------------------------------------------- */
+/*                     FONT BASEMENT                        */
+/* -------------------------------------------------------- */
+
+html {
+  font-size: $font-size-default;
+  color: $font-color;
+  font-family: $font-family;
+  line-height: $font-line-height-default;
+  font-weight: $font-weight-normal;
+  letter-spacing: $font-letter-spacing;
+}
+
+* {
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+h1{
+  font-size: $font-size-h1;
+}
+h2{
+  font-size: $font-size-h2;
+}
+h3{
+  font-size: $font-size-h3;
+}
+h4{
+  font-size: $font-size-h4;
+}
+h5{
+  font-size: $font-size-h5;
+}
+h6{
+  font-size: $font-size-h6;
+}
+
+/* -------------------------------------------------------- */
+/*                  A-TAG / LINK BASEMENT                   */
+/* -------------------------------------------------------- */
+
+a {
+  color: $font-link-color;
+  text-decoration: $font-text-decoration;
+}
+a:hover {
+  color: $font-link-color-hover;
+}
+
+/* -------------------------------------------------------- */
+/*                    ELEMENT BASEMENT                      */
+/* -------------------------------------------------------- */
+
+strong, b {
+  font-weight: bold;
+}
+small {
+  font-size: .875em;
+}
+strike, del {
+  text-decoration: line-through;
+}
+pre, code, kbd, samp {
+  font-family: $font-family-monospace;
+  font-size: .875em;
+}
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+blockquote {
+  font-style: italic;
+  margin-bottom: 1.5em;
+  padding: 1.125em 1.5em 1px;
+}
+
