@@ -1,3 +1,4 @@
 .DS_Store
 build/scss/.sass-cache/
 .idea/
+build/scss/ie8/.sass-cache

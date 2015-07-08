@@ -3,17 +3,17 @@
 /*            13.08.2014     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
-body footer {
+body>footer {
 
 }
 
 @mixin footer-sS{
-  body footer {
+  body>footer {
 
   }
 }
 @mixin footer-mS{
-  body footer {
+  body>footer {
 
   }
 }

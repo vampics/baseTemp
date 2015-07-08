@@ -1,0 +1,56 @@
+/* -------------------------------------------------------- */
+/*          PRINT . STYLES FOR DER PRINTER DESIGN           */
+/*            22.04.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+
+
+@media print {
+
+  * {
+    background: transparent !important;
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  ul {
+    list-style: disc inside;
+    padding: 0 1em;
+  }
+
+  ol {
+    list-style: decimal inside;
+    padding: 0 1em;
+  }
+
+  a,
+  a:visited {
+    color: black !important;
+    text-decoration: underline;
+  }
+}
+
+@page {
+  margin: 10pt;
+}
