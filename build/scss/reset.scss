@@ -1,20 +1,74 @@
 /* -------------------------------------------------------- */
 /*        RESET . JUST DELETE SHITI BROWSER THINGS          */
-/*            13.08.2014     @Tobias Wöstmann               */
+/*            03.08.2015     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
-* { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
-*:before, *:after { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+* {
+  /* SET THE RIGHT BORDER BOXES  */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video { background: transparent; font-size: 100%; vertical-align: baseline; border: 0; outline: 0; margin: 0; padding: 0; }
+*:before, *:after {
+  /* SET THE RIGHT BORDER BOXES  */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-html { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; height: 100%; overflow-y: scroll; -webkit-overflow-scrolling: touch; }
 
-article, aside, figure, figcaption, footer, header, nav, section, main { display: block; }
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {
+  /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
+  background: transparent;
+  font-size: 100%;
+  vertical-align: baseline;
+  border: 0;
+  outline: 0;
+  margin: 0;
+  padding: 0;
 
-a, :focus { outline: 0;}
-a {text-decoration: none; }
-a img { border: 0 none; }
+  /* DELETE MOBILE TAP HIGHLIGHING */
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+input, button, textarea, select {
+  /* DELETE MOBILE BROWSER FORM STANDARDS */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+html {
+  /* SET THE RIGHT FONT SIZE  */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+
+  /* SET THE SMOOTHING FOR OWN FONTS  */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  height: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+article, aside, figure, figcaption, footer, header, nav, section, main {
+  /* SETT ALL NEW HTML5 ELEMENTS TO BLOCK  */
+  display: block;
+}
+
+/* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
+
+a, :focus {
+  outline: 0;
+}
+a {
+  text-decoration: none;
+}
+a img {
+  border: 0 none;
+}
 
 ul {
   list-style: square outside;
