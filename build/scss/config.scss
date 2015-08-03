@@ -7,6 +7,18 @@
   $s-screen:					480px;
   $m-screen:					768px;
 
+  // GRID BASEMENTS
+  $grid-size-1:			        10.5%;
+  $grid-size-2:			        23%;
+  $grid-size-3:			        35.5%;
+  $grid-size-4:			        48%;
+  $grid-size-5:			        60.5%;
+  $grid-size-6:			        73%;
+  $grid-size-7:			        85.5%;
+  $grid-size-8:			        98%;
+
+  $grid-margin:			        1%;
+
 
 /* -------------------------------------------------------- */
 /*                 COLORSCHEME, DO IT!                      */
@@ -56,11 +68,11 @@
   $font-family-monospace:		Consolas, "Lucida Console", Monaco, monospace;
 
   // FONT COLORS
-  $font-color:                  $color-white;
+  $font-color:                  $color-black;
 
   // LINK STYLES
-  $font-link-color:				#111;
-  $font-link-color-hover:		#222;
+  $font-link-color:				$color-black;
+  $font-link-color-hover:		$color-black;
   $font-text-decoration:		none;
 
 /* -------------------------------------------------------- */

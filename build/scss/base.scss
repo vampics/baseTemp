@@ -55,10 +55,48 @@ h6{
 a {
   color: $font-link-color;
   text-decoration: $font-text-decoration;
+  cursor: pointer;
+  @include transition(all 0.2s ease);
+  &:hover {
+    color: $font-link-color-hover;
+  }
 }
-a:hover {
-  color: $font-link-color-hover;
+
+/* -------------------------------------------------------- */
+/*              BUTTON-TAG / BUTTON BASEMENT                */
+/* -------------------------------------------------------- */
+
+button, input[type="button"], .button {
+  display: inline-block;
+  background: $color-white;
+  color: $color-black;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  @include transition(all 0.2s ease);
+  &:hover {
+    background: darken($color-white,20%);
+  }
 }
+
+/* -------------------------------------------------------- */
+/*              FORM-TAG / INPUT BASEMENT                */
+/* -------------------------------------------------------- */
+
+input[type="text"], textarea {
+  display: inline-block;
+  background: $color-white;
+  color: $color-black;
+  border: 1px solid $color-black;
+  padding: 0 5px;
+  margin: 0;
+  @include transition(all 0.2s ease);
+  &:hover {
+    background: darken($color-white,5%);
+  }
+}
+
 
 /* -------------------------------------------------------- */
 /*                    ELEMENT BASEMENT                      */

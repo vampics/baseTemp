@@ -1,0 +1,359 @@
+@charset "UTF-8";
+/* -------------------------------------------------------- */
+/*           SCSS SCHEME . IMPORTING ALL STYLES             */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*        RESET . JUST DELETE SHITI BROWSER THINGS          */
+/*            03.08.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@import url(http://fonts.googleapis.com/css?family=Hind:400,600,300);
+* {
+  /* SET THE RIGHT BORDER BOXES  */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+*:before, *:after {
+  /* SET THE RIGHT BORDER BOXES  */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {
+  /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
+  background: transparent;
+  font-size: 100%;
+  vertical-align: baseline;
+  border: 0;
+  outline: 0;
+  margin: 0;
+  padding: 0;
+  /* DELETE MOBILE TAP HIGHLIGHING */
+  -webkit-tap-highlight-color: transparent; }
+
+input, button, textarea, select {
+  /* DELETE MOBILE BROWSER FORM STANDARDS */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
+
+html {
+  /* SET THE RIGHT FONT SIZE  */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  /* SET THE SMOOTHING FOR OWN FONTS  */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; }
+
+article, aside, figure, figcaption, footer, header, nav, section, main {
+  /* SETT ALL NEW HTML5 ELEMENTS TO BLOCK  */
+  display: block; }
+
+/* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
+a, :focus {
+  outline: 0; }
+
+a {
+  text-decoration: none; }
+
+a img {
+  border: 0 none; }
+
+ul {
+  list-style: square outside; }
+  ul ul {
+    margin-bottom: 0; }
+
+ol {
+  list-style: decimal outside; }
+  ol ol ol {
+    margin-bottom: 0; }
+
+/* -------------------------------------------------------- */
+/*        CONFIG DATA . FONTS, GENERALS and VARIABLES       */
+/*            12.03.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 COLORSCHEME, DO IT!                      */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 LETS ROCK THE FONTS                      */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                  Z-INDEX LEVEL RANKING                   */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                FAIHTFULLY STYLE MIXINS                   */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*               FAIHTFULLY POSITION MIXINS                 */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*       SYMBOLES . SYMBOLS FROM FONTELLO FOR ICONS         */
+/*            15.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@font-face {
+  font-family: 'symbols';
+  src: url("../font/symbols.eot?38570642");
+  src: url("../font/symbols.eot?38570642#iefix") format("embedded-opentype"), url("../font/symbols.woff?38570642") format("woff"), url("../font/symbols.ttf?38570642") format("truetype"), url("../font/symbols.svg?38570642#symbols") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "symbols";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1em;
+  margin-left: .2em; }
+
+.icon-twitter-circled:before {
+  content: '\e800'; }
+
+/* '' */
+.icon-gplus-circled:before {
+  content: '\e801'; }
+
+/* '' */
+.icon-facebook-circled:before {
+  content: '\e802'; }
+
+/* '' */
+.icon-search:before {
+  content: '\e803'; }
+
+/* '' */
+/* -------------------------------------------------------- */
+/*           BASE . THE BASEMENT OF YOUR STYLE              */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+body {
+  background: #FFF; }
+
+/* -------------------------------------------------------- */
+/*                     FONT BASEMENT                        */
+/* -------------------------------------------------------- */
+html {
+  font-size: 19px;
+  color: #151515;
+  font-family: "Hind", Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0.3px; }
+
+* {
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit; }
+
+h1 {
+  font-size: 19px; }
+
+h2 {
+  font-size: 19px; }
+
+h3 {
+  font-size: 19px; }
+
+h4 {
+  font-size: 19px; }
+
+h5 {
+  font-size: 19px; }
+
+h6 {
+  font-size: 19px; }
+
+/* -------------------------------------------------------- */
+/*                  A-TAG / LINK BASEMENT                   */
+/* -------------------------------------------------------- */
+a {
+  color: #151515;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+  a:hover {
+    color: #151515; }
+
+/* -------------------------------------------------------- */
+/*              BUTTON-TAG / BUTTON BASEMENT                */
+/* -------------------------------------------------------- */
+button, input[type="button"], .button {
+  display: inline-block;
+  background: #FFF;
+  color: #151515;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+  button:hover, input[type="button"]:hover, .button:hover {
+    background: #cccccc; }
+
+/* -------------------------------------------------------- */
+/*              FORM-TAG / INPUT BASEMENT                */
+/* -------------------------------------------------------- */
+input[type="text"], textarea {
+  display: inline-block;
+  background: #FFF;
+  color: #151515;
+  border: 1px solid #151515;
+  padding: 0 5px;
+  margin: 0;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+  input[type="text"]:hover, textarea:hover {
+    background: #f2f2f2; }
+
+/* -------------------------------------------------------- */
+/*                    ELEMENT BASEMENT                      */
+/* -------------------------------------------------------- */
+strong,
+b {
+  font-weight: bold; }
+
+small {
+  font-size: .875em; }
+
+strike,
+del {
+  text-decoration: line-through; }
+
+pre,
+code,
+kbd,
+samp {
+  font-family: Consolas, "Lucida Console", Monaco, monospace;
+  font-size: .875em; }
+
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word; }
+
+blockquote {
+  font-style: italic;
+  margin-bottom: 1.5em;
+  padding: 1.125em 1.5em 1px; }
+
+/* -------------------------------------------------------- */
+/*                 INIT THE FRAMEWORK                       */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*             HEADER . STYLES OF THE HEADER                */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*             FOOTER . STYLES OF THE FOOTER                */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*         NAVIGATION . STYLES OF THE NAVIGATION            */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                   INIT THE SITES                         */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*              INDEX . STYLES OF STARTPAGE                 */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 RELEASE THE QUERYS                       */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*       MEDIA QUERY . IMPORT THE STYLES FROM MODULES       */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@media screen and (min-width: 480px) {
+  /* -------------------------------------------------------- */
+  /*               FRAMEWORK S-SIZE (min 480px)               */
+  /* -------------------------------------------------------- */
+  /* -------------------------------------------------------- */
+  /*                MODULES S-SIZE (min 480px)                */
+  /* -------------------------------------------------------- */ }
+@media screen and (min-width: 768px) {
+  /* -------------------------------------------------------- */
+  /*               FRAMEWORK M-SIZE (min 768px)               */
+  /* -------------------------------------------------------- */
+  /* -------------------------------------------------------- */
+  /*                MODULES M-SIZE (min 768px)                */
+  /* -------------------------------------------------------- */ }
+/* -------------------------------------------------------- */
+/* RETINA IMAGES FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*  RETINA . FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS  */
+/*            22.04.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*            PRINT THINGS FOR PRINTER NOOBS                */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*          PRINT . STYLES FOR DER PRINTER DESIGN           */
+/*            22.04.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    opacity: 1 !important; }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid; }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    orphans: 3;
+    widows: 3; }
+
+  ul {
+    list-style: disc inside;
+    padding: 0 1em; }
+
+  ol {
+    list-style: decimal inside;
+    padding: 0 1em; }
+
+  a,
+  a:visited {
+    color: black !important;
+    text-decoration: underline; } }
+@page {
+  margin: 10pt; }
