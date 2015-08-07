@@ -18,3 +18,8 @@ var config = {
     }
 
 }
+
+/// SET MODULES TO LOAD OBJECT
+var modules = {
+
+};

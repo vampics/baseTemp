@@ -12,7 +12,7 @@ body {
 /* -------------------------------------------------------- */
 
 html {
-  font-size: $font-size-default;
+  font-size: $font-size-mobile;
   color: $font-color;
   font-family: $font-family;
   line-height: $font-line-height-default;
@@ -131,3 +131,16 @@ blockquote {
   padding: 1.125em 1.5em 1px;
 }
 
+/* -------------------------------------------------------- */
+/*                    BASE MEDIAQUERYS                      */
+/* -------------------------------------------------------- */
+
+@mixin base-sS{
+
+}
+
+@mixin base-mS{
+  html {
+    font-size: $font-size-desktop;
+  }
+}

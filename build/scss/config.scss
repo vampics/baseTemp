@@ -6,6 +6,7 @@
   // GENERAL BREAKPOINTS
   $s-screen:					480px;
   $m-screen:					768px;
+  $l-screen:					1000px;
 
   // GRID BASEMENTS
   $grid-size-1:			        10.5%;
@@ -49,7 +50,8 @@
 
   @import url(http://fonts.googleapis.com/css?family=Hind:400,600,300);
 
-  $font-size-default:			19px;
+  $font-size-desktop:			14px;
+  $font-size-mobile:			12px;
   $font-line-height-default:	1.6;
   $font-letter-spacing:         0.3px;
 
@@ -138,6 +140,16 @@
     background: -o-linear-gradient($from, $to);
     background: linear-gradient($from, $to);
     -pie-background: linear-gradient($from, $to);
+  }
+
+  // TRANSFORM
+  @mixin transform($ver, $hoz) {
+    transform: translate($ver, $hoz);
+    -webkit-transform: translate($ver, $hoz);
+    -o-transform: translate($ver, $hoz);
+    -moz-transform: translate($ver, $hoz);
+    -ms-transform: translate($ver, $hoz);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1, M12=0, M21=0, M22=1, SizingMethod='auto expand')";
   }
 
   // CARET MIXINS FOR BUBBLES

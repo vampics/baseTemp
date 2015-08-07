@@ -13,7 +13,7 @@
 ///             SET PROJECTS FOLDERS                ///
 ///////////////////////////////////////////////////////
 
-var projectname = 'basetemp'
+var projectname = 'basetemp';
 
 var jsPath = 'htdocs/js/';
 var cssPath = 'htdocs/css/';
