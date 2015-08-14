@@ -23,27 +23,29 @@ var base = {
     ///        INIT ALL MODULES NEEDED ON PAGE          ///
     ///////////////////////////////////////////////////////
     loadModules: {
-
         locate: function() {
-
-            var main = config.vars.body().find("> main");
-
+            var main = config.vars.body().find('main');
             var allModulesToLoad = {};
-            main.find("*[data-js]").each(function() {
-                var selectedmodule = $(this).attr("data-js");
-                if (typeof selectedmodule != 'undefined') {
-                    if (!allModulesToLoad[selectedmodule]) {
+            main.find('*[data-js]').each(function() {
+                var selectedmodule = $(this).data('js');
+                if (typeof selectedmodule !== 'undefined') {
+                    if (typeof allModulesToLoad[selectedmodule] === 'undefined') {
                         allModulesToLoad[selectedmodule] = selectedmodule;
                     }
                 }
             });
-            base.loadModules.startmodules(allModulesToLoad);
+            base.loadModules.startModules(allModulesToLoad);
         },
 
-        startmodules: function(allModulesToLoad) {
+        startModules: function(allModulesToLoad) {
             for(var key in allModulesToLoad) {
-                var moduleToLoad = allModulesToLoad[key];
-                modules[moduleToLoad].init();
+                if (allModulesToLoad.hasOwnProperty(key)) {
+                    if (typeof modules[allModulesToLoad[key]] !== 'undefined') {
+                        modules[allModulesToLoad[key]].init();
+                    } else {
+                        console.log('Module "' + allModulesToLoad[key] + '" not found');
+                    }
+                }
             }
         }
     },
