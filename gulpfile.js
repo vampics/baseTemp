@@ -55,6 +55,7 @@ gulp.task('scripts', function () {
             buildJsPath + 'modules/**/*.js'
         ])
         .pipe(concat('functions.js'))
+        .on('error', onError)
         .pipe(gulp.dest(jsPath))
         .pipe(gulp.dest(staticJsPath));
 });
@@ -66,9 +67,7 @@ gulp.task('scripts', function () {
 gulp.task('sass', function () {
     return gulp.src([buildCssPath + 'styles.scss'])
         .pipe(sass())
-        .on('error', function (err) {
-            console.error('Error in SASS execution:', err.message);
-        })
+        .on('error', onError)
         .pipe(gulp.dest(cssPath))
         .pipe(gulp.dest(staticCssPath))
         .pipe(browserSync.stream());
@@ -84,6 +83,7 @@ gulp.task('fileinclude', function () {
             prefix: '@@',
             basepath: '@file'
         }))
+        .on('error', onError)
         .pipe(gulp.dest('./' + staticHtmlPath));
 });
 
@@ -96,6 +96,7 @@ gulp.task('compress-js', function () {
             jsPath + 'functions.js'
     ])
         .pipe(uglify())
+        .on('error', onError)
         .pipe(gulp.dest(jsPath));
 });
 
@@ -106,9 +107,7 @@ gulp.task('compress-js', function () {
 gulp.task('compress-css', function () {
     return gulp.src([buildCssPath + 'styles.scss'])
         .pipe(sass({outputStyle: 'compressed'}))
-        .on('error', function (err) {
-            console.error('Error!', err.message);
-        })
+        .on('error', onError)
         .pipe(gulp.dest(cssPath))
 });
 
@@ -124,6 +123,7 @@ gulp.task('compress-images', function () {
                 interlaced: true,
                 multipass: false
             }))
+            .on('error', onError)
             .pipe(gulp.dest(element + '/'));
     });
     return merge(tasts);
@@ -159,6 +159,15 @@ gulp.task('browser-sync-static', function () {
     gulp.watch(buildHtmlPath + '**/*.html', ['fileinclude']);
     gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload);
 });
+
+///////////////////////////////////////////////////////
+///             GULP ERROR HANDLING                 ///
+///////////////////////////////////////////////////////
+
+function onError(err) {
+    console.log(err);
+    this.emit('end');
+}
 
 ///////////////////////////////////////////////////////
 ///                                                 ///
