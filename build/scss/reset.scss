@@ -39,6 +39,11 @@ input, button, textarea, select {
   appearance: none;
 }
 
+input[type="checkbox"] {
+  /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
+  -webkit-appearance:checkbox;
+}
+
 html {
   /* SET THE RIGHT FONT SIZE  */
   -webkit-text-size-adjust: 100%;

@@ -84,7 +84,7 @@ button, input[type="button"], .button {
 /*              FORM-TAG / INPUT BASEMENT                */
 /* -------------------------------------------------------- */
 
-input[type="text"], textarea {
+input[type="text"], input[type="password"], textarea {
   display: inline-block;
   background: $color-white;
   color: $color-black;
@@ -102,45 +102,101 @@ input[type="text"], textarea {
 /*                    ELEMENT BASEMENT                      */
 /* -------------------------------------------------------- */
 
-strong,
-b {
+strong, b {
   font-weight: bold;
 }
 small {
   font-size: .875em;
 }
-strike,
-del {
+
+strike, del {
   text-decoration: line-through;
 }
-pre,
-code,
-kbd,
-samp {
+
+pre, code, kbd, samp {
   font-family: $font-family-monospace;
-  font-size: .875em;
 }
+
 pre {
-  white-space: pre;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
 blockquote {
   font-style: italic;
-  margin-bottom: 1.5em;
-  padding: 1.125em 1.5em 1px;
+  padding:10px;
 }
 
 /* -------------------------------------------------------- */
-/*                    BASE MEDIAQUERYS                      */
+/*                 GRID BASEMENT CLASSES                    */
+/* -------------------------------------------------------- */
+
+.bw1 {
+  width: $grid-size-1;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bw2 {
+  width: $grid-size-2;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bw3 {
+  width: $grid-size-3;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bw4 {
+  width: $grid-size-4;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bw5 {
+  width: $grid-size-5;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bw6 {
+  width: $grid-size-6;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bw7 {
+  width: $grid-size-7;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bw8 {
+  width: $grid-size-8;
+  margin: 0 $grid-margin;
+  float: left;
+}
+.bwFull {
+  width: 100%;
+}
+
+/* -------------------------------------------------------- */
+/*                 BASE MEDIAQUERYS SMALL                   */
 /* -------------------------------------------------------- */
 
 @mixin base-sS{
 
 }
 
+/* -------------------------------------------------------- */
+/*                BASE MEDIAQUERYS MEDIUM                   */
+/* -------------------------------------------------------- */
+
 @mixin base-mS{
   html {
     font-size: $font-size-desktop;
   }
+}
+
+/* -------------------------------------------------------- */
+/*                 BASE MEDIAQUERYS LARGE                   */
+/* -------------------------------------------------------- */
+
+@mixin base-lS{
+
 }

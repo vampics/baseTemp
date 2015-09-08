@@ -19,7 +19,7 @@
   $grid-size-8:			        98%;
 
   $grid-margin:			        1%;
-
+  $grid-max-width:			    1000px;
 
 /* -------------------------------------------------------- */
 /*                 COLORSCHEME, DO IT!                      */
@@ -38,7 +38,6 @@
   $color-theme-lemon:            #B2E097;
   $color-theme-yellow:           #FFE9AD;
   $color-theme-red:              #D24335;
-
 
   // BACKGROUND COLORS
   $color-mainbackground:         #FFF;
@@ -149,21 +148,68 @@
     -o-transform: translate($ver, $hoz);
     -moz-transform: translate($ver, $hoz);
     -ms-transform: translate($ver, $hoz);
-    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=1, M12=0, M21=0, M22=1, SizingMethod='auto expand')";
   }
 
-  // CARET MIXINS FOR BUBBLES
-  @mixin caret($caret-size, $color) {
+  // FONT-FACE
+  @mixin colums($colum-count, $colum-gap){
+    column-count: $colum-count;
+    -webkit-column-count: $colum-count;
+    -moz-column-count: $colum-count;
+
+    column-gap: $colum-gap;
+    -webkit-column-gap: $colum-gap;
+    -moz-column-gap: $colum-gap;
+  }
+
+  // FONT-FACE
+  @mixin font-face($fontFamily, $eotFileSrc, $woffFileSrc, $ttfFileSrc, $svgFileSrc, $svgFontID){
+    font-family: $fontFamily
+    src:
+      url($eotFileSrc) format('eot'),
+      url($woffFileSrc) format('woff'),
+      url($ttfFileSrc) format('truetype'),
+      url($svgFileSrc + $svgFontID) format('svg')
+  }
+
+  @mixin caret($direction, $height, $width, $color){
     content: '';
-    border-top: solid $caret-size $color;
-    border-right: solid $caret-size transparent;
-    border-left: solid $caret-size transparent;
-    bottom:  -$caret-size;
-    margin-right: -($caret-size / 2);
-    right: 50%;
+    display: block;
     position: absolute;
-    width: 0;
     height: 0;
+    width: 0;
+    border-style: solid;
+
+    @if ($direction == 'up'){
+      border-width: 0 1/2*$width $height 1/2*$width;
+      border-color: transparent transparent $color transparent;
+      top: -$height;
+      margin-right: -($width / 2);
+      right: 50%;
+    }
+
+    @else if ($direction == 'down'){
+      border-width: $height 1/2*$width 0 1/2*$width;
+      border-color: $color transparent transparent transparent ;
+      bottom: -$height;
+      margin-right: -($width / 2);
+      right: 50%;
+    }
+
+    @else if ($direction == 'left'){
+      border-width: 1/2*$height $width 1/2*$height 0;
+      border-color: transparent $color transparent transparent ;
+      left: -$width;
+      margin-top: -($height / 2);
+      top: 50%;
+    }
+
+    @else if ($direction == 'right'){
+      border-width: 1/2*$height 0 1/2*$height $width;
+      border-color: transparent transparent transparent $color ;
+      right: -$width;
+      margin-top: -($height / 2);
+      top: 50%;
+    }
   }
 
   // NO TEXT-MARKER-SELECTION
