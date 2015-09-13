@@ -11,11 +11,13 @@ var base = {
 
         base.loadModules.locate();
         base.recalculate.triggerResize();
+        base.IeModernizers.init();
 
     },
 
     vars: {
         windowWidth: $( window ).width(),
+        windowHeight: $( window ).height(),
         breakpointMedium: 768
     },
 
@@ -50,6 +52,38 @@ var base = {
         }
     },
 
+    ///////////////////////////////////////////////////////
+    ///          INIT MODERNZIER FOR IE 8 & 9           ///
+    ///////////////////////////////////////////////////////
+    IeModernizers: {
+
+        init: function() {
+
+            if ($('html').hasClass('ie8') || $('html').hasClass('ie9')) {
+
+                base.IeModernizers.modulePlaceholder();
+                base.IeModernizers.modulePie();
+
+            }
+
+        },
+
+        modulePlaceholder: function() {
+            $('input, textarea').placeholder();
+        },
+
+        modulePie: function() {
+            $(function() {
+                if (window.PIE) {
+                    $('.rounded').each(function() {
+                        PIE.attach(this);
+                    });
+                }
+            });
+        }
+
+    },
+
 
     ///////////////////////////////////////////////////////
     ///      CALCULATE NEW VARS AFTER INTERACTION       ///
@@ -59,11 +93,16 @@ var base = {
         triggerResize: function() {
             $( window ).resize(function() {
                 base.recalculate.windowWidth();
+                base.recalculate.windowHeight();
             });
         },
 
         windowWidth: function() {
             base.vars.windowWidth = $( window ).width();
+        },
+
+        windowHeight: function() {
+            base.vars.windowHeight = $( window ).height();
         }
 
     }
