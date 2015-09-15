@@ -58,14 +58,11 @@ var base = {
     IeModernizers: {
 
         init: function() {
-
-            if ($('html').hasClass('ie8') || $('html').hasClass('ie9')) {
-
+            var html = $('html');
+            if (html.hasClass('ie8') || html.hasClass('ie9')) {
                 base.IeModernizers.modulePlaceholder();
                 base.IeModernizers.modulePie();
-
             }
-
         },
 
         modulePlaceholder: function() {
