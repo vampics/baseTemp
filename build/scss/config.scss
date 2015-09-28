@@ -161,16 +161,6 @@
     -moz-column-gap: $colum-gap;
   }
 
-  // FONT-FACE
-  @mixin font-face($fontFamily, $eotFileSrc, $woffFileSrc, $ttfFileSrc, $svgFileSrc, $svgFontID){
-    font-family: $fontFamily
-    src:
-      url($eotFileSrc) format('eot'),
-      url($woffFileSrc) format('woff'),
-      url($ttfFileSrc) format('truetype'),
-      url($svgFileSrc + $svgFontID) format('svg')
-  }
-
   @mixin caret($direction, $height, $width, $color){
     content: '';
     display: block;

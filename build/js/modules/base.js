@@ -16,6 +16,7 @@ var base = {
     },
 
     vars: {
+        windowRoot: $('html, body'),
         windowWidth: $( window ).width(),
         windowHeight: $( window ).height(),
         breakpointMedium: 768
@@ -101,6 +102,25 @@ var base = {
         windowHeight: function() {
             base.vars.windowHeight = $( window ).height();
         }
+
+    },
+
+
+    ///////////////////////////////////////////////////////
+    ///        CENTRAL SMOOTH SCROLLTO FUNCTION         ///
+    ///////////////////////////////////////////////////////
+
+    scrollTo: function(finishScrollPos) {
+
+        var page = base.vars.windowRoot();
+
+        page.on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){
+            page.stop();
+        });
+
+        page.animate({ scrollTop: finishScrollPos }, 900, 'swing', function(){
+            page.off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
+        });
 
     }
 
