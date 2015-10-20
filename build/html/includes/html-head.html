@@ -4,17 +4,42 @@
 <!--[if IE 9 ]>
 <html class="ie9" lang="de"><![endif]-->
 <!--[if gt IE 9]><!-->
-<html lang="de"><!--<![endif]-->
+<html lang="de" itemscope itemtype="http://schema.org/Organization"><!--<![endif]-->
 <head>
 
     <meta charset="utf-8">
 
-    <title>@@title</title>
+    <title itemprop='name'>@@title</title>
 
-    <meta name="description" content="">
+    <meta name="description" content="@@description"/>
+    <meta name="keywords" content="" />
+
+    <meta itemprop="copyrightHolder" content="@@title" />
+    <meta itemprop="copyrightYear" content="2015" />
+    <meta itemprop="isFamilyFriendly" content="True" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="@@title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <meta name="robots" content="index, follow, noarchive"/>
+    <meta name="revisit-after" content="15 days" />
+
+    <meta property="og:title" content="@@title"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="/apple-touch-icon.png"/>
+    <meta property="og:description" content="@@description"/>
+    <meta property="og:url" content="@@url"/>
+
+    <meta name="twitter:card" content="website" />
+    <meta name="twitter:site" content="@@url" />
+    <meta name="twitter:title" content="@@title" />
+    <meta name="twitter:description" content="@@description" />
+    <meta name="twitter:image" content="/apple-touch-icon.png"/>
+
+    <link rel="canonical" href="@@url">
 
     <!--[if IE]>
     <meta http-equiv="imagetoolbar" content="no">
@@ -22,12 +47,18 @@
     <![endif]-->
 
     <link rel="stylesheet" href="css/styles.css">
+
     <!--[if lt IE 9 ]>
-    <link rel="stylesheet" href="css/ie8.css"><![endif]-->
+    <link rel="stylesheet" href="css/ie8.css">
+    <![endif]-->
 
     <script src="js/html5shiv.js"></script>
 
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="apple-touch-icon" href="touch-icon-60.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="touch-icon-76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="touch-icon-120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-152.png">
 
 </head>

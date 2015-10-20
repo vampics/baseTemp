@@ -128,6 +128,22 @@ blockquote {
 }
 
 /* -------------------------------------------------------- */
+/*                  MARKERED TEXT STYLES                    */
+/* -------------------------------------------------------- */
+
+::selection {
+  background: $color-black;
+  color: $color-white;
+  opacity: 1;
+}
+::-moz-selection {
+  background: $color-black;
+  color: $color-white;
+  opacity: 1;
+}
+
+
+/* -------------------------------------------------------- */
 /*                 GRID BASEMENT CLASSES                    */
 /* -------------------------------------------------------- */
 

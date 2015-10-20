@@ -150,7 +150,16 @@
     -ms-transform: translate($ver, $hoz);
   }
 
-  // FONT-FACE
+  // ROTATE SOMETHING
+  @mixin transformRotate($degree) {
+    transform: rotate($degree);
+    -webkit-transform: rotate($degree);
+    -o-transform: rotate($degree);
+    -moz-transform: rotate($degree);
+    -ms-transform: rotate($degree);
+  }
+
+  // CSS3 COLLUMNS
   @mixin colums($colum-count, $colum-gap){
     column-count: $colum-count;
     -webkit-column-count: $colum-count;
@@ -159,6 +168,24 @@
     column-gap: $colum-gap;
     -webkit-column-gap: $colum-gap;
     -moz-column-gap: $colum-gap;
+  }
+
+  // PlACEHOLDER COLOR
+  @mixin placeholdercolor($color){
+    &::-webkit-input-placeholder {
+      color:    $color;
+    }
+    &:-moz-placeholder {
+      color:    $color;
+      opacity:  1;
+    }
+    &:-moz-placeholder {
+      color:    $color;
+      opacity:  1;
+    }
+    &:-ms-input-placeholder {
+      color:    $color;
+    }
   }
 
   @mixin caret($direction, $height, $width, $color){

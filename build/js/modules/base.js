@@ -19,6 +19,7 @@ var base = {
         windowRoot: $('html, body'),
         windowWidth: $( window ).width(),
         windowHeight: $( window ).height(),
+        isTouchDevice: (window.navigator.msMaxTouchPoints || ('ontouchstart' in document.documentElement)),
         breakpointMedium: 768
     },
 
