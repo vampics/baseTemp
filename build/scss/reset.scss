@@ -32,18 +32,6 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, ma
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-input, button, textarea, select {
-  /* DELETE MOBILE BROWSER FORM STANDARDS */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-input[type="checkbox"] {
-  /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
-  -webkit-appearance:checkbox;
-}
-
 html {
   /* SET THE RIGHT FONT SIZE  */
   -webkit-text-size-adjust: 100%;
@@ -58,33 +46,99 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
-article, aside, figure, figcaption, footer, header, nav, section, main {
-  /* SETT ALL NEW HTML5 ELEMENTS TO BLOCK  */
-  display: block;
+
+/* -------------------------------------------------------- */
+/*           UI RESETS - FORMS, CONTROLS, ACTIONS           */
+/* -------------------------------------------------------- */
+
+audio, canvas, progress, video {
+  /* Correct `inline-block` display not defined in IE 8/9.*/
+  display: inline-block;
+  /* Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.*/
+  vertical-align: baseline;
 }
 
-/* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
-
-a, :focus {
-  outline: 0;
+audio:not([controls]) {
+  /* Prevent modern browsers from displaying `audio` without controls.*/
+  display: none;
+  /* Remove excess height in iOS 5 devices.*/
+  height: 0;
 }
+
+input, button, textarea, select {
+  /* DELETE MOBILE BROWSER FORM STANDARDS */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  &[disabled] {
+    cursor: default;
+  }
+}
+
+input {
+  line-height: normal;
+  &[type="reset"],
+  &[type="submit"] {
+    cursor: pointer;
+  }
+  &[type="checkbox"],
+  &[type="radio"] {
+    /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
+    -webkit-appearance:checkbox;
+    box-sizing: border-box;
+    padding: 0;
+  }
+  &[type="number"] {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      height: auto;
+    }
+  }
+}
+
+
+/* Address `[hidden]` styling not present in IE 8/9/10.*/
+/* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
+[hidden], template {
+ display: none;
+}
+
+/* -------------------------------------------------------- */
+/*              OTHER RESETS - A, SVG, ELEMENTS             */
+/* -------------------------------------------------------- */
+
+/* Remove the gray background color from active links in IE 10.*/
 a {
+  background: transparent;
   text-decoration: none;
+  &:active,
+  &:hover {
+    outline: 0;
+  }
+  img {
+    border: 0 none;
+  }
 }
-a img {
-  border: 0 none;
+
+svg:not(:root) {
+  /* Correct overflow not hidden in IE 9/10/11.*/
+  overflow: hidden;
+}
+
+textarea {
+  /* NO SCROLLBARS IN IE .*/
+  overflow: auto;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 ul {
   list-style: square outside;
-  ul {
-    margin-bottom: 0;
-  }
 }
 
 ol {
   list-style: decimal outside;
-  ol ol {
-    margin-bottom: 0;
-  }
 }

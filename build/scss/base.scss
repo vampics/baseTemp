@@ -57,7 +57,7 @@ a {
   text-decoration: $font-text-decoration;
   cursor: pointer;
   @include transition(all 0.2s ease);
-  &:hover {
+  &:hover, &:active {
     color: $font-link-color-hover;
   }
 }
@@ -75,7 +75,7 @@ button, input[type="button"], .button {
   padding: 0;
   margin: 0;
   @include transition(all 0.2s ease);
-  &:hover {
+  &:hover, &:active {
     background: darken($color-white,20%);
   }
 }
