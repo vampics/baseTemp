@@ -41,7 +41,8 @@ var gulp        = require('gulp'),
     browserSync = require('browser-sync').create(),
     fileinclude = require('gulp-file-include'),
     imagemin    = require('gulp-imagemin'),
-    merge       = require('merge-stream');
+    merge       = require('merge-stream'),
+    svgSprite   = require('gulp-svg-sprite');
 
 
 ///////////////////////////////////////////////////////
@@ -127,6 +128,19 @@ gulp.task('compress-images', function () {
             .pipe(gulp.dest(element + '/'));
     });
     return merge(tasts);
+});
+
+///////////////////////////////////////////////////////
+///                ADD SVG SPRITE                   ///
+///////////////////////////////////////////////////////
+
+gulp.task('svg-sprite', function () {
+
+    gulp.src('path/to/assets/*.svg')
+        .pipe(svgSprite( /* ... Insert your configuration here ... */ ))
+        .pipe(gulp.dest('out'));
+
+
 });
 
 ///////////////////////////////////////////////////////
