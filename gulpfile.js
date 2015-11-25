@@ -17,15 +17,16 @@ var projectname = 'basetemp';
 
 var jsPath = 'htdocs/js/';
 var cssPath = 'htdocs/css/';
-var imagePaths = ['htdocs/images', 'htdocs/files', 'htdocs/icons'];
+var imagePath = 'htdocs/images/';
 
 var staticJsPath    = 'static/js/';
 var staticCssPath   = 'static/css/';
 var staticHtmlPath  = 'static';
+var staticImagePaths = ['static/images'];
 
-var buildJsPath     = 'static/build/js/';
-var buildCssPath    = 'static/build/scss/';
-var buildHtmlPath   = 'static/build/html/';
+var buildJsPath     = 'build/js/';
+var buildCssPath    = 'build/scss/';
+var buildHtmlPath   = 'build/html/';
 
 var rexDeveloper    = 'htdocs/redaxo/include/data/addons/developer/';
 
@@ -116,7 +117,7 @@ gulp.task('compress-css', function () {
 ///////////////////////////////////////////////////////
 
 gulp.task('compress-images', function () {
-    var tasts = imagePaths.map(function (element) {
+    var tasts = staticImagePaths.map(function (element) {
         return gulp.src([element + '/**/*'])
             .pipe(imagemin({
                 progressive: true,
@@ -124,7 +125,7 @@ gulp.task('compress-images', function () {
                 multipass: false
             }))
             .on('error', onError)
-            .pipe(gulp.dest(element + '/'));
+            .pipe(gulp.dest(imagePath));
     });
     return merge(tasts);
 });
@@ -191,4 +192,4 @@ gulp.task('local', ['scripts', 'sass']);
 ///      CONCAT JS FILES & COMPRESS ALL FILES       ///
 ///////////////////////////////////////////////////////
 
-gulp.task('default', ['scripts', 'compress']);
+gulp.task('default', ['scripts', 'compress', 'sass']);

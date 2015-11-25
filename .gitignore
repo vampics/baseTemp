@@ -1,4 +1,5 @@
-.DS_Store
-build/scss/.sass-cache/
-.idea/
-build/scss/ie8/.sass-cache
+.vagrant
+.idea
+static/build/scss/.sass-cache
+static/build/scss/ie8/.sass-cache
+node_modules

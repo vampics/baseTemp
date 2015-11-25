@@ -1,10 +1,10 @@
 {
   "name": "basetemp",
   "version": "1.0.0",
-  "description": "",
+  "description": "BaseTemp Gulp",
   "main": "index.js",
   "devDependencies": {
-    "browser-sync": "^2.7.13",
+    "browser-sync": "^2.10.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-file-include": "^0.13.2",

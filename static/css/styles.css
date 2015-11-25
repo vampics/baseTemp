@@ -1,0 +1,473 @@
+@charset "UTF-8";
+/* -------------------------------------------------------- */
+/*           SCSS SCHEME . IMPORTING ALL STYLES             */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*        RESET . JUST DELETE SHITI BROWSER THINGS          */
+/*            03.08.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@import url(http://fonts.googleapis.com/css?family=Hind:400,600,300);
+* {
+  /* SET THE RIGHT BORDER BOXES  */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+*:before, *:after {
+  /* SET THE RIGHT BORDER BOXES  */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {
+  /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
+  background: transparent;
+  font-size: 100%;
+  vertical-align: baseline;
+  border: 0;
+  outline: 0;
+  margin: 0;
+  padding: 0;
+  /* DELETE MOBILE TAP HIGHLIGHING */
+  -webkit-tap-highlight-color: transparent; }
+
+main, section, aside, footer, header {
+  /* Correct `block` display not defined in IE 11.*/
+  display: block; }
+
+html {
+  /* SET THE RIGHT FONT SIZE  */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  /* SET THE SMOOTHING FOR OWN FONTS  */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; }
+
+/* -------------------------------------------------------- */
+/*           UI RESETS - FORMS, CONTROLS, ACTIONS           */
+/* -------------------------------------------------------- */
+audio, canvas, progress, video {
+  /* Correct `inline-block` display not defined in IE 8/9.*/
+  display: inline-block;
+  /* Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.*/
+  vertical-align: baseline; }
+
+audio:not([controls]) {
+  /* Prevent modern browsers from displaying `audio` without controls.*/
+  display: none;
+  /* Remove excess height in iOS 5 devices.*/
+  height: 0; }
+
+input, button, textarea, select {
+  /* DELETE MOBILE BROWSER FORM STANDARDS */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
+  input[disabled], button[disabled], textarea[disabled], select[disabled] {
+    cursor: default; }
+
+input {
+  line-height: normal; }
+  input[type="reset"], input[type="submit"] {
+    cursor: pointer; }
+  input[type="checkbox"], input[type="radio"] {
+    /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
+    -webkit-appearance: checkbox;
+    box-sizing: border-box;
+    padding: 0; }
+  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
+    height: auto; }
+
+/* Address `[hidden]` styling not present in IE 8/9/10.*/
+/* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
+[hidden], template {
+  display: none; }
+
+/* -------------------------------------------------------- */
+/*              OTHER RESETS - A, SVG, ELEMENTS             */
+/* -------------------------------------------------------- */
+/* Remove the gray background color from active links in IE 10.*/
+a {
+  background: transparent;
+  text-decoration: none; }
+  a:active, a:hover {
+    outline: 0; }
+  a img {
+    border: 0 none; }
+
+svg:not(:root) {
+  /* Correct overflow not hidden in IE 9/10/11.*/
+  overflow: hidden; }
+
+textarea {
+  /* NO SCROLLBARS IN IE .*/
+  overflow: auto;
+  resize: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+ul {
+  list-style: square outside; }
+
+ol {
+  list-style: decimal outside; }
+
+/* -------------------------------------------------------- */
+/*        CONFIG DATA . FONTS, GENERALS and VARIABLES       */
+/*            12.03.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 COLORSCHEME, DO IT!                      */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 LETS ROCK THE FONTS                      */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                  Z-INDEX LEVEL RANKING                   */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                FAIHTFULLY STYLE MIXINS                   */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*               FAIHTFULLY POSITION MIXINS                 */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*       SYMBOLES . SYMBOLS FROM FONTELLO FOR ICONS         */
+/*            15.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@font-face {
+  font-family: 'symbols';
+  src: url("../font/symbols.eot?38570642");
+  src: url("../font/symbols.eot?38570642#iefix") format("embedded-opentype"), url("../font/symbols.woff?38570642") format("woff"), url("../font/symbols.ttf?38570642") format("truetype"), url("../font/symbols.svg?38570642#symbols") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "symbols";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1em;
+  margin-left: .2em; }
+
+.icon-menu:before {
+  content: '\e804'; }
+
+/* '' */
+.icon-right-open-big:before {
+  content: '\e80c'; }
+
+/* '' */
+.icon-left-open-big:before {
+  content: '\e80d'; }
+
+/* '' */
+.icon-down-open-big:before {
+  content: '\e80e'; }
+
+/* '' */
+.icon-up-open-big:before {
+  content: '\e80f'; }
+
+/* '' */
+/* -------------------------------------------------------- */
+/*           BASE . THE BASEMENT OF YOUR STYLE              */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+body {
+  background: #FFF; }
+
+/* -------------------------------------------------------- */
+/*                     FONT BASEMENT                        */
+/* -------------------------------------------------------- */
+html {
+  font-size: 12px;
+  color: #151515;
+  font-family: "Hind", Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0.3px; }
+
+* {
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit; }
+
+h1 {
+  font-size: 19px; }
+
+h2 {
+  font-size: 19px; }
+
+h3 {
+  font-size: 19px; }
+
+h4 {
+  font-size: 19px; }
+
+h5 {
+  font-size: 19px; }
+
+h6 {
+  font-size: 19px; }
+
+/* -------------------------------------------------------- */
+/*                  A-TAG / LINK BASEMENT                   */
+/* -------------------------------------------------------- */
+a {
+  color: #151515;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+  a:hover, a:active {
+    color: #151515; }
+
+/* -------------------------------------------------------- */
+/*              BUTTON-TAG / BUTTON BASEMENT                */
+/* -------------------------------------------------------- */
+button, input[type="button"], .button {
+  display: inline-block;
+  background: #FFF;
+  color: #151515;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+  button:hover, button:active, input[type="button"]:hover, input[type="button"]:active, .button:hover, .button:active {
+    background: #cccccc; }
+
+/* -------------------------------------------------------- */
+/*              FORM-TAG / INPUT BASEMENT                */
+/* -------------------------------------------------------- */
+input[type="text"], input[type="password"], textarea {
+  display: inline-block;
+  background: #FFF;
+  color: #151515;
+  border: 1px solid #151515;
+  padding: 0 5px;
+  margin: 0;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease; }
+  input[type="text"]:hover, input[type="password"]:hover, textarea:hover {
+    background: #f2f2f2; }
+
+/* -------------------------------------------------------- */
+/*                    ELEMENT BASEMENT                      */
+/* -------------------------------------------------------- */
+strong, b {
+  font-weight: bold; }
+
+small {
+  font-size: .875em; }
+
+strike, del {
+  text-decoration: line-through; }
+
+pre, code, kbd, samp {
+  font-family: Consolas, "Lucida Console", Monaco, monospace; }
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word; }
+
+blockquote {
+  font-style: italic;
+  padding: 10px; }
+
+/* -------------------------------------------------------- */
+/*                  MARKERED TEXT STYLES                    */
+/* -------------------------------------------------------- */
+::selection {
+  background: #151515;
+  color: #FFF;
+  opacity: 1; }
+
+::-moz-selection {
+  background: #151515;
+  color: #FFF;
+  opacity: 1; }
+
+/* -------------------------------------------------------- */
+/*                 GRID BASEMENT CLASSES                    */
+/* -------------------------------------------------------- */
+.bw1 {
+  width: 10.5%;
+  margin: 0 1%;
+  float: left; }
+
+.bw2 {
+  width: 23%;
+  margin: 0 1%;
+  float: left; }
+
+.bw3 {
+  width: 35.5%;
+  margin: 0 1%;
+  float: left; }
+
+.bw4 {
+  width: 48%;
+  margin: 0 1%;
+  float: left; }
+
+.bw5 {
+  width: 60.5%;
+  margin: 0 1%;
+  float: left; }
+
+.bw6 {
+  width: 73%;
+  margin: 0 1%;
+  float: left; }
+
+.bw7 {
+  width: 85.5%;
+  margin: 0 1%;
+  float: left; }
+
+.bw8 {
+  width: 98%;
+  margin: 0 1%;
+  float: left; }
+
+.bwFull {
+  width: 100%; }
+
+/* -------------------------------------------------------- */
+/*                 BASE MEDIAQUERYS SMALL                   */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                BASE MEDIAQUERYS MEDIUM                   */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 BASE MEDIAQUERYS LARGE                   */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 INIT THE FRAMEWORK                       */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*             HEADER . STYLES OF THE HEADER                */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*             FOOTER . STYLES OF THE FOOTER                */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*         NAVIGATION . STYLES OF THE NAVIGATION            */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                  INIT THE MODULES                        */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*              START . STYLES OF STARTPAGE                 */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                   INIT THE SITES                         */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*              INDEX . STYLES OF STARTPAGE                 */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*                 RELEASE THE QUERYS                       */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*       MEDIA QUERY . IMPORT THE STYLES FROM MODULES       */
+/*            13.08.2014     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@media screen and (min-width: 768px) {
+  /* -------------------------------------------------------- */
+  /*               FRAMEWORK M-SIZE (min 768px)               */
+  /* -------------------------------------------------------- */
+  html {
+    font-size: 14px; }
+  /* -------------------------------------------------------- */
+  /*                MODULES M-SIZE (min 768px)                */
+  /* -------------------------------------------------------- */
+  /* -------------------------------------------------------- */
+  /*                 SITES M-SIZE (min 768px)                 */
+  /* -------------------------------------------------------- */ }
+
+/* -------------------------------------------------------- */
+/* RETINA IMAGES FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*  RETINA . FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS  */
+/*            22.04.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*            PRINT THINGS FOR PRINTER NOOBS                */
+/* -------------------------------------------------------- */
+/* -------------------------------------------------------- */
+/*          PRINT . STYLES FOR DER PRINTER DESIGN           */
+/*            24.11.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+@media print {
+  * {
+    background: transparent !important;
+    color: #151515 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    opacity: 1 !important; }
+  body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.45 !important;
+    font-size: 14pt; }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid; }
+  p, h1, h2, h3, h4, h5, h6 {
+    orphans: 3;
+    widows: 3; }
+  ul {
+    list-style: disc inside;
+    padding: 0 1em; }
+  ol {
+    list-style: decimal inside;
+    padding: 0 1em; }
+  a, a:visited {
+    color: #151515 !important;
+    text-decoration: none; }
+  a[href^="#"], a[href^="javascript:"] {
+    display: none; }
+  table {
+    margin: 1px; }
+  thead {
+    display: table-header-group; }
+  img, tr {
+    page-break-inside: avoid; } }
+
+@page {
+  margin: 10pt; }

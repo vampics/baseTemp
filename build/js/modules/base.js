@@ -12,6 +12,7 @@ var base = {
         base.loadModules.locate();
         base.recalculate.triggerResize();
         base.IeModernizers.init();
+        base.autosubmit();
 
     },
 
@@ -113,17 +114,28 @@ var base = {
 
     scrollTo: function(finishScrollPos) {
 
-        var page = base.vars.windowRoot();
+        var page = base.vars.windowRoot;
 
         page.on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){
             page.stop();
         });
 
-        page.animate({ scrollTop: finishScrollPos }, 900, 'swing', function(){
+        page.animate({ scrollTop: finishScrollPos }, 500, 'swing', function(){
             page.off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
         });
 
+    },
+
+    ///////////////////////////////////////////////////////
+    ///          AUTOSUBMIT FORM WHEN CHANGE            ///
+    ///////////////////////////////////////////////////////
+
+    autosubmit: function() {
+        $('*[data-auto-submit]').change(function() {
+            $(this).closest("form").submit();
+        });
     }
+
 
 };
 

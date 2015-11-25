@@ -32,6 +32,11 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, ma
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
+main, section, aside, footer, header {
+  /* Correct `block` display not defined in IE 11.*/
+  display: block;
+}
+
 html {
   /* SET THE RIGHT FONT SIZE  */
   -webkit-text-size-adjust: 100%;
@@ -96,7 +101,6 @@ input {
   }
 }
 
-
 /* Address `[hidden]` styling not present in IE 8/9/10.*/
 /* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
 [hidden], template {
@@ -128,6 +132,7 @@ svg:not(:root) {
 textarea {
   /* NO SCROLLBARS IN IE .*/
   overflow: auto;
+  resize: none;
 }
 
 table {
