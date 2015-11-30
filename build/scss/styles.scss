@@ -8,11 +8,11 @@
   @import 'symbols';
   @import 'base';
 
-
 /* -------------------------------------------------------- */
 /*                 INIT THE FRAMEWORK                       */
 /* -------------------------------------------------------- */
 
+  @import 'grid';
   @import 'header';
   @import 'footer';
   @import 'navigation';

@@ -9,17 +9,24 @@
   $l-screen:					1000px;
 
   // GRID BASEMENTS
-  $grid-size-1:			        10.5%;
-  $grid-size-2:			        23%;
-  $grid-size-3:			        35.5%;
-  $grid-size-4:			        48%;
-  $grid-size-5:			        60.5%;
-  $grid-size-6:			        73%;
-  $grid-size-7:			        85.5%;
-  $grid-size-8:			        98%;
+  $grid-absolute-box-margin:    5px;
+  $grid-absolute-box-width:     74px;
+  $grid-absolute-site-width:	1008px;
 
-  $grid-margin:			        1%;
-  $grid-max-width:			    1000px;
+  $grid-margin:			        percentage($grid-absolute-box-margin/$grid-absolute-site-width);
+
+  $grid-size-1:			        percentage(($grid-absolute-box-width * 1 + $grid-absolute-box-margin * 0)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-2:			        percentage(($grid-absolute-box-width * 2 + $grid-absolute-box-margin * 2)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-3:			        percentage(($grid-absolute-box-width * 3 + $grid-absolute-box-margin * 4)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-4:			        percentage(($grid-absolute-box-width * 4 + $grid-absolute-box-margin * 6)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-5:			        percentage(($grid-absolute-box-width * 5 + $grid-absolute-box-margin * 8)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-6:			        percentage(($grid-absolute-box-width * 6 + $grid-absolute-box-margin * 10)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-7:			        percentage(($grid-absolute-box-width * 7 + $grid-absolute-box-margin * 12)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-8:			        percentage(($grid-absolute-box-width * 8 + $grid-absolute-box-margin * 14)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-9:			        percentage(($grid-absolute-box-width * 9 + $grid-absolute-box-margin * 16)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-10:			    percentage(($grid-absolute-box-width * 10 + $grid-absolute-box-margin * 18)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-11:			    percentage(($grid-absolute-box-width * 11 + $grid-absolute-box-margin * 20)/$grid-absolute-site-width) - 0.01%;
+  $grid-size-12:			    percentage(($grid-absolute-box-width * 12 + $grid-absolute-box-margin * 22)/$grid-absolute-site-width) - 0.01%;
 
 /* -------------------------------------------------------- */
 /*                 COLORSCHEME, DO IT!                      */
