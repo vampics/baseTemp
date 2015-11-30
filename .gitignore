@@ -1,5 +1,5 @@
 .vagrant
 .idea
-static/build/scss/.sass-cache
-static/build/scss/ie8/.sass-cache
+build/scss/.sass-cache
+build/scss/ie8/.sass-cache
 node_modules
