@@ -429,6 +429,113 @@ blockquote {
 /*                  INIT THE MODULES                        */
 /* -------------------------------------------------------- */
 /* -------------------------------------------------------- */
+/*           SELECTBOX . STYLES OF OWN SELECTBOX            */
+/*            14.12.2015     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+.selectbox {
+  position: relative;
+  width: 100%;
+  cursor: pointer; }
+  .selectbox span {
+    display: block;
+    position: relative;
+    padding: 11px 21px 12px 10px;
+    background: #FFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #151515;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+    .selectbox span:before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 40px;
+      height: 40px;
+      padding: 10px 0 0;
+      margin: 0;
+      text-align: center;
+      color: #151515;
+      font-weight: 600;
+      font-size: 12px;
+      z-index: 500;
+      -webkit-transition: transform 0.2s ease;
+      -moz-transition: transform 0.2s ease;
+      -ms-transition: transform 0.2s ease;
+      -o-transition: transform 0.2s ease;
+      transition: transform 0.2s ease;
+      transform: rotate(90deg);
+      -webkit-transform: rotate(90deg);
+      -o-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      -ms-transform: rotate(90deg); }
+    .selectbox span:after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 40px;
+      border-left: 1px solid #151515;
+      content: ""; }
+    .selectbox span:hover {
+      background: #FFF;
+      color: #151515; }
+    .selectbox span.active {
+      background: #FFF;
+      color: #151515; }
+      .selectbox span.active:before {
+        transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg); }
+  .selectbox ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #FFF;
+    border: 1px solid #151515;
+    border-top: 0;
+    max-height: 300px;
+    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    z-index: 600; }
+    .selectbox ul li {
+      display: block;
+      padding: 5px 10px;
+      list-style: none;
+      overflow: hidden;
+      white-space: nowrap; }
+      .selectbox ul li:hover, .selectbox ul li.active {
+        background: #CCC;
+        color: #151515; }
+  .selectbox select {
+    display: none; }
+  .selectbox.touch select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    display: block;
+    opacity: 0.01;
+    z-index: 600; }
+
+/* -------------------------------------------------------- */
 /*              START . STYLES OF STARTPAGE                 */
 /*            13.08.2014     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
@@ -568,6 +675,16 @@ blockquote {
   /* -------------------------------------------------------- */
   /*                MODULES M-SIZE (min 768px)                */
   /* -------------------------------------------------------- */
+  .selectbox span {
+    padding: 6px 21px 6px 10px; }
+    .selectbox span:before {
+      width: 30px;
+      height: 30px;
+      padding: 7px 4px 0 5px; }
+    .selectbox span:after {
+      width: 30px; }
+  .selectbox ul li {
+    padding: 3px 7px; }
   /* -------------------------------------------------------- */
   /*                 SITES M-SIZE (min 768px)                 */
   /* -------------------------------------------------------- */ }

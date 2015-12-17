@@ -4806,6 +4806,7 @@ var base = {
         base.recalculate.triggerResize();
         base.IeModernizers.init();
         base.autosubmit();
+        base.fastclick();
 
     },
 
@@ -4920,6 +4921,16 @@ var base = {
     },
 
     ///////////////////////////////////////////////////////
+    ///                INIT FASTCLICK                   ///
+    ///////////////////////////////////////////////////////
+
+    fastclick: function() {
+        $(function() {
+            FastClick.attach(document.body);
+        });
+    },
+
+    ///////////////////////////////////////////////////////
     ///          AUTOSUBMIT FORM WHEN CHANGE            ///
     ///////////////////////////////////////////////////////
 
@@ -4945,8 +4956,7 @@ modules.demo = {
     ///////////////////////////////////////////////////////
     init: function() {
 
-
-    }
+   }
 
 };
 
@@ -4973,9 +4983,6 @@ var header = {
 
         bindClick: function() {
 
-            $(".header-metanav").find(".icon-menu").unbind().fastClick(function () {
-
-            });
 
         }
 
@@ -4987,6 +4994,23 @@ var header = {
 ///               OWN SELECTBOX JS                  ///
 ///////////////////////////////////////////////////////
 
+// EXAMPLE
+//<div class="selectbox" data-js="selectbox">
+//<span class="icon-right-open-big">Bitte wählen</span>
+//<ul>
+//<li data-value="Herr">Herr</li>
+//<li data-value="Frau">Frau</li>
+//</ul>
+//<label tabindex="4">
+//<select name="title">
+//<option></option>
+//<option value="Herr">Herr</option>
+//<option value="Frau">Frau</option>
+//</select>
+//</label>
+//</div>
+
+
 modules.selectbox = {
 
     ///////////////////////////////////////////////////////
@@ -4994,8 +5018,8 @@ modules.selectbox = {
     ///////////////////////////////////////////////////////
     init: function() {
 
-        modules.selectbox.toggle.bindClick();
-        modules.selectbox.change.bindClick();
+        modules.selectbox.toggle.bindClick(); //BIND OPEN SELECTBOX <UL>
+        modules.selectbox.change.bindClick(); //BIND SELECT A <LI>
 
     },
 
@@ -5006,10 +5030,12 @@ modules.selectbox = {
         autoSuggestText: ''
     },
 
+    // All functions where active when i open the selectbox
     toggle: {
 
         bindClick: function () {
 
+            // is this a touchdevice?
             if (modules.selectbox.vars.isTouchDevice) {
 
                 modules.selectbox.vars.selector.addClass("touch").find("select").change(function () {
@@ -5019,19 +5045,41 @@ modules.selectbox = {
                 });
 
             }else{
-                modules.selectbox.vars.selector.find(">span").unbind().fastClick(function () {
 
-                    var selectbox = $(this).parent();
-                    var list = selectbox.find("ul");
+                modules.selectbox.vars.selector.find(">span").unbind().click(function () {
 
-                    if (list.is(':visible')) {
-                        modules.selectbox.toggle.close(list);
-                    } else {
-                        modules.selectbox.toggle.close(modules.selectbox.vars.selector.find("ul"));
-                        modules.selectbox.toggle.open(list);
+                    modules.selectbox.toggle.starttoggle($(this));
+
+                });
+
+                modules.selectbox.vars.selector.find("label").unbind().focus(function () {
+
+                    modules.selectbox.toggle.starttoggle($(this));
+
+                });
+
+                modules.selectbox.vars.selector.find("label").blur(function () {
+
+                    if ($(this).parent().find("ul").is(':visible')) {
+                        modules.selectbox.toggle.close($(this).parent().find("ul"));
                     }
 
                 });
+
+            }
+
+        },
+
+        starttoggle: function (element) {
+
+            var selectbox = element.parent();
+            var list = selectbox.find("ul");
+
+            if (list.is(':visible')) {
+                modules.selectbox.toggle.close(list);
+            } else {
+                modules.selectbox.toggle.close(modules.selectbox.vars.selector.find("ul"));
+                modules.selectbox.toggle.open(list);
             }
 
         },
@@ -5047,11 +5095,40 @@ modules.selectbox = {
         },
 
         setKeyUp: function (event,list) {
+
             if (event.which == '13') {
+                //On Enter
                 if (list.find("li.active").length > 0) {
-                    modules.selectbox.change.setValue(list.find("li.active"));
+                    modules.selectbox.change.setClick(list.find("li.active"));
+                }
+
+            }else if ( event.which == '38' || event.which == '40' ) {
+                var activeList = list.find("li.active");
+                if ( event.which == '38') {
+                    if (activeList.length > 0) {
+                        //On KeyUp
+                        if (activeList.prev("li").length > 0) {
+                            activeList.removeClass("active").prev("li").addClass("active");
+                        }
+                    }
+                }else{
+                    if (activeList.length <= 0) {
+                        //On KeyDown First
+                        list.find("li:first-child").addClass("active");
+                    }else{
+                        //On KeyDown
+                        if (activeList.next("li").length > 0) {
+                            activeList.removeClass("active").next("li").addClass("active");
+                        }
+                    }
+                }
+
+            }else if ( event.which == '27') {
+                //On ESC
+                if (list.is(':visible')) {
                     modules.selectbox.toggle.close(list);
                 }
+
             }else{
                 var char = String.fromCharCode(event.which);
                 if (char.match(/[a-zA-Z\.]/)){
@@ -5066,21 +5143,25 @@ modules.selectbox = {
                             return false;
                         }
                     });
-                    $( ".selectbox" ).mousemove(function() {
+
+                    $(document).on("mousemove.selectbox", function() {
                         list.find("li").removeClass("active");
                         modules.selectbox.vars.autoSuggestText = '';
                     });
+
 
                     modules.selectbox.vars.autoSuggestTimeOut = setTimeout(function(){
                         modules.selectbox.vars.autoSuggestText = '';
                     }, 400);
                 }
             }
+
+
         },
 
         open: function (selectbox) {
 
-            selectbox.slideDown(80);
+            selectbox.slideDown(50);
             selectbox.parent().find(">span").addClass("active");
             $(document).on("keyup.selectbox", function(event) {modules.selectbox.toggle.setKeyUp(event,selectbox)}).on("click.selectbox", function(event) { modules.selectbox.toggle.bindClickOutside(event,selectbox.parent(),selectbox)});
 
@@ -5088,9 +5169,9 @@ modules.selectbox = {
 
         close: function (selectbox) {
 
-            selectbox.slideUp(80);
+            selectbox.slideUp(50);
             selectbox.parent().find(">span").removeClass("active");
-            $(document).off("keyup.selectbox").off("click.selectbox");
+            $(document).off("keyup.selectbox").off("click.selectbox").off("mousemove.selectbox");;
 
         }
 
@@ -5100,32 +5181,30 @@ modules.selectbox = {
 
         bindClick: function () {
 
-            $(".selectbox").find("li").unbind().fastClick(function () {
-
-                modules.selectbox.change.setValue($(this));
-                modules.selectbox.toggle.close($(this).parent());
-
+            $(".selectbox").find("li").unbind().click(function () {
+                modules.selectbox.change.setClick($(this));
             });
 
-            $(".selectbox").find("li").unbind().fastClick(function () {
-
-                modules.selectbox.change.setValue($(this));
-                modules.selectbox.toggle.close($(this).parent());
-
-            });
+        },
 
 
+        setClick: function (selected) {
+
+            modules.selectbox.change.setValue(selected);
+            modules.selectbox.toggle.close(selected.parent());
 
         },
 
         setValue: function (selected) {
 
             var newValue = selected.html();
+            selected.parent().find("li").removeClass("active");
+            selected.addClass("active");
             selected.parent().parent().find(">span:first-child").html(newValue);
 
             var attr;
             attr = selected.attr('data-value');
-            selected.parent().parent().find(">select").val(attr);
+            selected.parent().parent().find("select").val(attr);
 
         }
 

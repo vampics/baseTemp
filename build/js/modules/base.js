@@ -13,6 +13,7 @@ var base = {
         base.recalculate.triggerResize();
         base.IeModernizers.init();
         base.autosubmit();
+        base.fastclick();
 
     },
 
@@ -124,6 +125,16 @@ var base = {
             page.off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
         });
 
+    },
+
+    ///////////////////////////////////////////////////////
+    ///                INIT FASTCLICK                   ///
+    ///////////////////////////////////////////////////////
+
+    fastclick: function() {
+        $(function() {
+            FastClick.attach(document.body);
+        });
     },
 
     ///////////////////////////////////////////////////////

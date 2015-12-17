@@ -20,9 +20,6 @@ var header = {
 
         bindClick: function() {
 
-            $(".header-metanav").find(".icon-menu").unbind().fastClick(function () {
-
-            });
 
         }
 
