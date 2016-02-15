@@ -4945,23 +4945,6 @@ var base = {
 
 
 ///////////////////////////////////////////////////////
-///                   DEMO JS                       ///
-///       <section data-js='demo'></section>        ///
-///////////////////////////////////////////////////////
-
-modules.demo = {
-
-    ///////////////////////////////////////////////////////
-    ///                INIT DEMO MODULE                 ///
-    ///////////////////////////////////////////////////////
-    init: function() {
-
-   }
-
-};
-
-
-///////////////////////////////////////////////////////
 ///                    HEADER JS                    ///
 ///////////////////////////////////////////////////////
 
@@ -5018,8 +5001,8 @@ modules.selectbox = {
     ///////////////////////////////////////////////////////
     init: function() {
 
-        modules.selectbox.toggle.bindClick(); //BIND OPEN SELECTBOX <UL>
-        modules.selectbox.change.bindClick(); //BIND SELECT A <LI>
+        modules.selectbox.toggle.bindClick();
+        modules.selectbox.change.bindClick();
 
     },
 
@@ -5030,17 +5013,16 @@ modules.selectbox = {
         autoSuggestText: ''
     },
 
-    // All functions where active when i open the selectbox
+
     toggle: {
 
         bindClick: function () {
 
-            // is this a touchdevice?
             if (modules.selectbox.vars.isTouchDevice) {
 
                 modules.selectbox.vars.selector.addClass("touch").find("select").change(function () {
 
-                    $(this).parent().parent().find(">span:first-child").html($(this).parent().find("option[value='"+$(this).val()+"']").text());
+                    $(this).parent().parent().find("li[data-value='"+$(this).val()+"']").trigger("click");
 
                 });
 
@@ -5049,20 +5031,6 @@ modules.selectbox = {
                 modules.selectbox.vars.selector.find(">span").unbind().click(function () {
 
                     modules.selectbox.toggle.starttoggle($(this));
-
-                });
-
-                modules.selectbox.vars.selector.find("label").unbind().focus(function () {
-
-                    modules.selectbox.toggle.starttoggle($(this));
-
-                });
-
-                modules.selectbox.vars.selector.find("label").blur(function () {
-
-                    if ($(this).parent().find("ul").is(':visible')) {
-                        modules.selectbox.toggle.close($(this).parent().find("ul"));
-                    }
 
                 });
 
@@ -5202,9 +5170,11 @@ modules.selectbox = {
             selected.addClass("active");
             selected.parent().parent().find(">span:first-child").html(newValue);
 
-            var attr;
-            attr = selected.attr('data-value');
-            selected.parent().parent().find("select").val(attr);
+            if (modules.selectbox.vars.isTouchDevice) {
+                var attr;
+                attr = selected.attr('data-value');
+                selected.parent().parent().find("select").val(attr);
+            }
 
         }
 

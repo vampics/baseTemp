@@ -7,12 +7,12 @@ body>nav {
 
 }
 
-@mixin nav-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   body>nav {
 
   }
 }
-@mixin nav-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   body>nav {
 
   }

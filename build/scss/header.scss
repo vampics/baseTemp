@@ -6,13 +6,12 @@
 body>header {
 
 }
-
-@mixin header-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   body>header {
 
   }
 }
-@mixin header-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   body>header {
 
   }

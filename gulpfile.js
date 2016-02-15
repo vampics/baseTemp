@@ -42,7 +42,8 @@ var gulp        = require('gulp'),
     browserSync = require('browser-sync').create(),
     fileinclude = require('gulp-file-include'),
     imagemin    = require('gulp-imagemin'),
-    merge       = require('merge-stream');
+    merge       = require('merge-stream'),
+    mmq         = require('gulp-merge-media-queries');
 
 
 ///////////////////////////////////////////////////////
@@ -68,6 +69,7 @@ gulp.task('scripts', function () {
 gulp.task('sass', function () {
     return gulp.src([buildCssPath + 'styles.scss'])
         .pipe(sass())
+        .pipe(mmq({log: true}))
         .on('error', onError)
         .pipe(gulp.dest(cssPath))
         .pipe(gulp.dest(staticCssPath))
@@ -160,6 +162,7 @@ gulp.task('browser-sync-static', function () {
     gulp.watch(buildHtmlPath + '**/*.html', ['fileinclude']);
     gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload);
 });
+
 
 ///////////////////////////////////////////////////////
 ///             GULP ERROR HANDLING                 ///

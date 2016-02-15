@@ -1,25 +1,31 @@
 {
   "name": "basetemp",
+  "description": "Simply Frontend Framework with GULP, SASS, HTML, CSS & JS.",
   "version": "1.0.0",
-  "description": "BaseTemp Gulp",
+  "url" : "https://github.com/vampics/baseTemp/issues",
+  "author": "Tobias Wöstmann (https://github.com/vampics)",
+  "license": "MIT",
   "main": "index.js",
+
   "devDependencies": {
-    "browser-sync": "^2.10.0",
+    "browser-sync": "^2.11.1",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
-    "gulp-file-include": "^0.13.2",
-    "gulp-imagemin": "^2.3.0",
-    "gulp-sass": "^2.0.3",
-    "gulp-uglify": "^1.2.0",
-    "merge-stream": "^0.1.8"
+    "gulp-file-include": "^0.13.7",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-uglify": "^1.5.1",
+    "merge-stream": "^1.0.0",
+    "gulp-merge-media-queries": "^0.2.1"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+
   "repository": {
     "type": "git",
-    "url": "ssh://git@active-value.de/home/git/repositories/roofmusic/"
+    "url": "git://github.com/vampics/baseTemp.git"
   },
-  "author": "",
-  "license": "ISC"
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+
 }

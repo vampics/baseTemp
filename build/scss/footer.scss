@@ -7,12 +7,12 @@ body>footer {
 
 }
 
-@mixin footer-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   body>footer {
 
   }
 }
-@mixin footer-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   body>footer {
 
   }

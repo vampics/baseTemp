@@ -7,12 +7,12 @@
 
 }
 
-@mixin modules-start-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   .start  {
-
+    width: grid-size(3);
   }
 }
-@mixin modules-start-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   .start  {
 
   }

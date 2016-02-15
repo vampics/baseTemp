@@ -78,6 +78,7 @@ input, button, textarea, select {
   &[disabled] {
     cursor: default;
   }
+  @include border-radius(0);
 }
 
 input {

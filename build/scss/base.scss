@@ -18,6 +18,17 @@ html {
   line-height: $font-line-height-default;
   font-weight: $font-weight-normal;
   letter-spacing: $font-letter-spacing;
+
+  main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0 20px 0;
+    width: 100%;
+    max-width: $grid-absolute-site-width;
+    z-index: $zLevel1;
+    min-height: 100px;
+  }
+
 }
 
 * {
@@ -66,7 +77,7 @@ a {
 /*              BUTTON-TAG / BUTTON BASEMENT                */
 /* -------------------------------------------------------- */
 
-button, input[type="button"], .button {
+button, input[type="button"], input[type="submit"], .button {
   display: inline-block;
   background: $color-white;
   color: $color-black;
@@ -84,7 +95,7 @@ button, input[type="button"], .button {
 /*              FORM-TAG / INPUT BASEMENT                */
 /* -------------------------------------------------------- */
 
-input[type="text"], input[type="password"], textarea {
+input[type="text"], input[type="password"], input[type="number"], input[type="email"], input[type="search"], input[type="tel"], input[type="url"], textarea {
   display: inline-block;
   background: $color-white;
   color: $color-black;
@@ -127,6 +138,26 @@ blockquote {
   padding:10px;
 }
 
+hr {
+  border:0;
+  margin:0;
+  padding:0;
+  height:1px;
+  display:block;
+  background-color:$color-grey;
+}
+
+
+/* -------------------------------------------------------- */
+/*                    GENERALL CLASSES                      */
+/* -------------------------------------------------------- */
+
+.clear {
+  clear: both;
+}
+
+
+
 /* -------------------------------------------------------- */
 /*                  MARKERED TEXT STYLES                    */
 /* -------------------------------------------------------- */
@@ -146,7 +177,7 @@ blockquote {
 /*                 BASE MEDIAQUERYS SMALL                   */
 /* -------------------------------------------------------- */
 
-@mixin base-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
 
 }
 
@@ -154,9 +185,12 @@ blockquote {
 /*                BASE MEDIAQUERYS MEDIUM                   */
 /* -------------------------------------------------------- */
 
-@mixin base-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   html {
     font-size: $font-size-desktop;
+    main {
+      padding: 0;
+    }
   }
 }
 
@@ -164,6 +198,6 @@ blockquote {
 /*                 BASE MEDIAQUERYS LARGE                   */
 /* -------------------------------------------------------- */
 
-@mixin base-lS{
+@media screen and (min-width: map-get($viewports, lw)) {
 
 }

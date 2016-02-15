@@ -1,293 +1,47 @@
 /* -------------------------------------------------------- */
 /*                 GRID BASEMENT CLASSES                    */
 /* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                    MOBILE DEVICES                        */
-/* -------------------------------------------------------- */
 
-.w1 {
-  width: $grid-size-1;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w2 {
-  width: $grid-size-2;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w3 {
-  width: $grid-size-3;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w4 {
-  width: $grid-size-4;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w5 {
-  width: $grid-size-5;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w6 {
-  width: $grid-size-6;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w7 {
-  width: $grid-size-7;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w8 {
-  width: $grid-size-8;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w9 {
-  width: $grid-size-9;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w10 {
-  width: $grid-size-10;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w11 {
-  width: $grid-size-11;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.w12 {
-  width: $grid-size-12;
-  margin: 0 $grid-margin;
-  float: none;
-}
-.wFull {
-  width: 100%;
-}
+@each $current-viewport,  $current-viewportwidth in $viewports {
 
-.gridWrap {
-  width: 100%;
-  @include clearfix();
-}
+  @if $current-viewportwidth == 0px {
+    @for $i from 1 through $grid {
+      .#{$current-viewport}#{$i} {
+        width: grid-size($i);
+        margin: 0 $grid-margin;
+        float: left;
+      }
+    }
+    .#{$current-viewport}Full {
+      width: 100%;
+    }
+    .gridWrap {
+      width: 100%;
+      @include clearfix();
+    }
 
-/* -------------------------------------------------------- */
-/*                    TABLET DEVICES                        */
-/* -------------------------------------------------------- */
 
-@mixin grid-sS{
+  } @else {
 
-  .sw1 {
-    width: $grid-size-1;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw2 {
-    width: $grid-size-2;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw3 {
-    width: $grid-size-3;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw4 {
-    width: $grid-size-4;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw5 {
-    width: $grid-size-5;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw6 {
-    width: $grid-size-6;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw7 {
-    width: $grid-size-7;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw8 {
-    width: $grid-size-8;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw9 {
-    width: $grid-size-9;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw10 {
-    width: $grid-size-10;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw11 {
-    width: $grid-size-11;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .sw12 {
-    width: $grid-size-12;
-    margin: 0 $grid-margin;
-    float: none;
-  }
-  .swFull {
-    width: 100%;
-  }
-}
+    @media screen and (min-width: $current-viewportwidth) {
 
-/* -------------------------------------------------------- */
-/*                 SMALL DESKTOP DEVICES                    */
-/* -------------------------------------------------------- */
+      @for $i from 1 through $grid {
+        .#{$current-viewport}#{$i} {
+          width: grid-size($i);
+          margin: 0 $grid-margin;
+          float: left;
+        }
+      }
+      .#{$current-viewport}Full {
+        width: 100%;
+      }
+      .gridWrap {
+        width: 100%;
+        @include clearfix();
+      }
 
-@mixin grid-mS{
-  html {
-    font-size: $font-size-desktop;
-  }
+    }
 
-  .mw1 {
-    width: $grid-size-1;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw2 {
-    width: $grid-size-2;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw3 {
-    width: $grid-size-3;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw4 {
-    width: $grid-size-4;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw5 {
-    width: $grid-size-5;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw6 {
-    width: $grid-size-6;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw7 {
-    width: $grid-size-7;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw8 {
-    width: $grid-size-8;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw9 {
-    width: $grid-size-9;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw10 {
-    width: $grid-size-10;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw11 {
-    width: $grid-size-11;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .mw12 {
-    width: $grid-size-12;
-    margin: 0 $grid-margin;
-    float: none;
-  }
-  .mwFull {
-    width: 100%;
-  }
-
-}
-
-/* -------------------------------------------------------- */
-/*                 LARGE DESKTOP DEVICES                    */
-/* -------------------------------------------------------- */
-
-@mixin grid-lS{
-
-  .lw1 {
-    width: $grid-size-1;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw2 {
-    width: $grid-size-2;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw3 {
-    width: $grid-size-3;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw4 {
-    width: $grid-size-4;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw5 {
-    width: $grid-size-5;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw6 {
-    width: $grid-size-6;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw7 {
-    width: $grid-size-7;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw8 {
-    width: $grid-size-8;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw9 {
-    width: $grid-size-9;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw10 {
-    width: $grid-size-10;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw11 {
-    width: $grid-size-11;
-    margin: 0 $grid-margin;
-    float: left;
-  }
-  .lw12 {
-    width: $grid-size-12;
-    margin: 0 $grid-margin;
-    float: none;
-  }
-  .lwFull {
-    width: 100%;
   }
 
 }

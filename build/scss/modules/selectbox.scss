@@ -103,13 +103,13 @@
 
 }
 
-@mixin modules-selectbox-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   .selectbox  {
 
   }
 }
 
-@mixin modules-selectbox-mS {
+@media screen and (min-width: map-get($viewports, mw)) {
   .selectbox  {
     span {
       padding: 6px 21px 6px 10px;

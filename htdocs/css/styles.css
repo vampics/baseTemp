@@ -1,801 +1,1308 @@
-@charset "UTF-8";
-/* -------------------------------------------------------- */
-/*           SCSS SCHEME . IMPORTING ALL STYLES             */
-/*            13.08.2014     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*        RESET . JUST DELETE SHITI BROWSER THINGS          */
-/*            03.08.2015     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
 @import url(http://fonts.googleapis.com/css?family=Hind:400,600,300);
-* {
-  /* SET THE RIGHT BORDER BOXES  */
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
-*:before, *:after {
-  /* SET THE RIGHT BORDER BOXES  */
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
-
-html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {
-  /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
-  background: transparent;
-  font-size: 100%;
-  vertical-align: baseline;
-  border: 0;
-  outline: 0;
-  margin: 0;
-  padding: 0;
-  /* DELETE MOBILE TAP HIGHLIGHING */
-  -webkit-tap-highlight-color: transparent; }
-
-main, section, aside, footer, header {
-  /* Correct `block` display not defined in IE 11.*/
-  display: block; }
-
-html {
-  /* SET THE RIGHT FONT SIZE  */
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  /* SET THE SMOOTHING FOR OWN FONTS  */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  height: 100%;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch; }
 
 /* -------------------------------------------------------- */
+
+/*           SCSS SCHEME . IMPORTING ALL STYLES             */
+
+/*            13.08.2014     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*        CONFIG DATA . FONTS, GENERALS and VARIABLES       */
+
+/*            15.02.2016     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                   SET UP VIEWPORTS                       */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                    GENERATE GRIDS                        */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                 COLORSCHEME, DO IT!                      */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                 LETS ROCK THE FONTS                      */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                  Z-INDEX LEVEL RANKING                   */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                FAIHTFULLY STYLE MIXINS                   */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*        RESET . JUST DELETE SHITI BROWSER THINGS          */
+
+/*            03.08.2015     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+* { /* SET THE RIGHT BORDER BOXES  */
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+*:before,
+*:after { /* SET THE RIGHT BORDER BOXES  */
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+main,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+form,
+fieldset,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video { /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
+	background: transparent;
+	font-size: 100%;
+	vertical-align: baseline;
+	border: 0;
+	outline: 0;
+	margin: 0;
+	padding: 0; /* DELETE MOBILE TAP HIGHLIGHING */
+	-webkit-tap-highlight-color: transparent;
+}
+
+main,
+section,
+aside,
+footer,
+header { /* Correct `block` display not defined in IE 11.*/
+	display: block;
+}
+
+html { /* SET THE RIGHT FONT SIZE  */
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%; /* SET THE SMOOTHING FOR OWN FONTS  */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	height: 100%;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* -------------------------------------------------------- */
+
 /*           UI RESETS - FORMS, CONTROLS, ACTIONS           */
+
 /* -------------------------------------------------------- */
-audio, canvas, progress, video {
-  /* Correct `inline-block` display not defined in IE 8/9.*/
-  display: inline-block;
-  /* Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.*/
-  vertical-align: baseline; }
 
-audio:not([controls]) {
-  /* Prevent modern browsers from displaying `audio` without controls.*/
-  display: none;
-  /* Remove excess height in iOS 5 devices.*/
-  height: 0; }
+audio,
+canvas,
+progress,
+video { /* Correct `inline-block` display not defined in IE 8/9.*/
+	display: inline-block; /* Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.*/
+	vertical-align: baseline;
+}
 
-input, button, textarea, select {
-  /* DELETE MOBILE BROWSER FORM STANDARDS */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none; }
-  input[disabled], button[disabled], textarea[disabled], select[disabled] {
-    cursor: default; }
+audio:not([controls]) { /* Prevent modern browsers from displaying `audio` without controls.*/
+	display: none; /* Remove excess height in iOS 5 devices.*/
+	height: 0;
+}
+
+input,
+button,
+textarea,
+select { /* DELETE MOBILE BROWSER FORM STANDARDS */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-ms-border-radius: 0;
+}
+
+input[disabled],
+button[disabled],
+textarea[disabled],
+select[disabled] {
+	cursor: default;
+}
 
 input {
-  line-height: normal; }
-  input[type="reset"], input[type="submit"] {
-    cursor: pointer; }
-  input[type="checkbox"], input[type="radio"] {
-    /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
-    -webkit-appearance: checkbox;
-    box-sizing: border-box;
-    padding: 0; }
-  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {
-    height: auto; }
+	line-height: normal;
+}
+
+input[type="reset"],
+input[type="submit"] {
+	cursor: pointer;
+}
+
+input[type="checkbox"],
+input[type="radio"] { /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
+	-webkit-appearance: checkbox;
+	box-sizing: border-box;
+	padding: 0;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	height: auto;
+}
 
 /* Address `[hidden]` styling not present in IE 8/9/10.*/
+
 /* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
-[hidden], template {
-  display: none; }
+
+[hidden],
+template {
+	display: none;
+}
 
 /* -------------------------------------------------------- */
+
 /*              OTHER RESETS - A, SVG, ELEMENTS             */
+
 /* -------------------------------------------------------- */
+
 /* Remove the gray background color from active links in IE 10.*/
+
 a {
-  background: transparent;
-  text-decoration: none; }
-  a:active, a:hover {
-    outline: 0; }
-  a img {
-    border: 0 none; }
+	background: transparent;
+	text-decoration: none;
+}
 
-svg:not(:root) {
-  /* Correct overflow not hidden in IE 9/10/11.*/
-  overflow: hidden; }
+a:active,
+a:hover {
+	outline: 0;
+}
 
-textarea {
-  /* NO SCROLLBARS IN IE .*/
-  overflow: auto;
-  resize: none; }
+a img {
+	border: 0 none;
+}
+
+svg:not(:root) { /* Correct overflow not hidden in IE 9/10/11.*/
+	overflow: hidden;
+}
+
+textarea { /* NO SCROLLBARS IN IE .*/
+	overflow: auto;
+	resize: none;
+}
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0; }
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 
 ul {
-  list-style: square outside; }
+	list-style: square outside;
+}
 
 ol {
-  list-style: decimal outside; }
+	list-style: decimal outside;
+}
 
 /* -------------------------------------------------------- */
-/*        CONFIG DATA . FONTS, GENERALS and VARIABLES       */
-/*            12.03.2015     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                 COLORSCHEME, DO IT!                      */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                 LETS ROCK THE FONTS                      */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                  Z-INDEX LEVEL RANKING                   */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                FAIHTFULLY STYLE MIXINS                   */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*               FAIHTFULLY POSITION MIXINS                 */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
+
 /*       SYMBOLES . SYMBOLS FROM FONTELLO FOR ICONS         */
-/*            15.08.2014     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-@font-face {
-  font-family: 'symbols';
-  src: url("../font/symbols.eot?38570642");
-  src: url("../font/symbols.eot?38570642#iefix") format("embedded-opentype"), url("../font/symbols.woff?38570642") format("woff"), url("../font/symbols.ttf?38570642") format("truetype"), url("../font/symbols.svg?38570642#symbols") format("svg");
-  font-weight: normal;
-  font-style: normal; }
 
-[class^="icon-"]:before, [class*=" icon-"]:before {
-  font-family: "symbols";
-  font-style: normal;
-  font-weight: normal;
-  speak: none;
-  display: inline-block;
-  text-decoration: inherit;
-  width: 1em;
-  margin-right: .2em;
-  text-align: center;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1em;
-  margin-left: .2em; }
+/*            15.08.2014     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+@font-face {
+	font-family: 'symbols';
+	src: url("../font/symbols.eot?38570642");
+	src: url("../font/symbols.eot?38570642#iefix") format("embedded-opentype"), url("../font/symbols.woff?38570642") format("woff"), url("../font/symbols.ttf?38570642") format("truetype"), url("../font/symbols.svg?38570642#symbols") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+	font-family: "symbols";
+	font-style: normal;
+	font-weight: normal;
+	speak: none;
+	display: inline-block;
+	text-decoration: inherit;
+	width: 1em;
+	margin-right: .2em;
+	text-align: center;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1em;
+	margin-left: .2em;
+}
 
 .icon-menu:before {
-  content: '\e804'; }
+	content: '\e804';
+}
 
 /* '' */
+
 .icon-right-open-big:before {
-  content: '\e80c'; }
+	content: '\e80c';
+}
 
 /* '' */
+
 .icon-left-open-big:before {
-  content: '\e80d'; }
+	content: '\e80d';
+}
 
 /* '' */
+
 .icon-down-open-big:before {
-  content: '\e80e'; }
+	content: '\e80e';
+}
 
 /* '' */
+
 .icon-up-open-big:before {
-  content: '\e80f'; }
+	content: '\e80f';
+}
 
 /* '' */
-/* -------------------------------------------------------- */
-/*           BASE . THE BASEMENT OF YOUR STYLE              */
-/*            13.08.2014     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-body {
-  background: #FFF; }
 
 /* -------------------------------------------------------- */
-/*                     FONT BASEMENT                        */
+
+/*           BASE . THE BASEMENT OF YOUR STYLE              */
+
+/*            13.08.2014     @Tobias Wöstmann               */
+
 /* -------------------------------------------------------- */
+
+body {
+	background: #FFF;
+}
+
+/* -------------------------------------------------------- */
+
+/*                     FONT BASEMENT                        */
+
+/* -------------------------------------------------------- */
+
 html {
-  font-size: 12px;
-  color: #151515;
-  font-family: "Hind", Arial, sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-  letter-spacing: 0.3px; }
+	font-size: 12px;
+	color: #151515;
+	font-family: "Hind", Arial, sans-serif;
+	line-height: 1.6;
+	font-weight: 400;
+	letter-spacing: 0.3px;
+}
+
+html main {
+	position: relative;
+	margin: 0 auto;
+	padding: 0 20px 0;
+	width: 100%;
+	max-width: 1008px;
+	z-index: 100;
+	min-height: 100px;
+}
 
 * {
-  font-size: inherit;
-  color: inherit;
-  font-family: inherit;
-  line-height: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit; }
+	font-size: inherit;
+	color: inherit;
+	font-family: inherit;
+	line-height: inherit;
+	font-weight: inherit;
+	letter-spacing: inherit;
+}
 
 h1 {
-  font-size: 19px; }
+	font-size: 19px;
+}
 
 h2 {
-  font-size: 19px; }
+	font-size: 19px;
+}
 
 h3 {
-  font-size: 19px; }
+	font-size: 19px;
+}
 
 h4 {
-  font-size: 19px; }
+	font-size: 19px;
+}
 
 h5 {
-  font-size: 19px; }
+	font-size: 19px;
+}
 
 h6 {
-  font-size: 19px; }
+	font-size: 19px;
+}
 
 /* -------------------------------------------------------- */
+
 /*                  A-TAG / LINK BASEMENT                   */
+
 /* -------------------------------------------------------- */
+
 a {
-  color: #151515;
-  text-decoration: none;
-  cursor: pointer;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -ms-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease; }
-  a:hover, a:active {
-    color: #151515; }
+	color: #151515;
+	text-decoration: none;
+	cursor: pointer;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+
+a:hover,
+a:active {
+	color: #151515;
+}
 
 /* -------------------------------------------------------- */
+
 /*              BUTTON-TAG / BUTTON BASEMENT                */
-/* -------------------------------------------------------- */
-button, input[type="button"], .button {
-  display: inline-block;
-  background: #FFF;
-  color: #151515;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -ms-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease; }
-  button:hover, button:active, input[type="button"]:hover, input[type="button"]:active, .button:hover, .button:active {
-    background: #cccccc; }
 
 /* -------------------------------------------------------- */
+
+button,
+input[type="button"],
+input[type="submit"],
+.button {
+	display: inline-block;
+	background: #FFF;
+	color: #151515;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	margin: 0;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+
+button:hover,
+button:active,
+input[type="button"]:hover,
+input[type="button"]:active,
+input[type="submit"]:hover,
+input[type="submit"]:active,
+.button:hover,
+.button:active {
+	background: #cccccc;
+}
+
+/* -------------------------------------------------------- */
+
 /*              FORM-TAG / INPUT BASEMENT                */
-/* -------------------------------------------------------- */
-input[type="text"], input[type="password"], textarea {
-  display: inline-block;
-  background: #FFF;
-  color: #151515;
-  border: 1px solid #151515;
-  padding: 0 5px;
-  margin: 0;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -ms-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease; }
-  input[type="text"]:hover, input[type="password"]:hover, textarea:hover {
-    background: #f2f2f2; }
 
 /* -------------------------------------------------------- */
-/*                    ELEMENT BASEMENT                      */
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea {
+	display: inline-block;
+	background: #FFF;
+	color: #151515;
+	border: 1px solid #151515;
+	padding: 0 5px;
+	margin: 0;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+input[type="email"]:hover,
+input[type="search"]:hover,
+input[type="tel"]:hover,
+input[type="url"]:hover,
+textarea:hover {
+	background: #f2f2f2;
+}
+
 /* -------------------------------------------------------- */
-strong, b {
-  font-weight: bold; }
+
+/*                    ELEMENT BASEMENT                      */
+
+/* -------------------------------------------------------- */
+
+strong,
+b {
+	font-weight: bold;
+}
 
 small {
-  font-size: .875em; }
+	font-size: .875em;
+}
 
-strike, del {
-  text-decoration: line-through; }
+strike,
+del {
+	text-decoration: line-through;
+}
 
-pre, code, kbd, samp {
-  font-family: Consolas, "Lucida Console", Monaco, monospace; }
+pre,
+code,
+kbd,
+samp {
+	font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
 
 pre {
-  white-space: pre-wrap;
-  word-wrap: break-word; }
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
 
 blockquote {
-  font-style: italic;
-  padding: 10px; }
+	font-style: italic;
+	padding: 10px;
+}
+
+hr {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	height: 1px;
+	display: block;
+	background-color: #989898;
+}
 
 /* -------------------------------------------------------- */
-/*                  MARKERED TEXT STYLES                    */
+
+/*                    GENERALL CLASSES                      */
+
 /* -------------------------------------------------------- */
+
+.clear {
+	clear: both;
+}
+
+/* -------------------------------------------------------- */
+
+/*                  MARKERED TEXT STYLES                    */
+
+/* -------------------------------------------------------- */
+
 ::selection {
-  background: #151515;
-  color: #FFF;
-  opacity: 1; }
+	background: #151515;
+	color: #FFF;
+	opacity: 1;
+}
 
 ::-moz-selection {
-  background: #151515;
-  color: #FFF;
-  opacity: 1; }
+	background: #151515;
+	color: #FFF;
+	opacity: 1;
+}
 
 /* -------------------------------------------------------- */
+
 /*                 BASE MEDIAQUERYS SMALL                   */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
+
 /*                BASE MEDIAQUERYS MEDIUM                   */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
+
 /*                 BASE MEDIAQUERYS LARGE                   */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
+
 /*                 INIT THE FRAMEWORK                       */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
+
 /*                 GRID BASEMENT CLASSES                    */
+
 /* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                    MOBILE DEVICES                        */
-/* -------------------------------------------------------- */
+
 .w1 {
-  width: 7.33127%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w2 {
-  width: 15.6646%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w3 {
-  width: 23.99794%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w4 {
-  width: 32.33127%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w5 {
-  width: 40.6646%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w6 {
-  width: 48.99794%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w7 {
-  width: 57.33127%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w8 {
-  width: 65.6646%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w9 {
-  width: 73.99794%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w10 {
-  width: 82.33127%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w11 {
-  width: 90.6646%;
-  margin: 0 0.49603%;
-  float: left; }
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .w12 {
-  width: 98.99794%;
-  margin: 0 0.49603%;
-  float: none; }
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
 
 .wFull {
-  width: 100%; }
+	width: 100%;
+}
 
 .gridWrap {
-  width: 100%; }
-  .gridWrap:before, .gridWrap:after {
-    content: "";
-    display: table; }
-  .gridWrap:after {
-    clear: both; }
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
 
 /* -------------------------------------------------------- */
-/*                    TABLET DEVICES                        */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                 SMALL DESKTOP DEVICES                    */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                 LARGE DESKTOP DEVICES                    */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
+
 /*             HEADER . STYLES OF THE HEADER                */
+
 /*            13.08.2014     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*             FOOTER . STYLES OF THE FOOTER                */
-/*            13.08.2014     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*         NAVIGATION . STYLES OF THE NAVIGATION            */
-/*            13.08.2014     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*                  INIT THE MODULES                        */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*           SELECTBOX . STYLES OF OWN SELECTBOX            */
-/*            14.12.2015     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-.selectbox {
-  position: relative;
-  width: 100%;
-  cursor: pointer; }
-  .selectbox span {
-    display: block;
-    position: relative;
-    padding: 11px 21px 12px 10px;
-    background: #FFF;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border: 1px solid #151515;
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -ms-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none; }
-    .selectbox span:before {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      width: 40px;
-      height: 40px;
-      padding: 10px 0 0;
-      margin: 0;
-      text-align: center;
-      color: #151515;
-      font-weight: 600;
-      font-size: 12px;
-      z-index: 500;
-      -webkit-transition: transform 0.2s ease;
-      -moz-transition: transform 0.2s ease;
-      -ms-transition: transform 0.2s ease;
-      -o-transition: transform 0.2s ease;
-      transition: transform 0.2s ease;
-      transform: rotate(90deg);
-      -webkit-transform: rotate(90deg);
-      -o-transform: rotate(90deg);
-      -moz-transform: rotate(90deg);
-      -ms-transform: rotate(90deg); }
-    .selectbox span:after {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      width: 40px;
-      border-left: 1px solid #151515;
-      content: ""; }
-    .selectbox span:hover {
-      background: #FFF;
-      color: #151515; }
-    .selectbox span.active {
-      background: #FFF;
-      color: #151515; }
-      .selectbox span.active:before {
-        transform: rotate(-90deg);
-        -webkit-transform: rotate(-90deg);
-        -o-transform: rotate(-90deg);
-        -moz-transform: rotate(-90deg);
-        -ms-transform: rotate(-90deg); }
-  .selectbox ul {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #FFF;
-    border: 1px solid #151515;
-    border-top: 0;
-    max-height: 300px;
-    overflow: scroll;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    z-index: 600; }
-    .selectbox ul li {
-      display: block;
-      padding: 5px 10px;
-      list-style: none;
-      overflow: hidden;
-      white-space: nowrap; }
-      .selectbox ul li:hover, .selectbox ul li.active {
-        background: #CCC;
-        color: #151515; }
-  .selectbox select {
-    display: none; }
-  .selectbox.touch select {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    bottom: 0;
-    display: block;
-    opacity: 0.01;
-    z-index: 600; }
 
 /* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*             FOOTER . STYLES OF THE FOOTER                */
+
+/*            13.08.2014     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*         NAVIGATION . STYLES OF THE NAVIGATION            */
+
+/*            13.08.2014     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                  INIT THE MODULES                        */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*           SELECTBOX . STYLES OF OWN SELECTBOX            */
+
+/*            14.12.2015     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+.selectbox {
+	position: relative;
+	width: 100%;
+	cursor: pointer;
+}
+
+.selectbox span {
+	display: block;
+	position: relative;
+	padding: 11px 21px 12px 10px;
+	background: #FFF;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	border: 1px solid #151515;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.selectbox span:before {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 40px;
+	height: 40px;
+	padding: 10px 0 0;
+	margin: 0;
+	text-align: center;
+	color: #151515;
+	font-weight: 600;
+	font-size: 12px;
+	z-index: 500;
+	-webkit-transition: transform 0.2s ease;
+	-moz-transition: transform 0.2s ease;
+	-ms-transition: transform 0.2s ease;
+	-o-transition: transform 0.2s ease;
+	transition: transform 0.2s ease;
+	transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+}
+
+.selectbox span:after {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 40px;
+	border-left: 1px solid #151515;
+	content: "";
+}
+
+.selectbox span:hover {
+	background: #FFF;
+	color: #151515;
+}
+
+.selectbox span.active {
+	background: #FFF;
+	color: #151515;
+}
+
+.selectbox span.active:before {
+	transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+}
+
+.selectbox ul {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background: #FFF;
+	border: 1px solid #151515;
+	border-top: 0;
+	max-height: 300px;
+	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	z-index: 600;
+}
+
+.selectbox ul li {
+	display: block;
+	padding: 5px 10px;
+	list-style: none;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.selectbox ul li:hover,
+.selectbox ul li.active {
+	background: #CCC;
+	color: #151515;
+}
+
+.selectbox select {
+	display: none;
+}
+
+.selectbox.touch select {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	bottom: 0;
+	display: block;
+	opacity: 0.01;
+	z-index: 600;
+}
+
+/* -------------------------------------------------------- */
+
 /*              START . STYLES OF STARTPAGE                 */
+
 /*            13.08.2014     @Tobias Wöstmann               */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
+
 /*                   INIT THE SITES                         */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
+
 /*              INDEX . STYLES OF STARTPAGE                 */
+
 /*            13.08.2014     @Tobias Wöstmann               */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
-/*                 RELEASE THE QUERYS                       */
+
+/* RETINA IMAGES FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS */
+
 /* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
-/*       MEDIA QUERY . IMPORT THE STYLES FROM MODULES       */
-/*            13.08.2014     @Tobias Wöstmann               */
+
+/*  RETINA . FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS  */
+
+/*            22.04.2015     @Tobias Wöstmann               */
+
 /* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*            PRINT THINGS FOR PRINTER NOOBS                */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*          PRINT . STYLES FOR DER PRINTER DESIGN           */
+
+/*            24.11.2015     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
 @media screen and (min-width: 480px) {
-  /* -------------------------------------------------------- */
-  /*               FRAMEWORK S-SIZE (min 480px)               */
-  /* -------------------------------------------------------- */
-  .sw1 {
-    width: 7.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw2 {
-    width: 15.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw3 {
-    width: 23.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw4 {
-    width: 32.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw5 {
-    width: 40.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw6 {
-    width: 48.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw7 {
-    width: 57.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw8 {
-    width: 65.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw9 {
-    width: 73.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw10 {
-    width: 82.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw11 {
-    width: 90.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .sw12 {
-    width: 98.99794%;
-    margin: 0 0.49603%;
-    float: none; }
-  .swFull {
-    width: 100%; }
-  /* -------------------------------------------------------- */
-  /*                MODULES S-SIZE (min 480px)                */
-  /* -------------------------------------------------------- */
-  /* -------------------------------------------------------- */
-  /*                 SITES S-SIZE (min 480px)                 */
-  /* -------------------------------------------------------- */ }
+
+.sw1 {
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw2 {
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw3 {
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw4 {
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw5 {
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw6 {
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw7 {
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw8 {
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw9 {
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw10 {
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw11 {
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw12 {
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.swFull {
+	width: 100%;
+}
+
+.gridWrap {
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
+
+.start {
+	width: 23.99794%;
+}
+
+}
 
 @media screen and (min-width: 768px) {
-  /* -------------------------------------------------------- */
-  /*               FRAMEWORK M-SIZE (min 768px)               */
-  /* -------------------------------------------------------- */
-  html {
-    font-size: 14px; }
-  html {
-    font-size: 14px; }
-  .mw1 {
-    width: 7.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw2 {
-    width: 15.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw3 {
-    width: 23.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw4 {
-    width: 32.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw5 {
-    width: 40.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw6 {
-    width: 48.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw7 {
-    width: 57.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw8 {
-    width: 65.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw9 {
-    width: 73.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw10 {
-    width: 82.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw11 {
-    width: 90.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .mw12 {
-    width: 98.99794%;
-    margin: 0 0.49603%;
-    float: none; }
-  .mwFull {
-    width: 100%; }
-  /* -------------------------------------------------------- */
-  /*                MODULES M-SIZE (min 768px)                */
-  /* -------------------------------------------------------- */
-  .selectbox span {
-    padding: 6px 21px 6px 10px; }
-    .selectbox span:before {
-      width: 30px;
-      height: 30px;
-      padding: 7px 4px 0 5px; }
-    .selectbox span:after {
-      width: 30px; }
-  .selectbox ul li {
-    padding: 3px 7px; }
-  /* -------------------------------------------------------- */
-  /*                 SITES M-SIZE (min 768px)                 */
-  /* -------------------------------------------------------- */ }
+
+html {
+	font-size: 14px;
+}
+
+html main {
+	padding: 0;
+}
+
+.mw1 {
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw2 {
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw3 {
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw4 {
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw5 {
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw6 {
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw7 {
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw8 {
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw9 {
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw10 {
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw11 {
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw12 {
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mwFull {
+	width: 100%;
+}
+
+.gridWrap {
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
+
+.selectbox span {
+	padding: 6px 21px 6px 10px;
+}
+
+.selectbox span:before {
+	width: 30px;
+	height: 30px;
+	padding: 7px 4px 0 5px;
+}
+
+.selectbox span:after {
+	width: 30px;
+}
+
+.selectbox ul li {
+	padding: 3px 7px;
+}
+
+}
 
 @media screen and (min-width: 1000px) {
-  /* -------------------------------------------------------- */
-  /*               FRAMEWORK M-SIZE (min 1000px)               */
-  /* -------------------------------------------------------- */
-  .lw1 {
-    width: 7.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw2 {
-    width: 15.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw3 {
-    width: 23.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw4 {
-    width: 32.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw5 {
-    width: 40.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw6 {
-    width: 48.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw7 {
-    width: 57.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw8 {
-    width: 65.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw9 {
-    width: 73.99794%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw10 {
-    width: 82.33127%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw11 {
-    width: 90.6646%;
-    margin: 0 0.49603%;
-    float: left; }
-  .lw12 {
-    width: 98.99794%;
-    margin: 0 0.49603%;
-    float: none; }
-  .lwFull {
-    width: 100%; }
-  /* -------------------------------------------------------- */
-  /*                MODULES M-SIZE (min 1000px)                */
-  /* -------------------------------------------------------- */ }
 
-/* -------------------------------------------------------- */
-/* RETINA IMAGES FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*  RETINA . FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS  */
-/*            22.04.2015     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*            PRINT THINGS FOR PRINTER NOOBS                */
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
-/*          PRINT . STYLES FOR DER PRINTER DESIGN           */
-/*            24.11.2015     @Tobias Wöstmann               */
-/* -------------------------------------------------------- */
+.lw1 {
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw2 {
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw3 {
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw4 {
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw5 {
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw6 {
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw7 {
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw8 {
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw9 {
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw10 {
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw11 {
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw12 {
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lwFull {
+	width: 100%;
+}
+
+.gridWrap {
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
+
+}
+
 @media print {
-  * {
-    background: transparent !important;
-    color: #151515 !important;
-    text-shadow: none !important;
-    box-shadow: none !important;
-    opacity: 1 !important; }
-  body {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 1.45 !important;
-    font-size: 14pt; }
-  h1, h2, h3, h4, h5, h6 {
-    page-break-after: avoid; }
-  p, h1, h2, h3, h4, h5, h6 {
-    orphans: 3;
-    widows: 3; }
-  ul {
-    list-style: disc inside;
-    padding: 0 1em; }
-  ol {
-    list-style: decimal inside;
-    padding: 0 1em; }
-  a, a:visited {
-    color: #151515 !important;
-    text-decoration: none; }
-  a[href^="#"], a[href^="javascript:"] {
-    display: none; }
-  table {
-    margin: 1px; }
-  thead {
-    display: table-header-group; }
-  img, tr {
-    page-break-inside: avoid; } }
 
-@page {
-  margin: 10pt; }
+* {
+	background: transparent !important;
+	color: #151515 !important;
+	text-shadow: none !important;
+	box-shadow: none !important;
+	opacity: 1 !important;
+}
+
+body {
+	width: 100% !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	line-height: 1.45 !important;
+	font-size: 14pt;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	page-break-after: avoid;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	orphans: 3;
+	widows: 3;
+}
+
+ul {
+	list-style: disc inside;
+	padding: 0 1em;
+}
+
+ol {
+	list-style: decimal inside;
+	padding: 0 1em;
+}
+
+a,
+a:visited {
+	color: #151515 !important;
+	text-decoration: none;
+}
+
+a[href^="#"],
+a[href^="javascript:"] {
+	display: none;
+}
+
+table {
+	margin: 1px;
+}
+
+thead {
+	display: table-header-group;
+}
+
+img,
+tr {
+	page-break-inside: avoid;
+}
+
+}
+
