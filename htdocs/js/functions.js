@@ -5170,7 +5170,7 @@ modules.selectbox = {
             selected.addClass("active");
             selected.parent().parent().find(">span:first-child").html(newValue);
 
-            if (modules.selectbox.vars.isTouchDevice) {
+            if (!modules.selectbox.vars.isTouchDevice) {
                 var attr;
                 attr = selected.attr('data-value');
                 selected.parent().parent().find("select").val(attr);
