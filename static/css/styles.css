@@ -422,7 +422,8 @@ h6 {
 
 /* -------------------------------------------------------- */
 
-a {
+a,
+.link {
 	color: #151515;
 	text-decoration: none;
 	cursor: pointer;
@@ -434,7 +435,9 @@ a {
 }
 
 a:hover,
-a:active {
+a:active,
+.link:hover,
+.link:active {
 	color: #151515;
 }
 
@@ -519,7 +522,7 @@ textarea:hover {
 
 strong,
 b {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 small {
@@ -1016,10 +1019,6 @@ hr {
 	clear: both;
 }
 
-.start {
-	width: 23.99794%;
-}
-
 }
 
 @media screen and (min-width: 768px) {
@@ -1029,6 +1028,7 @@ html {
 }
 
 html main {
+	width: 95%;
 	padding: 0;
 }
 

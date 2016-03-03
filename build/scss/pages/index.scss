@@ -7,12 +7,12 @@
 
 }
 
-@mixin site-index-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   .index  {
 
   }
 }
-@mixin site-index-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   .index  {
 
   }

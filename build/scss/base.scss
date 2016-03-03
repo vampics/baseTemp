@@ -63,7 +63,7 @@ h6{
 /*                  A-TAG / LINK BASEMENT                   */
 /* -------------------------------------------------------- */
 
-a {
+a, .link {
   color: $font-link-color;
   text-decoration: $font-text-decoration;
   cursor: pointer;
@@ -114,7 +114,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="em
 /* -------------------------------------------------------- */
 
 strong, b {
-  font-weight: bold;
+  font-weight: $font-weight-bold;
 }
 small {
   font-size: .875em;
@@ -193,6 +193,7 @@ hr {
   html {
     font-size: $font-size-desktop;
     main {
+      width: 95%;
       padding: 0;
     }
   }

@@ -19,12 +19,12 @@
 /*                    GENERATE GRIDS                        */
 /* -------------------------------------------------------- */
 
+  $grid:                        12;
   $grid-absolute-box-margin:    5px;
-  $grid-absolute-box-width:     74px;
   $grid-absolute-site-width:	1008px;
 
-  $grid:                        12;
   $grid-margin:			        percentage($grid-absolute-box-margin/$grid-absolute-site-width);
+  $grid-absolute-box-width:     $grid-absolute-site-width / $grid - $grid-absolute-box-margin - $grid-absolute-box-margin;
 
   @function grid-size($size) {
     $qoutient: $size * 2 - 2;
