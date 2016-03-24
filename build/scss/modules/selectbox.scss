@@ -1,133 +1,72 @@
 /* -------------------------------------------------------- */
 /*           SELECTBOX . STYLES OF OWN SELECTBOX            */
-/*            14.12.2015     @Tobias Wöstmann               */
+/*            23.03.2016     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
 .selectbox {
   position: relative;
   width: 100%;
   cursor: pointer;
+  margin: 5px 0;
 
-
-  span {
+  .selectboxit-btn {
     display: block;
-    position: relative;
-    padding: 11px 21px 12px 10px;
-    background: $color-white;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border:1px solid $color-black;
+    width: 100%!important;
+    padding: 5px 6px;
+    border: 1px solid $color-grey;
+    text-align: left;
+    height: 30px;
+    cursor: pointer;
+
     @include transition(all 0.2s ease);
-    @include user-select();
-    &:before {
-      position: absolute;
-      top:0;
-      bottom: 0;
-      right: 0;
-      width: 40px;
-      height: 40px;
-      padding: 10px 0 0;
-      margin: 0;
-      text-align: center;
-      color: $color-black;
-      font-weight: $font-weight-bold;
-      font-size: 12px;
-      z-index: $zLevel5;
-      @include transition(transform 0.2s ease);
-      @include transformRotate(90deg);
-    }
-    &:after {
-      position: absolute;
-      top:0;
-      bottom: 0;
-      right: 0;
-      width: 40px;
-      border-left: 1px solid $color-black;
-      content:"";
-    }
     &:hover {
-      background: $color-white;
-      color: $color-black;
-    }
-    &.active {
-      background: $color-white;
-      color: $color-black;
-      &:before{
-        @include transformRotate(-90deg); 
-      }
+      background: $color-lightgrey;
     }
   }
 
-  ul {
+  .selectboxit-list {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
-    background: #FFF;
-    border: 1px solid $color-black;
-    border-top: 0;
-    max-height: 300px;
-    overflow: scroll;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    z-index: $zLevel6;
+    height: auto;
+    min-width: 100%;
+    z-index: $zLevel5;
+    background: $color-white;
+    border: 1px solid $color-grey;
+    border-top: none;
     li {
-      display: block;
-      padding: 5px 10px;
       list-style: none;
-      overflow: hidden;
-      white-space: nowrap;
-      &:hover,&.active {
-        background: #CCC;
-        color: $color-black;
+      a {
+        display: block;
+        padding: 2px 5px;
       }
     }
+    .selectboxit-focus {
+      background: $color-lightgrey;
+    }
   }
+
+
   select {
     display: none;
   }
-  &.touch {
+
+
+  &.native{
     select {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      bottom: 0;
-      display: block;
-      opacity: 0.01;
-      z-index: $zLevel6;
+      @extend .selectboxit-btn;
+      padding: 3px 6px;
     }
   }
 
+  
 }
 
 @media screen and (min-width: map-get($viewports, sw)) {
-  .selectbox  {
 
-  }
 }
 
 @media screen and (min-width: map-get($viewports, mw)) {
-  .selectbox  {
-    span {
-      padding: 6px 21px 6px 10px;
-
-      &:before {
-        width: 30px;
-        height: 30px;
-        padding: 7px 4px 0 5px;
-      }
-      &:after {
-        width: 30px;
-      }
-    }
-    ul {
-      li {
-        padding: 3px 7px;
-      }
-    }
-  }
 
 }

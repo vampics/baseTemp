@@ -30,7 +30,7 @@ var base = {
     ///////////////////////////////////////////////////////
     loadModules: {
         locate: function() {
-            var main = config.vars.body().find('main');
+            var main = $("body").find('main');
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
                 var selectedmodule = $(this).data('js');

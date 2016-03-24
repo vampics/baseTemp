@@ -1,1 +1,17 @@
-*{behavior:url(js/PIE.htc)}
+html .oldBrowserWarning {
+    display: block;
+    position: absolute;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding-top: 25%;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+    z-index: 9999;
+}
+html main {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+}

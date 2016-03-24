@@ -22,18 +22,6 @@
 
     <meta name="robots" content="index, follow, noarchive"/>
 
-    <meta property="og:title" content="@@title"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:image" content="@@url apple-touch-icon.png"/>
-    <meta property="og:description" content="@@description"/>
-    <meta property="og:url" content="@@url"/>
-
-    <meta name="twitter:card" content="website" />
-    <meta name="twitter:site" content="@@url" />
-    <meta name="twitter:title" content="@@title" />
-    <meta name="twitter:description" content="@@description" />
-    <meta name="twitter:image" content="@@url apple-touch-icon.png"/>
-
     <link rel="canonical" href="@@url">
 
     <!--[if IE]>
@@ -45,19 +33,38 @@
 
     <!--[if lt IE 9 ]>
     <link rel="stylesheet" href="css/ie8.css">
-    <![endif]-->
-
     <script src="js/html5shiv.js"></script>
+    <![endif]-->
 
     <link rel="shortcut icon" href="favicon.ico">
 
+    <!-- OPEN GRAPH META -->
+    <meta property="og:title" content="@@title"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="@@url apple-touch-icon.png"/>
+    <meta property="og:description" content="@@description"/>
+    <meta property="og:url" content="@@url"/>
+
+    <!-- TWITTER META -->
+    <meta name="twitter:card" content="website" />
+    <meta name="twitter:site" content="@@url" />
+    <meta name="twitter:title" content="@@title" />
+    <meta name="twitter:description" content="@@description" />
+    <meta name="twitter:image" content="@@url apple-touch-icon.png"/>
+
+    <!-- APPLE ICONS BARS -->
     <link rel="apple-touch-icon" href="touch-icon-60.png">
     <link rel="apple-touch-icon" sizes="76x76" href="touch-icon-76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="touch-icon-120.png">
     <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-152.png">
 
+    <!-- WINDOWS TILES BARS -->
     <meta name="application-name" content="@@title" />
-    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileColor" content="@@color" />
     <meta name="msapplication-TileImage" content="mstile-144.png" />
+
+    <!-- ANDROID THEME BAR -->
+    <meta name="theme-color" content="@@color">
+    <link rel="icon" sizes="192x192" href="touch-icon-192.png">
 
 </head>
