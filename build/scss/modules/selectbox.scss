@@ -12,12 +12,11 @@
   .selectboxit-btn {
     display: block;
     width: 100%!important;
-    padding: 5px 6px;
+    padding: 6px 6px;
     border: 1px solid $color-grey;
     text-align: left;
-    height: 30px;
     cursor: pointer;
-
+    @include border-radius(3px);
     @include transition(all 0.2s ease);
     &:hover {
       background: $color-lightgrey;
@@ -60,7 +59,7 @@
     }
   }
 
-  
+
 }
 
 @media screen and (min-width: map-get($viewports, sw)) {

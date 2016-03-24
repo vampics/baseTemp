@@ -1,0 +1,52 @@
+/* -------------------------------------------------------- */
+/*           RADIOBOX . STYLES OF OWN RADIOBOX              */
+/*            26.03.2016     @Tobias Wöstmann               */
+/* -------------------------------------------------------- */
+
+.radiobox {
+  position: relative;
+  display: inline-block;
+
+  input {
+    display: none;
+  }
+
+  span {
+    display: block;
+    margin-left: 25px;
+    min-height: 20px;
+    padding-top: 2px;
+    cursor: pointer;
+    @include user-select();
+    @include border-radius(50%);
+    &:before {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 20px;
+      width: 20px;
+      border: 1px solid $color-grey;
+      cursor: pointer;
+      content: "";
+      @include border-radius(50%);
+    }
+    &:after {
+      display: block;
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      height: 14px;
+      width: 14px;
+      cursor: pointer;
+      background: transparent;
+      content: "";
+      @include border-radius(50%);
+    }
+  }
+
+  input[type=radio]:checked + span:after {
+    background: $color-grey;
+  }
+
+}

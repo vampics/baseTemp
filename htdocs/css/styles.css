@@ -771,11 +771,14 @@ hr {
 .selectbox.native select {
 	display: block;
 	width: 100% !important;
-	padding: 5px 6px;
+	padding: 6px 6px;
 	border: 1px solid #989898;
 	text-align: left;
-	height: 30px;
 	cursor: pointer;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
@@ -820,6 +823,144 @@ hr {
 
 .selectbox.native select {
 	padding: 3px 6px;
+}
+
+/* -------------------------------------------------------- */
+
+/*           CHECKBOX . STYLES OF OWN CHECKBOX              */
+
+/*            26.03.2016     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+.checkbox {
+	position: relative;
+	display: inline-block;
+}
+
+.checkbox input {
+	display: none;
+}
+
+.checkbox span {
+	display: block;
+	margin-left: 25px;
+	min-height: 20px;
+	padding-top: 2px;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.checkbox span:before {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 20px;
+	width: 20px;
+	border: 1px solid #989898;
+	cursor: pointer;
+	content: "";
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+}
+
+.checkbox span:after {
+	display: block;
+	position: absolute;
+	left: 3px;
+	top: 3px;
+	height: 14px;
+	width: 14px;
+	cursor: pointer;
+	background: transparent;
+	content: "";
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+}
+
+.checkbox input[type=checkbox]:checked + span:after {
+	background: #989898;
+}
+
+/* -------------------------------------------------------- */
+
+/*           RADIOBOX . STYLES OF OWN RADIOBOX              */
+
+/*            26.03.2016     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+.radiobox {
+	position: relative;
+	display: inline-block;
+}
+
+.radiobox input {
+	display: none;
+}
+
+.radiobox span {
+	display: block;
+	margin-left: 25px;
+	min-height: 20px;
+	padding-top: 2px;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+}
+
+.radiobox span:before {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 20px;
+	width: 20px;
+	border: 1px solid #989898;
+	cursor: pointer;
+	content: "";
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+}
+
+.radiobox span:after {
+	display: block;
+	position: absolute;
+	left: 3px;
+	top: 3px;
+	height: 14px;
+	width: 14px;
+	cursor: pointer;
+	background: transparent;
+	content: "";
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+}
+
+.radiobox input[type=radio]:checked + span:after {
+	background: #989898;
 }
 
 /* -------------------------------------------------------- */
