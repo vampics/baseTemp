@@ -28,8 +28,6 @@ var buildJsPath     = 'build/js/';
 var buildCssPath    = 'build/scss/';
 var buildHtmlPath   = 'build/html/';
 
-var rexDeveloper    = 'htdocs/redaxo/include/data/addons/developer/';
-
 
 ///////////////////////////////////////////////////////
 ///          INIT GULP, ADD ALL MODULES             ///
@@ -136,23 +134,7 @@ gulp.task('compress-images', function () {
 ///              GULP BROWSER SYNC                  ///
 ///////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////
-///    FOR REDAXO BROWSER SYNC WITH LOCAL SERVER    ///
-///////////////////////////////////////////////////////
-
-gulp.task('browser-sync-server', function () {
-    browserSync.init(['*.css', '*.scss'], {
-        proxy: projectname + '.dev'
-    });
-    gulp.watch(cssPath + '*.scss', ['sass']);
-    gulp.watch([rexDeveloper + "**/*.php", "src/*.php"]).on('change', browserSync.reload);
-});
-
-///////////////////////////////////////////////////////
-///           FOR FRONTEND BROWSER SYNC             ///
-///////////////////////////////////////////////////////
-
-gulp.task('browser-sync-static', function () {
+gulp.task('browser-sync', function () {
     browserSync.init(['*.css', '*.scss'], {
         server: {
             baseDir: "./static"

@@ -9,11 +9,11 @@ modules.selectbox = {
     ///////////////////////////////////////////////////////
     init: function() {
 
-        this.activateLibary();
+        this.initLibary();
 
     },
 
-    activateLibary: function() {
+    initLibary: function() {
 
         $('.selectbox').not(".native").find("select").selectBoxIt({
             autoWidth: false

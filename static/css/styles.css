@@ -497,14 +497,18 @@ textarea {
 	display: inline-block;
 	background: #FFF;
 	color: #151515;
-	border: 1px solid #151515;
+	border: 1px solid #989898;
 	padding: 0 5px;
-	margin: 0;
+	margin: 5px 0;
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 	transition: all 0.2s ease;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
 }
 
 input[type="text"]:hover,
@@ -833,82 +837,19 @@ hr {
 
 /* -------------------------------------------------------- */
 
-.checkbox {
-	position: relative;
-	display: inline-block;
-}
-
-.checkbox input {
-	display: none;
-}
-
-.checkbox span {
-	display: block;
-	margin-left: 25px;
-	min-height: 20px;
-	padding-top: 2px;
-	cursor: pointer;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.checkbox span:before {
-	display: block;
-	position: absolute;
-	left: 0;
-	top: 0;
-	height: 20px;
-	width: 20px;
-	border: 1px solid #989898;
-	cursor: pointer;
-	content: "";
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	-ms-border-radius: 3px;
-}
-
-.checkbox span:after {
-	display: block;
-	position: absolute;
-	left: 3px;
-	top: 3px;
-	height: 14px;
-	width: 14px;
-	cursor: pointer;
-	background: transparent;
-	content: "";
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	-ms-border-radius: 3px;
-}
-
-.checkbox input[type=checkbox]:checked + span:after {
-	background: #989898;
-}
-
-/* -------------------------------------------------------- */
-
-/*           RADIOBOX . STYLES OF OWN RADIOBOX              */
-
-/*            26.03.2016     @Tobias Wöstmann               */
-
-/* -------------------------------------------------------- */
-
+.checkbox,
 .radiobox {
 	position: relative;
 	display: inline-block;
+	width: 100%;
 }
 
+.checkbox input,
 .radiobox input {
 	display: none;
 }
 
+.checkbox span,
 .radiobox span {
 	display: block;
 	margin-left: 25px;
@@ -921,12 +862,9 @@ hr {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
-	-ms-border-radius: 50%;
 }
 
+.checkbox span:before,
 .radiobox span:before {
 	display: block;
 	position: absolute;
@@ -937,12 +875,13 @@ hr {
 	border: 1px solid #989898;
 	cursor: pointer;
 	content: "";
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
-	-ms-border-radius: 50%;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
 }
 
+.checkbox span:after,
 .radiobox span:after {
 	display: block;
 	position: absolute;
@@ -953,14 +892,44 @@ hr {
 	cursor: pointer;
 	background: transparent;
 	content: "";
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+}
+
+.checkbox input:checked + span:after,
+.radiobox input:checked + span:after {
+	background: #989898;
+}
+
+/* -------------------------------------------------------- */
+
+/*           RADIOBOX . STYLES OF OWN RADIOBOX              */
+
+/*            26.03.2016     @Tobias Wöstmann               */
+
+/* -------------------------------------------------------- */
+
+.radiobox span {
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	border-radius: 50%;
 	-ms-border-radius: 50%;
 }
 
-.radiobox input[type=radio]:checked + span:after {
-	background: #989898;
+.radiobox span:before {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+}
+
+.radiobox span:after {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
 }
 
 /* -------------------------------------------------------- */

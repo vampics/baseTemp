@@ -103,10 +103,11 @@ input[type="text"], input[type="password"], input[type="number"], input[type="em
   display: inline-block;
   background: $color-white;
   color: $color-black;
-  border: 1px solid $color-black;
+  border: 1px solid $color-grey;
   padding: 0 5px;
-  margin: 0;
+  margin: 5px 0;
   @include transition(all 0.2s ease);
+  @include border-radius(3px);
   &:hover {
     background: darken($color-white,5%);
   }

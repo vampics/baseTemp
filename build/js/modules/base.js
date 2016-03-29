@@ -9,11 +9,13 @@ var base = {
     ///////////////////////////////////////////////////////
     init: function() {
 
-        base.loadModules.locate();
-        base.recalculate.triggerResize();
-        base.IeModernizers.init();
-        base.autosubmit();
-        base.fastclick();
+        this.loadModules.locate();
+        this.recalculate.triggerResize();
+        this.IeModernizers.init();
+        this.autosubmit();
+        this.fastclick();
+        this.fastclickIosFix();
+
 
     },
 
@@ -135,6 +137,31 @@ var base = {
         $(function() {
             FastClick.attach(document.body);
         });
+    },
+
+    fastclickIosFix: function() {
+
+        if (this.vars.isTouchDevice) {
+
+            $('label').click(function() {
+
+                var input = $(this).find("input");
+                if (input.attr("type") == "radio") {
+                    input.prop("checked", true);
+                }else if (input.attr("type") == "checkbox") {
+                    if (input.prop("checked")) {
+                        input.prop("checked", false);
+                    }else{
+                        input.prop("checked", true);
+                    }
+                }else{
+                    input.trigger("click");
+                }
+
+            });
+
+        }
+
     },
 
     ///////////////////////////////////////////////////////

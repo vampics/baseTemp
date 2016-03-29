@@ -6,6 +6,7 @@
 .checkbox {
   position: relative;
   display: inline-block;
+  width: 100%;
 
   input {
     display: none;
@@ -44,7 +45,7 @@
     }
   }
 
-  input[type=checkbox]:checked + span:after {
+  input:checked + span:after {
     background: $color-grey;
   }
 
