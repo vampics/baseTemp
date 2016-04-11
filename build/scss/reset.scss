@@ -30,6 +30,7 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, ma
 
   /* DELETE MOBILE TAP HIGHLIGHING */
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-focus-ring-color:  rgba(0,0,0,0);
 }
 
 main, section, aside, footer, header {
@@ -79,6 +80,9 @@ input, button, textarea, select {
     cursor: default;
   }
   @include border-radius(0);
+  &:focus {
+    outline: none;
+  }
 }
 
 input {
@@ -105,7 +109,7 @@ input {
 /* Address `[hidden]` styling not present in IE 8/9/10.*/
 /* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
 [hidden], template {
- display: none;
+  display: none;
 }
 
 /* -------------------------------------------------------- */

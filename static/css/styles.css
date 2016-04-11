@@ -150,6 +150,7 @@ video { /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
 	margin: 0;
 	padding: 0; /* DELETE MOBILE TAP HIGHLIGHING */
 	-webkit-tap-highlight-color: transparent;
+	-webkit-focus-ring-color: transparent;
 }
 
 main,
@@ -207,6 +208,13 @@ button[disabled],
 textarea[disabled],
 select[disabled] {
 	cursor: default;
+}
+
+input:focus,
+button:focus,
+textarea:focus,
+select:focus {
+	outline: none;
 }
 
 input {
@@ -396,27 +404,33 @@ html .oldBrowserWarning {
 	letter-spacing: inherit;
 }
 
-h1 {
+h1,
+.h1 {
 	font-size: 19px;
 }
 
-h2 {
+h2,
+.h2 {
 	font-size: 19px;
 }
 
-h3 {
+h3,
+.h3 {
 	font-size: 19px;
 }
 
-h4 {
+h4,
+.h4 {
 	font-size: 19px;
 }
 
-h5 {
+h5,
+.h5 {
 	font-size: 19px;
 }
 
-h6 {
+h6,
+.h6 {
 	font-size: 19px;
 }
 
@@ -1087,27 +1101,33 @@ html main {
 	padding: 0;
 }
 
-h1 {
+h1,
+.h1 {
 	font-size: 19px;
 }
 
-h2 {
+h2,
+.h2 {
 	font-size: 19px;
 }
 
-h3 {
+h3,
+.h3 {
 	font-size: 19px;
 }
 
-h4 {
+h4,
+.h4 {
 	font-size: 19px;
 }
 
-h5 {
+h5,
+.h5 {
 	font-size: 19px;
 }
 
-h6 {
+h6,
+.h6 {
 	font-size: 19px;
 }
 

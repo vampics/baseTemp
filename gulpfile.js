@@ -50,10 +50,10 @@ var gulp        = require('gulp'),
 
 gulp.task('scripts', function () {
     return gulp.src([
-            buildJsPath + 'libs/**/*.js',
-            buildJsPath + '*.js',
-            buildJsPath + 'modules/**/*.js'
-        ])
+        buildJsPath + 'libs/**/*.js',
+        buildJsPath + '*.js',
+        buildJsPath + 'modules/**/*.js'
+    ])
         .pipe(concat('functions.js'))
         .on('error', onError)
         .pipe(gulp.dest(jsPath))
@@ -94,11 +94,20 @@ gulp.task('fileinclude', function () {
 
 gulp.task('compress-js', function () {
     return gulp.src([
-            jsPath + 'functions.js'
+        staticJsPath + '*.js'
     ])
         .pipe(uglify())
         .on('error', onError)
         .pipe(gulp.dest(jsPath));
+});
+
+gulp.task('compress-js-libs', function () {
+    return gulp.src([
+        staticJsPath + 'libs/*.js'
+    ])
+        .pipe(uglify())
+        .on('error', onError)
+        .pipe(gulp.dest(jsPath + 'libs/'));
 });
 
 ///////////////////////////////////////////////////////
@@ -106,7 +115,9 @@ gulp.task('compress-js', function () {
 ///////////////////////////////////////////////////////
 
 gulp.task('compress-css', function () {
-    return gulp.src([buildCssPath + 'styles.scss'])
+    return gulp.src([
+        buildCssPath + 'styles.scss'
+    ])
         .pipe(sass({outputStyle: 'compressed'}))
         .on('error', onError)
         .pipe(gulp.dest(cssPath))
@@ -165,13 +176,13 @@ function onError(err) {
 ///            COMPRESS ALL FILE TASKS              ///
 ///////////////////////////////////////////////////////
 
-gulp.task('compress', ['compress-js', 'compress-css', 'compress-images']);
+gulp.task('compress', ['compress-js', 'compress-js-libs', 'compress-css', 'compress-images']);
 
 ///////////////////////////////////////////////////////
 ///         EXECUTE SASS & CONCAT JS FILES          ///
 ///////////////////////////////////////////////////////
 
-gulp.task('local', ['scripts', 'sass']);
+gulp.task('local', ['scripts', 'sass', 'compress-js-libs']);
 
 ///////////////////////////////////////////////////////
 ///      CONCAT JS FILES & COMPRESS ALL FILES       ///
