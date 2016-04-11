@@ -602,6 +602,42 @@ hr {
 	clear: both;
 }
 
+.ft-uppercase {
+	text-transform: uppercase;
+}
+
+.fw-light {
+	font-weight: 300;
+}
+
+.fw-regular {
+	font-weight: 400;
+}
+
+.fw-bold {
+	font-weight: 600;
+}
+
+.fc-black {
+	color: #151515;
+}
+
+.fc-grey {
+	color: #6d6d6d;
+}
+
+.fc-green {
+	color: #008E74;
+}
+
+.fc-red {
+	color: #D24335;
+}
+
+.fc-white {
+	color: #FFF;
+}
+
 /* -------------------------------------------------------- */
 
 /*                  MARKERED TEXT STYLES                    */

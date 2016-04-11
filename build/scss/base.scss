@@ -172,6 +172,35 @@ hr {
   clear: both;
 }
 
+.ft-uppercase {
+  text-transform: uppercase;
+}
+
+.fw-light {
+  font-weight: $font-weight-light;
+}
+.fw-regular {
+  font-weight: $font-weight-normal;
+}
+.fw-bold {
+  font-weight: $font-weight-bold;
+}
+
+.fc-black {
+  color: $color-black;
+}
+.fc-grey {
+  color: $color-darkgrey;
+}
+.fc-green {
+  color: $color-theme-green;
+}
+.fc-red {
+  color: $color-theme-red;
+}
+.fc-white {
+  color: $color-white;
+}
 
 /* -------------------------------------------------------- */
 /*                  MARKERED TEXT STYLES                    */
