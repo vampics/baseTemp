@@ -15,7 +15,7 @@ var base = {
         this.autosubmit();
         this.fastclick();
         this.fastclickIosFix();
-
+        this.scrollToTop();
 
     },
 
@@ -32,7 +32,7 @@ var base = {
     ///////////////////////////////////////////////////////
     loadModules: {
         locate: function() {
-            var main = $("body").find('main');
+            var main = $("body");
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
                 var selectedmodule = $(this).data('js');
@@ -125,6 +125,18 @@ var base = {
 
         page.animate({ scrollTop: finishScrollPos }, 500, 'swing', function(){
             page.off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
+        });
+
+    },
+
+    scrollToTop: function() {
+
+        $("a.toTop").click(function( event ) {
+
+            event.preventDefault();
+
+            base.scrollTo("0px");
+
         });
 
     },

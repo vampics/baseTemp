@@ -233,9 +233,13 @@ input[type="radio"] { /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
 	padding: 0;
 }
 
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-	height: auto;
+	-webkit-appearance: none;
 }
 
 /* Address `[hidden]` styling not present in IE 8/9/10.*/
@@ -760,6 +764,7 @@ hr {
 
 .wFull {
 	width: 100%;
+	float: left;
 }
 
 .gridWrap {
@@ -1108,6 +1113,7 @@ hr {
 
 .swFull {
 	width: 100%;
+	float: left;
 }
 
 .gridWrap {
@@ -1241,6 +1247,7 @@ h6,
 
 .mwFull {
 	width: 100%;
+	float: left;
 }
 
 .gridWrap {
@@ -1335,6 +1342,7 @@ h6,
 
 .lwFull {
 	width: 100%;
+	float: left;
 }
 
 .gridWrap {
@@ -1423,6 +1431,11 @@ thead {
 img,
 tr {
 	page-break-inside: avoid;
+}
+
+.navigation,
+iframe {
+	display: none !important;
 }
 
 }

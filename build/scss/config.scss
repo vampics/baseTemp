@@ -50,6 +50,13 @@
   $color-theme-yellow:           #FFE9AD;
   $color-theme-red:              #D24335;
 
+  // SOCIAL COLORS
+  $color-social-facebook:        #4b6fad;
+  $color-social-twitter:         #00abf0;
+  $color-social-gplus:           #d94830;
+  $color-social-pinterest:       #b82929;
+  $color-social-instagram:       #3f729b;
+
   // BACKGROUND COLORS
   $color-mainbackground:         #FFF;
 
@@ -120,7 +127,7 @@
     text-shadow: $x $y $blur $color;
   }
 
-  @mixin boxshadow($radius, $blur, $opacity){
+  @mixin boxshadow($y, $x, $blur, $radius, $opacity){
     -webkit-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
     -moz-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
     box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
@@ -148,8 +155,7 @@
     transition: $args;
   }
 
-  // GRADIENT FOR PIE IE8 Script
-  @mixin linear-gradient-pie($from, $to) {
+  @mixin linear-gradient($from, $to) {
     background: $to;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from($from), to($to));
     background: -webkit-linear-gradient($from, $to);
@@ -157,11 +163,10 @@
     background: -ms-linear-gradient($from, $to);
     background: -o-linear-gradient($from, $to);
     background: linear-gradient($from, $to);
-    -pie-background: linear-gradient($from, $to);
   }
 
   // TRANSFORM
-  @mixin transform($ver, $hoz) {
+  @mixin transformtranslate($ver, $hoz) {
     transform: translate($ver, $hoz);
     -webkit-transform: translate($ver, $hoz);
     -o-transform: translate($ver, $hoz);
@@ -198,7 +203,7 @@
       color:    $color;
       opacity:  1;
     }
-    &:-moz-placeholder {
+    &::-moz-placeholder {
       color:    $color;
       opacity:  1;
     }

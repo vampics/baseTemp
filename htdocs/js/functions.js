@@ -1935,7 +1935,7 @@ var base = {
         this.autosubmit();
         this.fastclick();
         this.fastclickIosFix();
-
+        this.scrollToTop();
 
     },
 
@@ -1952,7 +1952,7 @@ var base = {
     ///////////////////////////////////////////////////////
     loadModules: {
         locate: function() {
-            var main = $("body").find('main');
+            var main = $("body");
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
                 var selectedmodule = $(this).data('js');
@@ -2049,6 +2049,18 @@ var base = {
 
     },
 
+    scrollToTop: function() {
+
+        $("a.toTop").click(function( event ) {
+
+            event.preventDefault();
+
+            base.scrollTo("0px");
+
+        });
+
+    },
+
     ///////////////////////////////////////////////////////
     ///                INIT FASTCLICK                   ///
     ///////////////////////////////////////////////////////
@@ -2132,6 +2144,7 @@ modules.formvalidation = {
         errors: [],
 
         textinputTrigger: "input[type=text], input[type=date], input[type=email], input[type=password], input[type=number], input[type=search], input[type=time], input[type=url], input[type=tel]",
+        textareaTrigger: "textarea",
         selectboxTrigger: ".selectbox select",
         checkboxTrigger: ".checkbox input"
     },
@@ -2164,7 +2177,7 @@ modules.formvalidation = {
 
             fvActions.resetErrors();
 
-            fvGlobals.submit = fvActions.checkFormSubmit(fvCases.textinput(),fvCases.selectboxes(), fvCases.checkboxes());
+            fvGlobals.submit = fvActions.checkFormSubmit(fvCases.textinput(), fvCases.textarea(), fvCases.selectboxes(), fvCases.checkboxes());
 
             return fvGlobals.submit;
 
@@ -2228,6 +2241,31 @@ modules.formvalidation = {
 
         },
 
+        textarea: function () {
+
+            var textareaReturn = true;
+
+            fvGlobals.thisActiveForm.find(fvGlobals.textareaTrigger).each(function() {
+
+                var checkingElement = $(this);
+                checkingElement.removeClass(fvGlobals.errorClass);
+
+                if(checkingElement.is(':visible')) {
+
+                    if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyField)) {
+                        if (!fvValidations.validateEmptyField(checkingElement.html())) {
+                            textareaReturn = fvActions.setErrorHandling(checkingElement);
+                        }
+                    }
+
+                }
+
+            });
+
+            return textareaReturn;
+
+        },
+
         selectboxes: function () {
 
             var selectboxesReturn = true;
@@ -2282,11 +2320,11 @@ modules.formvalidation = {
 
     setActions: {
 
-        checkFormSubmit: function (textinputCheck, selectboxesCheck, checkboxesCheck) {
+        checkFormSubmit: function (textinputCheck, textareaCheck, selectboxesCheck, checkboxesCheck) {
 
             var tempSubmit = true;
 
-            if (textinputCheck == false || selectboxesCheck == false || checkboxesCheck == false) {
+            if (textinputCheck == false || textareaCheck == false || selectboxesCheck == false || checkboxesCheck == false) {
 
                 tempSubmit = false;
 
@@ -2410,7 +2448,6 @@ modules.formvalidation = {
 
 }
 
-
 ///////////////////////////////////////////////////////
 ///                    HEADER JS                    ///
 ///////////////////////////////////////////////////////
@@ -2468,14 +2505,29 @@ modules.selectbox = {
     },
 
     startScript: function() {
-        $('.selectbox').find("select").selectBoxIt({
+
+        var selectbox = $('.selectbox');
+
+        selectbox.find("select").selectBoxIt({
             autoWidth: false,
+            downArrowIcon: "icon-down-open-big",
             showEffect: "slideDown",
             showEffectSpeed: 150,
             hideEffect: "slideUp",
             hideEffectSpeed: 150,
             showFirstOption: false
         });
+
+        if (selectbox.find(".selectboxit-text").html() != selectbox.find("select").find("option:first-child").html()) {
+            selectbox.find(".selectboxit-btn").addClass("selected");
+        }
+
+        selectbox.find("select").bind({
+            "changed": function(ev, obj) {
+                $(obj.dropdown).addClass("selected");
+            }
+        });
+
     }
 
 };

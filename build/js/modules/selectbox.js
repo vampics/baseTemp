@@ -26,14 +26,29 @@ modules.selectbox = {
     },
 
     startScript: function() {
-        $('.selectbox').find("select").selectBoxIt({
+
+        var selectbox = $('.selectbox');
+
+        selectbox.find("select").selectBoxIt({
             autoWidth: false,
+            downArrowIcon: "icon-down-open-big",
             showEffect: "slideDown",
             showEffectSpeed: 150,
             hideEffect: "slideUp",
             hideEffectSpeed: 150,
             showFirstOption: false
         });
+
+        if (selectbox.find(".selectboxit-text").html() != selectbox.find("select").find("option:first-child").html()) {
+            selectbox.find(".selectboxit-btn").addClass("selected");
+        }
+
+        selectbox.find("select").bind({
+            "changed": function(ev, obj) {
+                $(obj.dropdown).addClass("selected");
+            }
+        });
+
     }
 
 };

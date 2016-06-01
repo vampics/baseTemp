@@ -14,6 +14,7 @@
     }
     .#{$current-viewport}Full {
       width: 100%;
+      float: left;
     }
     .gridWrap {
       width: 100%;
@@ -34,6 +35,7 @@
       }
       .#{$current-viewport}Full {
         width: 100%;
+        float: left;
       }
       .gridWrap {
         width: 100%;
