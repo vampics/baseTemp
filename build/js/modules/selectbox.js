@@ -69,7 +69,7 @@ modules.selectbox = {
             $(this).find("select").selectBoxIt(SelectBoxOptions);
 
 
-        };
+        });
 
         selectbox.find("select").bind({
             "changed": function(ev, obj) {

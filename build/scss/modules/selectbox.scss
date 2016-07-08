@@ -68,10 +68,6 @@
     }
   }
 
-  select {
-    display: none;
-  }
-
   &.native{
     select {
       @extend .selectboxit-btn;

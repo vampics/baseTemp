@@ -968,10 +968,6 @@ hr {
 	background: #d9d9d9;
 }
 
-.selectbox select {
-	display: none;
-}
-
 .selectbox.native select {
 	padding: 3px 6px;
 }
