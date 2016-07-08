@@ -540,6 +540,63 @@ textarea:hover {
 	background: #f2f2f2;
 }
 
+input[type="text"].error,
+input[type="password"].error,
+input[type="number"].error,
+input[type="email"].error,
+input[type="search"].error,
+input[type="tel"].error,
+input[type="url"].error,
+textarea.error {
+	border: 2px solid #C10D00;
+}
+
+input[type="text"]::-webkit-input-placeholder,
+input[type="password"]::-webkit-input-placeholder,
+input[type="number"]::-webkit-input-placeholder,
+input[type="email"]::-webkit-input-placeholder,
+input[type="search"]::-webkit-input-placeholder,
+input[type="tel"]::-webkit-input-placeholder,
+input[type="url"]::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+	color: #151515;
+}
+
+input[type="text"]:-moz-placeholder,
+input[type="password"]:-moz-placeholder,
+input[type="number"]:-moz-placeholder,
+input[type="email"]:-moz-placeholder,
+input[type="search"]:-moz-placeholder,
+input[type="tel"]:-moz-placeholder,
+input[type="url"]:-moz-placeholder,
+textarea:-moz-placeholder {
+	color: #151515;
+	opacity: 1;
+}
+
+input[type="text"]::-moz-placeholder,
+input[type="password"]::-moz-placeholder,
+input[type="number"]::-moz-placeholder,
+input[type="email"]::-moz-placeholder,
+input[type="search"]::-moz-placeholder,
+input[type="tel"]::-moz-placeholder,
+input[type="url"]::-moz-placeholder,
+textarea::-moz-placeholder {
+	color: #151515;
+	opacity: 1;
+}
+
+input[type="text"]:-ms-input-placeholder,
+input[type="password"]:-ms-input-placeholder,
+input[type="number"]:-ms-input-placeholder,
+input[type="email"]:-ms-input-placeholder,
+input[type="search"]:-ms-input-placeholder,
+input[type="tel"]:-ms-input-placeholder,
+input[type="url"]:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+	color: #151515;
+}
+
 /* -------------------------------------------------------- */
 
 /*                    ELEMENT BASEMENT                      */
@@ -843,11 +900,46 @@ hr {
 	-ms-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
 	transition: all 0.2s ease;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .selectbox .selectboxit-btn:hover,
-.selectbox.native select:hover {
+.selectbox.native select:hover,
+.selectbox .selectboxit-btn:focus,
+.selectbox.native select:focus {
 	background: #d9d9d9;
+}
+
+.selectbox.error .selectboxit-btn,
+.selectbox.error .selectbox.native select,
+.selectbox.native .selectbox.error select {
+	border: 2px solid #C10D00;
+}
+
+.selectbox .selectboxit-arrow-container {
+	position: absolute;
+	right: 15px;
+	top: 7px;
+	font-weight: bold;
+	color: #151515;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.selectbox .selectboxit-open .selectboxit-arrow-container {
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
 }
 
 .selectbox .selectboxit-list {

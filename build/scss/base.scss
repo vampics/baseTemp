@@ -111,6 +111,10 @@ input[type="text"], input[type="password"], input[type="number"], input[type="em
   &:hover {
     background: darken($color-white,5%);
   }
+  &.error {
+    border: 2px solid $color-ui-red;
+  }
+  @include placeholdercolor($color-black);
 }
 
 

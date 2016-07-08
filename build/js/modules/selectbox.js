@@ -29,23 +29,53 @@ modules.selectbox = {
 
         var selectbox = $('.selectbox');
 
-        selectbox.find("select").selectBoxIt({
-            autoWidth: false,
-            downArrowIcon: "icon-down-open-big",
-            showEffect: "slideDown",
-            showEffectSpeed: 150,
-            hideEffect: "slideUp",
-            hideEffectSpeed: 150,
-            showFirstOption: false
-        });
+        $.each(selectbox, function() {
 
-        if (selectbox.find(".selectboxit-text").html() != selectbox.find("select").find("option:first-child").html()) {
-            selectbox.find(".selectboxit-btn").addClass("selected");
-        }
+            var SelectBoxOptions;
+            var EffectSpeed = 150;
+            var downArrowIcon = "icon-down-open-big";
+
+            if ($(this).hasClass("showfirstoption")) {
+
+                SelectBoxOptions = {
+                    autoWidth: false,
+                    downArrowIcon: downArrowIcon,
+                    showEffect: "slideDown",
+                    showEffectSpeed: EffectSpeed,
+                    hideEffect: "slideUp",
+                    hideEffectSpeed: EffectSpeed
+                };
+
+                $(this).find(".selectboxit-btn").addClass("selected");
+
+            } else {
+
+                SelectBoxOptions = {
+                    autoWidth: false,
+                    downArrowIcon: downArrowIcon,
+                    showEffect: "slideDown",
+                    showEffectSpeed: EffectSpeed,
+                    hideEffect: "slideUp",
+                    hideEffectSpeed: EffectSpeed,
+                    showFirstOption: false
+                };
+
+                if ($(this).find(".selectboxit-text").html() != $(this).find("select").find("option:first-child").html()) {
+                    $(this).find(".selectboxit-btn").addClass("selected");
+                }
+
+            }
+
+            $(this).find("select").selectBoxIt(SelectBoxOptions);
+
+
+        };
 
         selectbox.find("select").bind({
             "changed": function(ev, obj) {
+
                 $(obj.dropdown).addClass("selected");
+
             }
         });
 

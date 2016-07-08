@@ -18,9 +18,31 @@
     cursor: pointer;
     @include border-radius(3px);
     @include transition(all 0.2s ease);
-    &:hover {
+    @include user-select();
+
+    &:hover, &:focus {
       background: $color-lightgrey;
     }
+  }
+
+  &.error .selectboxit-btn{
+    border: 2px solid $color-ui-red;
+  }
+
+  .selectboxit-arrow-container {
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    font-weight: bold;
+    color: $color-black;
+    @include transition(all 0.3s ease);
+  }
+  .selectboxit-open  .selectboxit-arrow-container {
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
   }
 
   .selectboxit-list {
@@ -46,11 +68,9 @@
     }
   }
 
-
   select {
     display: none;
   }
-
 
   &.native{
     select {
@@ -59,13 +79,5 @@
     }
   }
 
-
-}
-
-@media screen and (min-width: map-get($viewports, sw)) {
-
-}
-
-@media screen and (min-width: map-get($viewports, mw)) {
 
 }

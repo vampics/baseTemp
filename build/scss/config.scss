@@ -43,6 +43,9 @@
   $color-darkgrey:               #6d6d6d;
   $color-black:                  #151515;
 
+  $color-ui-green:               #B0C717;
+  $color-ui-red:                 #C10D00;
+
   // THEME COLORS
   $color-theme-blue:             #1A222F;
   $color-theme-green:            #008E74;
@@ -51,11 +54,16 @@
   $color-theme-red:              #D24335;
 
   // SOCIAL COLORS
-  $color-social-facebook:        #4b6fad;
-  $color-social-twitter:         #00abf0;
-  $color-social-gplus:           #d94830;
-  $color-social-pinterest:       #b82929;
-  $color-social-instagram:       #3f729b;
+  $color-social-facebook:        #3b5999;
+  $color-social-twitter:         #55acee;
+  $color-social-gplus:           #dc4e41;
+  $color-social-pinterest:       #af0921;
+  $color-social-instagram:       #c6c6c6;
+
+  // SOCIAL COLORS ON HOVER
+  $color-social-facebook-hover:  #364d85;
+  $color-social-twitter-hover:   #5292be;
+  $color-social-gplus-hover:     #bc4537;
 
   // BACKGROUND COLORS
   $color-mainbackground:         #FFF;
