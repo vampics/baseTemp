@@ -4,9 +4,6 @@
 
 modules.selectbox = {
 
-    ///////////////////////////////////////////////////////
-    ///              INIT SELECTBOX MODULES             ///
-    ///////////////////////////////////////////////////////
     init: function() {
 
         this.getLibary();
@@ -35,34 +32,27 @@ modules.selectbox = {
             var EffectSpeed = 150;
             var downArrowIcon = "icon-down-open-big";
 
-            if ($(this).hasClass("showfirstoption")) {
+            SelectBoxOptions = {
+                autoWidth: false,
+                downArrowIcon: downArrowIcon,
+                showEffect: "slideDown",
+                showEffectSpeed: EffectSpeed,
+                hideEffect: "slideUp",
+                hideEffectSpeed: EffectSpeed
+            };
 
-                SelectBoxOptions = {
-                    autoWidth: false,
-                    downArrowIcon: downArrowIcon,
-                    showEffect: "slideDown",
-                    showEffectSpeed: EffectSpeed,
-                    hideEffect: "slideUp",
-                    hideEffectSpeed: EffectSpeed
-                };
+            if (!$(this).hasClass("showfirstoption")) {
 
+                SelectBoxOptions["showFirstOption"] = false;
                 $(this).find(".selectboxit-btn").addClass("selected");
-
-            } else {
-
-                SelectBoxOptions = {
-                    autoWidth: false,
-                    downArrowIcon: downArrowIcon,
-                    showEffect: "slideDown",
-                    showEffectSpeed: EffectSpeed,
-                    hideEffect: "slideUp",
-                    hideEffectSpeed: EffectSpeed,
-                    showFirstOption: false
-                };
 
                 if ($(this).find(".selectboxit-text").html() != $(this).find("select").find("option:first-child").html()) {
                     $(this).find(".selectboxit-btn").addClass("selected");
                 }
+
+            } else {
+
+                $(this).find(".selectboxit-btn").addClass("selected");
 
             }
 

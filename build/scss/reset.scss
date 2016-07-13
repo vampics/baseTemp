@@ -71,7 +71,7 @@ audio:not([controls]) {
   height: 0;
 }
 
-input, button, textarea, select {
+input, button, textarea {
   /* DELETE MOBILE BROWSER FORM STANDARDS */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -80,7 +80,7 @@ input, button, textarea, select {
     cursor: default;
   }
   @include border-radius(0);
-  &:focus {
+  &:focus, &:active {
     outline: none;
   }
 }

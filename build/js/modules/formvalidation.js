@@ -308,8 +308,6 @@ modules.formvalidation = {
 
     },
 
-
-
     setValidations: {
 
         validateEmptyField: function (stValue) {
@@ -325,7 +323,6 @@ modules.formvalidation = {
         },
 
         validateEmptyCheckbox: function (element) {
-
 
             return element.prop('checked')
 

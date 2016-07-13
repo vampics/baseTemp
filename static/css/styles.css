@@ -192,8 +192,7 @@ audio:not([controls]) { /* Prevent modern browsers from displaying `audio` witho
 
 input,
 button,
-textarea,
-select { /* DELETE MOBILE BROWSER FORM STANDARDS */
+textarea { /* DELETE MOBILE BROWSER FORM STANDARDS */
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
@@ -205,15 +204,16 @@ select { /* DELETE MOBILE BROWSER FORM STANDARDS */
 
 input[disabled],
 button[disabled],
-textarea[disabled],
-select[disabled] {
+textarea[disabled] {
 	cursor: default;
 }
 
 input:focus,
+input:active,
 button:focus,
+button:active,
 textarea:focus,
-select:focus {
+textarea:active {
 	outline: none;
 }
 
