@@ -48,7 +48,7 @@ var gulp        = require('gulp'),
 ///      CONCAT ALL JS FILES IN BUILD FOLDER        ///
 ///////////////////////////////////////////////////////
 
-gulp.task('scripts', function () {
+gulp.task('compile-js', function () {
     return gulp.src([
         buildJsPath + 'libs/**/*.js',
         buildJsPath + '*.js',
@@ -64,7 +64,7 @@ gulp.task('scripts', function () {
 ///    EXECUTE SASS TASK, CONCAT ALL SCSS FILES     ///
 ///////////////////////////////////////////////////////
 
-gulp.task('sass', function () {
+gulp.task('compile-scss', function () {
     return gulp.src([buildCssPath + 'styles.scss'])
         .pipe(sass())
         .pipe(mmq({log: true}))
@@ -78,7 +78,7 @@ gulp.task('sass', function () {
 ///      CONCAT ALL HTML FILES IN BUILD FOLDER      ///
 ///////////////////////////////////////////////////////
 
-gulp.task('fileinclude', function () {
+gulp.task('compile-html', function () {
     gulp.src([buildHtmlPath + '*.html'])
         .pipe(fileinclude({
             prefix: '@@',
@@ -167,25 +167,7 @@ function onError(err) {
 }
 
 ///////////////////////////////////////////////////////
-///                                                 ///
-///                   GULP TASKS                    ///
-///                                                 ///
-///////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////
 ///            COMPRESS ALL FILE TASKS              ///
 ///////////////////////////////////////////////////////
 
 gulp.task('compress', ['compress-js', 'compress-js-libs', 'compress-css', 'compress-images']);
-
-///////////////////////////////////////////////////////
-///         EXECUTE SASS & CONCAT JS FILES          ///
-///////////////////////////////////////////////////////
-
-gulp.task('local', ['scripts', 'sass', 'compress-js-libs']);
-
-///////////////////////////////////////////////////////
-///      CONCAT JS FILES & COMPRESS ALL FILES       ///
-///////////////////////////////////////////////////////
-
-gulp.task('default', ['scripts', 'compress', 'sass']);

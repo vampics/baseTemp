@@ -142,7 +142,7 @@ modules.formvalidation = {
                 if(checkingElement.is(':visible')) {
 
                     if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyField)) {
-                        if (!fvValidations.validateEmptyField(checkingElement.html())) {
+                        if (!fvValidations.validateEmptyField(checkingElement.val())) {
                             textareaReturn = fvActions.setErrorHandling(checkingElement);
                         }
                     }
