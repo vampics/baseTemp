@@ -151,8 +151,7 @@ gulp.task('browser-sync', function () {
             baseDir: "./static"
         }
     });
-    gulp.watch(cssPath + '*.scss', ['sass']);
-    gulp.watch(buildHtmlPath + '**/*.html', ['fileinclude']);
+    gulp.watch(buildHtmlPath + '**/*.html', ['compile-html']);
     gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload);
 });
 
