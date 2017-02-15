@@ -1,18 +1,17 @@
 /* -------------------------------------------------------- */
 /*              START . STYLES OF STARTPAGE                 */
-/*            13.08.2014     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
 .start {
 
 }
 
-@mixin modules-start-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   .start  {
 
   }
 }
-@mixin modules-start-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   .start  {
 
   }

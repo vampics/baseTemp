@@ -1,6 +1,5 @@
 /* -------------------------------------------------------- */
 /*        RESET . JUST DELETE SHITI BROWSER THINGS          */
-/*            03.08.2015     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
 * {
@@ -30,6 +29,12 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, ma
 
   /* DELETE MOBILE TAP HIGHLIGHING */
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-focus-ring-color:  rgba(0,0,0,0);
+}
+
+main, section, aside, footer, header {
+  /* Correct `block` display not defined in IE 11.*/
+  display: block;
 }
 
 html {
@@ -65,13 +70,17 @@ audio:not([controls]) {
   height: 0;
 }
 
-input, button, textarea, select {
+input, button, textarea {
   /* DELETE MOBILE BROWSER FORM STANDARDS */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   &[disabled] {
     cursor: default;
+  }
+  @include border-radius(0);
+  &:focus, &:active {
+    outline: none;
   }
 }
 
@@ -89,18 +98,18 @@ input {
     padding: 0;
   }
   &[type="number"] {
+    -moz-appearance:textfield;
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
-      height: auto;
+      -webkit-appearance: none;
     }
   }
 }
 
-
 /* Address `[hidden]` styling not present in IE 8/9/10.*/
 /* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
 [hidden], template {
- display: none;
+  display: none;
 }
 
 /* -------------------------------------------------------- */
@@ -128,6 +137,7 @@ svg:not(:root) {
 textarea {
   /* NO SCROLLBARS IN IE .*/
   overflow: auto;
+  resize: none;
 }
 
 table {

@@ -1,6 +1,5 @@
 /* -------------------------------------------------------- */
 /*           BASE . THE BASEMENT OF YOUR STYLE              */
-/*            13.08.2014     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
 body {
@@ -18,6 +17,21 @@ html {
   line-height: $font-line-height-default;
   font-weight: $font-weight-normal;
   letter-spacing: $font-letter-spacing;
+
+  main {
+    position: relative;
+    margin: 0 auto;
+    padding: 0 20px 0;
+    width: 100%;
+    max-width: $grid-absolute-site-width;
+    z-index: $zLevel1;
+    min-height: 10px;
+  }
+
+  .oldBrowserWarning {
+    display: none;
+  }
+
 }
 
 * {
@@ -29,30 +43,42 @@ html {
   letter-spacing: inherit;
 }
 
-h1{
-  font-size: $font-size-h1;
+h1,.h1{
+  display: block;
+  padding: 5px 0;
+  font-size: $font-size-h1-mobile;
 }
-h2{
-  font-size: $font-size-h2;
+h2,.h2{
+  display: block;
+  padding: 5px 0;
+  font-size: $font-size-h2-mobile;
 }
-h3{
-  font-size: $font-size-h3;
+h3,.h3{
+  display: block;
+  padding: 5px 0;
+  font-size: $font-size-h3-mobile;
 }
-h4{
-  font-size: $font-size-h4;
+h4,.h4{
+  display: block;
+  padding: 5px 0;
+  font-size: $font-size-h4-mobile;
 }
-h5{
-  font-size: $font-size-h5;
+h5,.h5{
+  display: block;
+  padding: 5px 0;
+  font-size: $font-size-h5-mobile;
 }
-h6{
-  font-size: $font-size-h6;
+h6,.h6{
+  display: block;
+  padding: 5px 0;
+  font-size: $font-size-h6-mobile;
 }
 
 /* -------------------------------------------------------- */
 /*                  A-TAG / LINK BASEMENT                   */
 /* -------------------------------------------------------- */
 
-a {
+a, .link {
   color: $font-link-color;
   text-decoration: $font-text-decoration;
   cursor: pointer;
@@ -66,17 +92,18 @@ a {
 /*              BUTTON-TAG / BUTTON BASEMENT                */
 /* -------------------------------------------------------- */
 
-button, input[type="button"], .button {
+button, input[type="button"], input[type="submit"], .button {
   display: inline-block;
-  background: $color-white;
-  color: $color-black;
+  background: $color-grey;
+  color: $color-white;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 6px 12px;
   margin: 0;
   @include transition(all 0.2s ease);
+  @include border-radius(3px);
   &:hover, &:active {
-    background: darken($color-white,20%);
+    background: lighten($color-grey,5%);
   }
 }
 
@@ -84,17 +111,27 @@ button, input[type="button"], .button {
 /*              FORM-TAG / INPUT BASEMENT                */
 /* -------------------------------------------------------- */
 
-input[type="text"], input[type="password"], textarea {
+input[type="text"], input[type="password"], input[type="number"], input[type="email"], input[type="search"], input[type="tel"], input[type="url"], textarea {
   display: inline-block;
+  width: 100%;
   background: $color-white;
   color: $color-black;
-  border: 1px solid $color-black;
-  padding: 0 5px;
-  margin: 0;
+  border: 1px solid $color-grey;
+  padding: 6px 6px;
+  margin: 5px 0;
   @include transition(all 0.2s ease);
+  @include border-radius(3px);
   &:hover {
     background: darken($color-white,5%);
   }
+  &.error {
+    border: 1px solid $color-ui-red;
+  }
+  @include placeholdercolor($color-black);
+}
+
+textarea {
+  width: 100%;
 }
 
 
@@ -102,11 +139,23 @@ input[type="text"], input[type="password"], textarea {
 /*                    ELEMENT BASEMENT                      */
 /* -------------------------------------------------------- */
 
-strong, b {
-  font-weight: bold;
+p {
+  display: block;
+  padding: 5px 0;
 }
+
+strong, b {
+  font-weight: $font-weight-bold;
+}
+
+sup {
+  font-size: .875rem;
+  vertical-align: super;
+  line-height: .875rem;
+}
+
 small {
-  font-size: .875em;
+  font-size: .875rem;
 }
 
 strike, del {
@@ -127,6 +176,72 @@ blockquote {
   padding:10px;
 }
 
+iframe {
+  max-width:100%;
+}
+
+hr {
+  border:0;
+  margin:5px 0;
+  padding:0;
+  height:1px;
+  display:block;
+  background-color:$color-grey;
+}
+
+ul {
+  display: block;
+  padding:5px 0;
+  li {
+    position: relative;
+    list-style: none;
+    padding-left: 15px;
+    &:after {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 10px;
+      height: 5px;
+      width: 5px;
+      background: $color-black;
+      content: "";
+    }
+  }
+}
+
+
+/* -------------------------------------------------------- */
+/*                    GENERALL CLASSES                      */
+/* -------------------------------------------------------- */
+
+.clear {
+  clear: both;
+}
+
+.ft-uppercase {
+  text-transform: uppercase;
+}
+
+.fw-light {
+  font-weight: $font-weight-light;
+}
+.fw-regular {
+  font-weight: $font-weight-normal;
+}
+.fw-bold {
+  font-weight: $font-weight-bold;
+}
+
+.fc-black {
+  color: $color-black;
+}
+.fc-grey {
+  color: $color-darkgrey;
+}
+.fc-white {
+  color: $color-white;
+}
+
 /* -------------------------------------------------------- */
 /*                  MARKERED TEXT STYLES                    */
 /* -------------------------------------------------------- */
@@ -142,60 +257,11 @@ blockquote {
   opacity: 1;
 }
 
-
-/* -------------------------------------------------------- */
-/*                 GRID BASEMENT CLASSES                    */
-/* -------------------------------------------------------- */
-
-.bw1 {
-  width: $grid-size-1;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bw2 {
-  width: $grid-size-2;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bw3 {
-  width: $grid-size-3;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bw4 {
-  width: $grid-size-4;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bw5 {
-  width: $grid-size-5;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bw6 {
-  width: $grid-size-6;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bw7 {
-  width: $grid-size-7;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bw8 {
-  width: $grid-size-8;
-  margin: 0 $grid-margin;
-  float: left;
-}
-.bwFull {
-  width: 100%;
-}
-
 /* -------------------------------------------------------- */
 /*                 BASE MEDIAQUERYS SMALL                   */
 /* -------------------------------------------------------- */
 
-@mixin base-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
 
 }
 
@@ -203,16 +269,40 @@ blockquote {
 /*                BASE MEDIAQUERYS MEDIUM                   */
 /* -------------------------------------------------------- */
 
-@mixin base-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   html {
     font-size: $font-size-desktop;
+    main {
+      width: 95%;
+      padding: 0;
+    }
   }
+
+  h1,.h1{
+    font-size: $font-size-h1;
+  }
+  h2,.h2{
+    font-size: $font-size-h2;
+  }
+  h3,.h3{
+    font-size: $font-size-h3;
+  }
+  h4,.h4{
+    font-size: $font-size-h4;
+  }
+  h5,.h5{
+    font-size: $font-size-h5;
+  }
+  h6,.h6{
+    font-size: $font-size-h6;
+  }
+
 }
 
 /* -------------------------------------------------------- */
 /*                 BASE MEDIAQUERYS LARGE                   */
 /* -------------------------------------------------------- */
 
-@mixin base-lS{
+@media screen and (min-width: map-get($viewports, lw)) {
 
 }

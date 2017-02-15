@@ -1,12 +1,5 @@
 ///////////////////////////////////////////////////////
 ///                  GULPFILE                       ///
-///                                                 ///
-///   for the all active value projects starting    ///
-///      08/2015. To Init gulp local tap "npm       ///
-///    install" in your console. Last Change of     ///
-///                 this File:                      ///
-///          03.08.2015 @Tobias Wöstmann            ///
-///                                                 ///
 ///////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////
@@ -17,17 +10,16 @@ var projectname = 'basetemp';
 
 var jsPath = 'htdocs/js/';
 var cssPath = 'htdocs/css/';
-var imagePaths = ['htdocs/images', 'htdocs/files', 'htdocs/icons'];
+var imagePath = 'htdocs/images/';
 
 var staticJsPath    = 'static/js/';
 var staticCssPath   = 'static/css/';
 var staticHtmlPath  = 'static';
+var staticImagePaths = ['static/images','htdocs/images'];
 
-var buildJsPath     = 'static/build/js/';
-var buildCssPath    = 'static/build/scss/';
-var buildHtmlPath   = 'static/build/html/';
-
-var rexDeveloper    = 'htdocs/redaxo/include/data/addons/developer/';
+var buildJsPath     = 'build/js/';
+var buildCssPath    = 'build/scss/';
+var buildHtmlPath   = 'build/html/';
 
 
 ///////////////////////////////////////////////////////
@@ -42,19 +34,19 @@ var gulp        = require('gulp'),
     fileinclude = require('gulp-file-include'),
     imagemin    = require('gulp-imagemin'),
     merge       = require('merge-stream'),
-    svgSprite   = require('gulp-svg-sprite');
+    mmq         = require('gulp-merge-media-queries');
 
 
 ///////////////////////////////////////////////////////
 ///      CONCAT ALL JS FILES IN BUILD FOLDER        ///
 ///////////////////////////////////////////////////////
 
-gulp.task('scripts', function () {
+gulp.task('compile-js', function () {
     return gulp.src([
-            buildJsPath + 'libs/**/*.js',
-            buildJsPath + '*.js',
-            buildJsPath + 'modules/**/*.js'
-        ])
+        buildJsPath + 'libs/**/*.js',
+        buildJsPath + '*.js',
+        buildJsPath + 'modules/**/*.js'
+    ])
         .pipe(concat('functions.js'))
         .on('error', onError)
         .pipe(gulp.dest(jsPath))
@@ -65,9 +57,10 @@ gulp.task('scripts', function () {
 ///    EXECUTE SASS TASK, CONCAT ALL SCSS FILES     ///
 ///////////////////////////////////////////////////////
 
-gulp.task('sass', function () {
+gulp.task('compile-scss', function () {
     return gulp.src([buildCssPath + 'styles.scss'])
         .pipe(sass())
+        .pipe(mmq({log: true}))
         .on('error', onError)
         .pipe(gulp.dest(cssPath))
         .pipe(gulp.dest(staticCssPath))
@@ -78,7 +71,7 @@ gulp.task('sass', function () {
 ///      CONCAT ALL HTML FILES IN BUILD FOLDER      ///
 ///////////////////////////////////////////////////////
 
-gulp.task('fileinclude', function () {
+gulp.task('compile-html', function () {
     gulp.src([buildHtmlPath + '*.html'])
         .pipe(fileinclude({
             prefix: '@@',
@@ -94,11 +87,20 @@ gulp.task('fileinclude', function () {
 
 gulp.task('compress-js', function () {
     return gulp.src([
-            jsPath + 'functions.js'
+        staticJsPath + '*.js'
     ])
         .pipe(uglify())
         .on('error', onError)
         .pipe(gulp.dest(jsPath));
+});
+
+gulp.task('compress-js-libs', function () {
+    return gulp.src([
+        staticJsPath + 'libs/*.js'
+    ])
+        .pipe(uglify())
+        .on('error', onError)
+        .pipe(gulp.dest(jsPath + 'libs/'));
 });
 
 ///////////////////////////////////////////////////////
@@ -106,7 +108,9 @@ gulp.task('compress-js', function () {
 ///////////////////////////////////////////////////////
 
 gulp.task('compress-css', function () {
-    return gulp.src([buildCssPath + 'styles.scss'])
+    return gulp.src([
+        buildCssPath + 'styles.scss'
+    ])
         .pipe(sass({outputStyle: 'compressed'}))
         .on('error', onError)
         .pipe(gulp.dest(cssPath))
@@ -117,7 +121,7 @@ gulp.task('compress-css', function () {
 ///////////////////////////////////////////////////////
 
 gulp.task('compress-images', function () {
-    var tasts = imagePaths.map(function (element) {
+    var tasts = staticImagePaths.map(function (element) {
         return gulp.src([element + '/**/*'])
             .pipe(imagemin({
                 progressive: true,
@@ -125,54 +129,25 @@ gulp.task('compress-images', function () {
                 multipass: false
             }))
             .on('error', onError)
-            .pipe(gulp.dest(element + '/'));
+            .pipe(gulp.dest(imagePath));
     });
     return merge(tasts);
-});
-
-///////////////////////////////////////////////////////
-///                ADD SVG SPRITE                   ///
-///////////////////////////////////////////////////////
-
-gulp.task('svg-sprite', function () {
-
-    gulp.src('path/to/assets/*.svg')
-        .pipe(svgSprite( /* ... Insert your configuration here ... */ ))
-        .pipe(gulp.dest('out'));
-
-
 });
 
 ///////////////////////////////////////////////////////
 ///              GULP BROWSER SYNC                  ///
 ///////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////
-///    FOR REDAXO BROWSER SYNC WITH LOCAL SERVER    ///
-///////////////////////////////////////////////////////
-
-gulp.task('browser-sync-server', function () {
-    browserSync.init(['*.css', '*.scss'], {
-        proxy: projectname + '.dev'
-    });
-    gulp.watch(cssPath + '*.scss', ['sass']);
-    gulp.watch([rexDeveloper + "**/*.php", "src/*.php"]).on('change', browserSync.reload);
-});
-
-///////////////////////////////////////////////////////
-///           FOR FRONTEND BROWSER SYNC             ///
-///////////////////////////////////////////////////////
-
-gulp.task('browser-sync-static', function () {
+gulp.task('browser-sync', function () {
     browserSync.init(['*.css', '*.scss'], {
         server: {
             baseDir: "./static"
         }
     });
-    gulp.watch(cssPath + '*.scss', ['sass']);
-    gulp.watch(buildHtmlPath + '**/*.html', ['fileinclude']);
+    gulp.watch(buildHtmlPath + '**/*.html', ['compile-html']);
     gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload);
 });
+
 
 ///////////////////////////////////////////////////////
 ///             GULP ERROR HANDLING                 ///
@@ -184,25 +159,7 @@ function onError(err) {
 }
 
 ///////////////////////////////////////////////////////
-///                                                 ///
-///                   GULP TASKS                    ///
-///                                                 ///
-///////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////
 ///            COMPRESS ALL FILE TASKS              ///
 ///////////////////////////////////////////////////////
 
-gulp.task('compress', ['compress-js', 'compress-css', 'compress-images']);
-
-///////////////////////////////////////////////////////
-///         EXECUTE SASS & CONCAT JS FILES          ///
-///////////////////////////////////////////////////////
-
-gulp.task('local', ['scripts', 'sass']);
-
-///////////////////////////////////////////////////////
-///      CONCAT JS FILES & COMPRESS ALL FILES       ///
-///////////////////////////////////////////////////////
-
-gulp.task('default', ['scripts', 'compress']);
+gulp.task('compress', ['compress-js', 'compress-js-libs', 'compress-css', 'compress-images']);

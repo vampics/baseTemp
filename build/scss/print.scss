@@ -1,6 +1,5 @@
 /* -------------------------------------------------------- */
-/*          PRINT . STYLES FOR DER PRINTER DESIGN           */
-/*            22.04.2015     @Tobias Wöstmann               */
+/*             PRINT . STYLES FOR PRINT DESIGN              */
 /* -------------------------------------------------------- */
 
 
@@ -8,28 +7,25 @@
 
   * {
     background: transparent !important;
-    color: black !important;
+    color: $color-black!important;
     text-shadow: none !important;
     box-shadow: none !important;
     opacity: 1 !important;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  body {
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    line-height: 1.45!important;
+    font-size: 14pt;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
   }
 
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  p, h1, h2, h3, h4, h5, h6 {
     orphans: 3;
     widows: 3;
   }
@@ -44,11 +40,32 @@
     padding: 0 1em;
   }
 
-  a,
-  a:visited {
-    color: black !important;
-    text-decoration: underline;
+  a, a:visited {
+    color: $color-black !important;
+    text-decoration: none;
   }
+
+  a[href^="#"], a[href^="javascript:"] {
+    display: none;
+  }
+
+  table {
+    margin: 1px;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  img,tr {
+    page-break-inside: avoid;
+  }
+
+  .navigation, iframe{
+    display: none!important;
+  }
+
+
 }
 
 @page {

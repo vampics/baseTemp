@@ -1,18 +1,16 @@
 /* -------------------------------------------------------- */
 /*             HEADER . STYLES OF THE HEADER                */
-/*            13.08.2014     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
 body>header {
 
 }
-
-@mixin header-sS{
+@media screen and (min-width: map-get($viewports, sw)) {
   body>header {
 
   }
 }
-@mixin header-mS{
+@media screen and (min-width: map-get($viewports, mw)) {
   body>header {
 
   }

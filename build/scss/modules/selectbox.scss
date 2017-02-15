@@ -1,0 +1,93 @@
+/* -------------------------------------------------------- */
+/*           SELECTBOX . STYLES OF OWN SELECTBOX            */
+/* -------------------------------------------------------- */
+
+.selectbox {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  margin: 5px 0;
+
+  .selectboxit-btn {
+    display: block;
+    width: 100%!important;
+    padding: 6px 6px;
+    border: 1px solid $color-grey;
+    text-align: left;
+    cursor: pointer;
+    @include border-radius(3px);
+    @include transition(all 0.2s ease);
+    @include user-select();
+
+    &:hover, &:focus {
+      background: $color-lightgrey;
+    }
+  }
+
+  &.error .selectboxit-btn{
+    border: 1px solid $color-ui-red;
+  }
+
+  .selectboxit-arrow-container {
+    position: absolute;
+    right: 15px;
+    top: 13px;
+    font-weight: bold;
+    color: $color-black;;
+    @include transition(all 0.3s ease);
+
+    .selectboxit-default-arrow {
+      display: block;
+      height: 9px;
+      width: 17px;
+      background: url("/images/arrow-down-big.svg");
+      background-size: 17px auto ;
+    }
+
+  }
+  .selectboxit-open  .selectboxit-arrow-container {
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+
+  .selectboxit-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    height: auto;
+    min-width: 100%;
+    z-index: $zLevel5;
+    background: $color-white;
+    border: 1px solid $color-grey;
+    border-top: none;
+    padding: 0;
+    li {
+      list-style: none;
+      padding-left: 0;
+      &:after {
+        display: none;
+      }
+      a {
+        display: block;
+        padding: 2px 5px;
+        color: $font-color;
+      }
+    }
+    .selectboxit-focus {
+      background: $color-lightgrey;
+    }
+  }
+
+  &.native{
+    select {
+      @extend .selectboxit-btn;
+      padding: 3px 6px;
+    }
+  }
+
+
+}

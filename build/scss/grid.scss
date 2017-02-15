@@ -1,0 +1,49 @@
+/* -------------------------------------------------------- */
+/*                 GRID BASEMENT CLASSES                    */
+/* -------------------------------------------------------- */
+
+@each $current-viewport,  $current-viewportwidth in $viewports {
+
+  @if $current-viewportwidth == 0px {
+    @for $i from 1 through $grid {
+      .#{$current-viewport}#{$i} {
+        width: grid-size($i);
+        margin: 0 $grid-margin;
+        float: left;
+      }
+    }
+    .#{$current-viewport}Full {
+      width: 100%;
+      float: left;
+    }
+    .gridWrap {
+      width: 100%;
+      @include clearfix();
+    }
+
+
+  } @else {
+
+    @media screen and (min-width: $current-viewportwidth) {
+
+      @for $i from 1 through $grid {
+        .#{$current-viewport}#{$i} {
+          width: grid-size($i);
+          margin: 0 $grid-margin;
+          float: left;
+        }
+      }
+      .#{$current-viewport}Full {
+        width: 100%;
+        float: left;
+      }
+      .gridWrap {
+        width: 100%;
+        @include clearfix();
+      }
+
+    }
+
+  }
+
+}

@@ -1,25 +1,35 @@
 /* -------------------------------------------------------- */
 /*        CONFIG DATA . FONTS, GENERALS and VARIABLES       */
-/*            12.03.2015     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
-  // GENERAL BREAKPOINTS
-  $s-screen:					480px;
-  $m-screen:					768px;
-  $l-screen:					1000px;
 
-  // GRID BASEMENTS
-  $grid-size-1:			        10.5%;
-  $grid-size-2:			        23%;
-  $grid-size-3:			        35.5%;
-  $grid-size-4:			        48%;
-  $grid-size-5:			        60.5%;
-  $grid-size-6:			        73%;
-  $grid-size-7:			        85.5%;
-  $grid-size-8:			        98%;
+/* -------------------------------------------------------- */
+/*                   SET UP VIEWPORTS                       */
+/* -------------------------------------------------------- */
 
-  $grid-margin:			        1%;
-  $grid-max-width:			    1000px;
+  $viewports: (
+          w: 0px,
+          sw: 480px,
+          mw: 768px,
+          lw: 1000px
+  );
+
+/* -------------------------------------------------------- */
+/*                    GENERATE GRIDS                        */
+/* -------------------------------------------------------- */
+
+  $grid:                        12;
+  $grid-absolute-box-margin:    5px;
+  $grid-absolute-site-width:	1008px;
+
+  $grid-margin:			        percentage($grid-absolute-box-margin/$grid-absolute-site-width);
+  $grid-absolute-box-width:     $grid-absolute-site-width / $grid - $grid-absolute-box-margin - $grid-absolute-box-margin;
+
+  @function grid-size($size) {
+    $qoutient: $size * 2 - 2;
+    @return percentage(($grid-absolute-box-width * $size + $grid-absolute-box-margin * $qoutient)/$grid-absolute-site-width) - 0.01%;
+  }
+
 
 /* -------------------------------------------------------- */
 /*                 COLORSCHEME, DO IT!                      */
@@ -32,12 +42,27 @@
   $color-darkgrey:               #6d6d6d;
   $color-black:                  #151515;
 
+  $color-ui-green:               #B0C717;
+  $color-ui-red:                 #C10D00;
+
   // THEME COLORS
   $color-theme-blue:             #1A222F;
   $color-theme-green:            #008E74;
   $color-theme-lemon:            #B2E097;
   $color-theme-yellow:           #FFE9AD;
   $color-theme-red:              #D24335;
+
+  // SOCIAL COLORS
+  $color-social-facebook:        #3b5999;
+  $color-social-twitter:         #55acee;
+  $color-social-gplus:           #dc4e41;
+  $color-social-pinterest:       #af0921;
+  $color-social-instagram:       #c6c6c6;
+
+  // SOCIAL COLORS ON HOVER
+  $color-social-facebook-hover:  #364d85;
+  $color-social-twitter-hover:   #5292be;
+  $color-social-gplus-hover:     #bc4537;
 
   // BACKGROUND COLORS
   $color-mainbackground:         #FFF;
@@ -47,32 +72,40 @@
 /*                 LETS ROCK THE FONTS                      */
 /* -------------------------------------------------------- */
 
-  @import url(http://fonts.googleapis.com/css?family=Hind:400,600,300);
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
 
   $font-size-desktop:			14px;
-  $font-size-mobile:			12px;
+  $font-size-mobile:			13px;
+
   $font-line-height-default:	1.6;
-  $font-letter-spacing:         0.3px;
+  $font-letter-spacing:         0;
 
-  $font-size-h1:				19px;
-  $font-size-h2:				19px;
-  $font-size-h3:				19px;
+  $font-size-h1-mobile:			25px;
+  $font-size-h2-mobile:			23px;
+  $font-size-h3-mobile:			21px;
+  $font-size-h4-mobile:			19px;
+  $font-size-h5-mobile:			17px;
+  $font-size-h6-mobile:			15px;
+
+  $font-size-h1:				25px;
+  $font-size-h2:				23px;
+  $font-size-h3:				21px;
   $font-size-h4:				19px;
-  $font-size-h5:				19px;
-  $font-size-h6:				19px;
+  $font-size-h5:				17px;
+  $font-size-h6:				15px;
 
-  $font-weight-light:			300;
+  $font-weight-light:			400;
   $font-weight-normal:			400;
-  $font-weight-bold:			600;
+  $font-weight-bold:			700;
 
-  $font-family:			        'Hind', Arial, sans-serif;
+  $font-family:			        'Lato', Arial, sans-serif;
   $font-family-monospace:		Consolas, "Lucida Console", Monaco, monospace;
 
   // FONT COLORS
   $font-color:                  $color-black;
 
   // LINK STYLES
-  $font-link-color:				$color-black;
+  $font-link-color:				$color-theme-green;
   $font-link-color-hover:		$color-black;
   $font-text-decoration:		none;
 
@@ -101,7 +134,7 @@
     text-shadow: $x $y $blur $color;
   }
 
-  @mixin boxshadow($radius, $blur, $opacity){
+  @mixin boxshadow($y, $x, $blur, $radius, $opacity){
     -webkit-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
     -moz-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
     box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
@@ -118,7 +151,6 @@
     opacity: $opacity;
     $opacity-ie: $opacity * 100;
     filter: alpha(opacity=$opacity-ie);
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(opacity=$opacity-ie)";
   }
 
   @mixin transition($args) {
@@ -129,8 +161,7 @@
     transition: $args;
   }
 
-  // GRADIENT FOR PIE IE8 Script
-  @mixin linear-gradient-pie($from, $to) {
+  @mixin linear-gradient($from, $to) {
     background: $to;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from($from), to($to));
     background: -webkit-linear-gradient($from, $to);
@@ -138,11 +169,10 @@
     background: -ms-linear-gradient($from, $to);
     background: -o-linear-gradient($from, $to);
     background: linear-gradient($from, $to);
-    -pie-background: linear-gradient($from, $to);
   }
 
-  // TRANSFORM
-  @mixin transform($ver, $hoz) {
+  // TRANSLATE SOMETHING
+  @mixin transformtranslate($ver, $hoz) {
     transform: translate($ver, $hoz);
     -webkit-transform: translate($ver, $hoz);
     -o-transform: translate($ver, $hoz);
@@ -159,17 +189,6 @@
     -ms-transform: rotate($degree);
   }
 
-  // CSS3 COLLUMNS
-  @mixin colums($colum-count, $colum-gap){
-    column-count: $colum-count;
-    -webkit-column-count: $colum-count;
-    -moz-column-count: $colum-count;
-
-    column-gap: $colum-gap;
-    -webkit-column-gap: $colum-gap;
-    -moz-column-gap: $colum-gap;
-  }
-
   // PlACEHOLDER COLOR
   @mixin placeholdercolor($color){
     &::-webkit-input-placeholder {
@@ -179,7 +198,7 @@
       color:    $color;
       opacity:  1;
     }
-    &:-moz-placeholder {
+    &::-moz-placeholder {
       color:    $color;
       opacity:  1;
     }
@@ -237,37 +256,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
-
-
-/* -------------------------------------------------------- */
-/*               FAIHTFULLY POSITION MIXINS                 */
-/* -------------------------------------------------------- */
-
-  // POSITIONING BOX ABOVE ALL IN THE WHOLE WINDOW
-  @mixin coverer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    z-index: $zLevel10;
-  }
-
-  // POSITIONING BOX IN CENTER
-  @mixin centerer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    max-height: 90%;
-    max-width: 90%;
   }
 
   // NORMAL CLEARFIX FOR DESTROY FLOATS

@@ -9,9 +9,13 @@ var base = {
     ///////////////////////////////////////////////////////
     init: function() {
 
-        base.loadModules.locate();
-        base.recalculate.triggerResize();
-        base.IeModernizers.init();
+        this.loadModules.locate();
+        this.recalculate.triggerResize();
+        this.IeModernizers.init();
+        this.autosubmit();
+        this.fastclick();
+        this.fastclickIosFix();
+        this.scrollToTop();
 
     },
 
@@ -28,7 +32,7 @@ var base = {
     ///////////////////////////////////////////////////////
     loadModules: {
         locate: function() {
-            var main = config.vars.body().find('main');
+            var main = $("body");
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
                 var selectedmodule = $(this).data('js');
@@ -113,17 +117,75 @@ var base = {
 
     scrollTo: function(finishScrollPos) {
 
-        var page = base.vars.windowRoot();
+        var page = base.vars.windowRoot;
 
         page.on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){
             page.stop();
         });
 
-        page.animate({ scrollTop: finishScrollPos }, 900, 'swing', function(){
+        page.animate({ scrollTop: finishScrollPos }, 500, 'swing', function(){
             page.off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
         });
 
+    },
+
+    scrollToTop: function() {
+
+        $("a.toTop").click(function( event ) {
+
+            event.preventDefault();
+
+            base.scrollTo("0px");
+
+        });
+
+    },
+
+    ///////////////////////////////////////////////////////
+    ///                INIT FASTCLICK                   ///
+    ///////////////////////////////////////////////////////
+
+    fastclick: function() {
+        $(function() {
+            FastClick.attach(document.body);
+        });
+    },
+
+    fastclickIosFix: function() {
+
+        if (this.vars.isTouchDevice) {
+
+            $('label').click(function() {
+
+                var input = $(this).find("input");
+                if (input.attr("type") == "radio") {
+                    input.prop("checked", true);
+                }else if (input.attr("type") == "checkbox") {
+                    if (input.prop("checked")) {
+                        input.prop("checked", false);
+                    }else{
+                        input.prop("checked", true);
+                    }
+                }else{
+                    input.trigger("click");
+                }
+
+            });
+
+        }
+
+    },
+
+    ///////////////////////////////////////////////////////
+    ///          AUTOSUBMIT FORM WHEN CHANGE            ///
+    ///////////////////////////////////////////////////////
+
+    autosubmit: function() {
+        $('*[data-auto-submit]').change(function() {
+            $(this).closest("form").submit();
+        });
     }
+
 
 };
 

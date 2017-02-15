@@ -1,4 +1,33 @@
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.log
+*.orig
+*.rej
+*.swo
+*.swp
+*.vi
+*.zip
+*~
+
+# OS or Editor folders
+._*
+.cache
 .DS_Store
-build/scss/.sass-cache/
-.idea/
+.idea
+.project
+.settings
+.tmproj
+*.esproj
+*.sublime-project
+*.sublime-workspace
+nbproject
+Thumbs.db
+
+# gulp cache
+build/scss/.sass-cache
 build/scss/ie8/.sass-cache
+
+# Folders to ignore
+node_modules
+.vagrant

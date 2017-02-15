@@ -1,0 +1,1499 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+
+/* -------------------------------------------------------- */
+
+/*           SCSS SCHEME . IMPORTING ALL STYLES             */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*        CONFIG DATA . FONTS, GENERALS and VARIABLES       */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                   SET UP VIEWPORTS                       */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                    GENERATE GRIDS                        */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                 COLORSCHEME, DO IT!                      */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                 LETS ROCK THE FONTS                      */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                  Z-INDEX LEVEL RANKING                   */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                FAIHTFULLY STYLE MIXINS                   */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*        RESET . JUST DELETE SHITI BROWSER THINGS          */
+
+/* -------------------------------------------------------- */
+
+* { /* SET THE RIGHT BORDER BOXES  */
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+*:before,
+*:after { /* SET THE RIGHT BORDER BOXES  */
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+main,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+form,
+fieldset,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video { /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
+	background: transparent;
+	font-size: 100%;
+	vertical-align: baseline;
+	border: 0;
+	outline: 0;
+	margin: 0;
+	padding: 0; /* DELETE MOBILE TAP HIGHLIGHING */
+	-webkit-tap-highlight-color: transparent;
+	-webkit-focus-ring-color: transparent;
+}
+
+main,
+section,
+aside,
+footer,
+header { /* Correct `block` display not defined in IE 11.*/
+	display: block;
+}
+
+html { /* SET THE RIGHT FONT SIZE  */
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%; /* SET THE SMOOTHING FOR OWN FONTS  */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	height: 100%;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* -------------------------------------------------------- */
+
+/*           UI RESETS - FORMS, CONTROLS, ACTIONS           */
+
+/* -------------------------------------------------------- */
+
+audio,
+canvas,
+progress,
+video { /* Correct `inline-block` display not defined in IE 8/9.*/
+	display: inline-block; /* Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.*/
+	vertical-align: baseline;
+}
+
+audio:not([controls]) { /* Prevent modern browsers from displaying `audio` without controls.*/
+	display: none; /* Remove excess height in iOS 5 devices.*/
+	height: 0;
+}
+
+input,
+button,
+textarea { /* DELETE MOBILE BROWSER FORM STANDARDS */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-ms-border-radius: 0;
+}
+
+input[disabled],
+button[disabled],
+textarea[disabled] {
+	cursor: default;
+}
+
+input:focus,
+input:active,
+button:focus,
+button:active,
+textarea:focus,
+textarea:active {
+	outline: none;
+}
+
+input {
+	line-height: normal;
+}
+
+input[type="reset"],
+input[type="submit"] {
+	cursor: pointer;
+}
+
+input[type="checkbox"],
+input[type="radio"] { /* NOW SET THIS TO TRUE TO SHOW CHECKBOXES */
+	-webkit-appearance: checkbox;
+	box-sizing: border-box;
+	padding: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+}
+
+/* Address `[hidden]` styling not present in IE 8/9/10.*/
+
+/* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
+
+[hidden],
+template {
+	display: none;
+}
+
+/* -------------------------------------------------------- */
+
+/*              OTHER RESETS - A, SVG, ELEMENTS             */
+
+/* -------------------------------------------------------- */
+
+/* Remove the gray background color from active links in IE 10.*/
+
+a {
+	background: transparent;
+	text-decoration: none;
+}
+
+a:active,
+a:hover {
+	outline: 0;
+}
+
+a img {
+	border: 0 none;
+}
+
+svg:not(:root) { /* Correct overflow not hidden in IE 9/10/11.*/
+	overflow: hidden;
+}
+
+textarea { /* NO SCROLLBARS IN IE .*/
+	overflow: auto;
+	resize: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+ul {
+	list-style: square outside;
+}
+
+ol {
+	list-style: decimal outside;
+}
+
+/* -------------------------------------------------------- */
+
+/*           BASE . THE BASEMENT OF YOUR STYLE              */
+
+/* -------------------------------------------------------- */
+
+body {
+	background: #FFF;
+}
+
+/* -------------------------------------------------------- */
+
+/*                     FONT BASEMENT                        */
+
+/* -------------------------------------------------------- */
+
+html {
+	font-size: 13px;
+	color: #151515;
+	font-family: "Lato", Arial, sans-serif;
+	line-height: 1.6;
+	font-weight: 400;
+	letter-spacing: 0;
+}
+
+html main {
+	position: relative;
+	margin: 0 auto;
+	padding: 0 20px 0;
+	width: 100%;
+	max-width: 1008px;
+	z-index: 100;
+	min-height: 10px;
+}
+
+html .oldBrowserWarning {
+	display: none;
+}
+
+* {
+	font-size: inherit;
+	color: inherit;
+	font-family: inherit;
+	line-height: inherit;
+	font-weight: inherit;
+	letter-spacing: inherit;
+}
+
+h1,
+.h1 {
+	display: block;
+	padding: 5px 0;
+	font-size: 25px;
+}
+
+h2,
+.h2 {
+	display: block;
+	padding: 5px 0;
+	font-size: 23px;
+}
+
+h3,
+.h3 {
+	display: block;
+	padding: 5px 0;
+	font-size: 21px;
+}
+
+h4,
+.h4 {
+	display: block;
+	padding: 5px 0;
+	font-size: 19px;
+}
+
+h5,
+.h5 {
+	display: block;
+	padding: 5px 0;
+	font-size: 17px;
+}
+
+h6,
+.h6 {
+	display: block;
+	padding: 5px 0;
+	font-size: 15px;
+}
+
+/* -------------------------------------------------------- */
+
+/*                  A-TAG / LINK BASEMENT                   */
+
+/* -------------------------------------------------------- */
+
+a,
+.link {
+	color: #008E74;
+	text-decoration: none;
+	cursor: pointer;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+
+a:hover,
+a:active,
+.link:hover,
+.link:active {
+	color: #151515;
+}
+
+/* -------------------------------------------------------- */
+
+/*              BUTTON-TAG / BUTTON BASEMENT                */
+
+/* -------------------------------------------------------- */
+
+button,
+input[type="button"],
+input[type="submit"],
+.button {
+	display: inline-block;
+	background: #989898;
+	color: #FFF;
+	border: none;
+	cursor: pointer;
+	padding: 6px 12px;
+	margin: 0;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+}
+
+button:hover,
+button:active,
+input[type="button"]:hover,
+input[type="button"]:active,
+input[type="submit"]:hover,
+input[type="submit"]:active,
+.button:hover,
+.button:active {
+	background: #a5a5a5;
+}
+
+/* -------------------------------------------------------- */
+
+/*              FORM-TAG / INPUT BASEMENT                */
+
+/* -------------------------------------------------------- */
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea {
+	display: inline-block;
+	width: 100%;
+	background: #FFF;
+	color: #151515;
+	border: 1px solid #989898;
+	padding: 6px 6px;
+	margin: 5px 0;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+input[type="email"]:hover,
+input[type="search"]:hover,
+input[type="tel"]:hover,
+input[type="url"]:hover,
+textarea:hover {
+	background: #f2f2f2;
+}
+
+input[type="text"].error,
+input[type="password"].error,
+input[type="number"].error,
+input[type="email"].error,
+input[type="search"].error,
+input[type="tel"].error,
+input[type="url"].error,
+textarea.error {
+	border: 1px solid #C10D00;
+}
+
+input[type="text"]::-webkit-input-placeholder,
+input[type="password"]::-webkit-input-placeholder,
+input[type="number"]::-webkit-input-placeholder,
+input[type="email"]::-webkit-input-placeholder,
+input[type="search"]::-webkit-input-placeholder,
+input[type="tel"]::-webkit-input-placeholder,
+input[type="url"]::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+	color: #151515;
+}
+
+input[type="text"]:-moz-placeholder,
+input[type="password"]:-moz-placeholder,
+input[type="number"]:-moz-placeholder,
+input[type="email"]:-moz-placeholder,
+input[type="search"]:-moz-placeholder,
+input[type="tel"]:-moz-placeholder,
+input[type="url"]:-moz-placeholder,
+textarea:-moz-placeholder {
+	color: #151515;
+	opacity: 1;
+}
+
+input[type="text"]::-moz-placeholder,
+input[type="password"]::-moz-placeholder,
+input[type="number"]::-moz-placeholder,
+input[type="email"]::-moz-placeholder,
+input[type="search"]::-moz-placeholder,
+input[type="tel"]::-moz-placeholder,
+input[type="url"]::-moz-placeholder,
+textarea::-moz-placeholder {
+	color: #151515;
+	opacity: 1;
+}
+
+input[type="text"]:-ms-input-placeholder,
+input[type="password"]:-ms-input-placeholder,
+input[type="number"]:-ms-input-placeholder,
+input[type="email"]:-ms-input-placeholder,
+input[type="search"]:-ms-input-placeholder,
+input[type="tel"]:-ms-input-placeholder,
+input[type="url"]:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+	color: #151515;
+}
+
+textarea {
+	width: 100%;
+}
+
+/* -------------------------------------------------------- */
+
+/*                    ELEMENT BASEMENT                      */
+
+/* -------------------------------------------------------- */
+
+p {
+	display: block;
+	padding: 5px 0;
+}
+
+strong,
+b {
+	font-weight: 700;
+}
+
+sup {
+	font-size: .875rem;
+	vertical-align: super;
+	line-height: .875rem;
+}
+
+small {
+	font-size: .875rem;
+}
+
+strike,
+del {
+	text-decoration: line-through;
+}
+
+pre,
+code,
+kbd,
+samp {
+	font-family: Consolas, "Lucida Console", Monaco, monospace;
+}
+
+pre {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+blockquote {
+	font-style: italic;
+	padding: 10px;
+}
+
+iframe {
+	max-width: 100%;
+}
+
+hr {
+	border: 0;
+	margin: 5px 0;
+	padding: 0;
+	height: 1px;
+	display: block;
+	background-color: #989898;
+}
+
+ul {
+	display: block;
+	padding: 5px 0;
+}
+
+ul li {
+	position: relative;
+	list-style: none;
+	padding-left: 15px;
+}
+
+ul li:after {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 10px;
+	height: 5px;
+	width: 5px;
+	background: #151515;
+	content: "";
+}
+
+/* -------------------------------------------------------- */
+
+/*                    GENERALL CLASSES                      */
+
+/* -------------------------------------------------------- */
+
+.clear {
+	clear: both;
+}
+
+.ft-uppercase {
+	text-transform: uppercase;
+}
+
+.fw-light {
+	font-weight: 400;
+}
+
+.fw-regular {
+	font-weight: 400;
+}
+
+.fw-bold {
+	font-weight: 700;
+}
+
+.fc-black {
+	color: #151515;
+}
+
+.fc-grey {
+	color: #6d6d6d;
+}
+
+.fc-white {
+	color: #FFF;
+}
+
+/* -------------------------------------------------------- */
+
+/*                  MARKERED TEXT STYLES                    */
+
+/* -------------------------------------------------------- */
+
+::selection {
+	background: #151515;
+	color: #FFF;
+	opacity: 1;
+}
+
+::-moz-selection {
+	background: #151515;
+	color: #FFF;
+	opacity: 1;
+}
+
+/* -------------------------------------------------------- */
+
+/*                 BASE MEDIAQUERYS SMALL                   */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                BASE MEDIAQUERYS MEDIUM                   */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                 BASE MEDIAQUERYS LARGE                   */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                 INIT THE FRAMEWORK                       */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                 GRID BASEMENT CLASSES                    */
+
+/* -------------------------------------------------------- */
+
+.w1 {
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w2 {
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w3 {
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w4 {
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w5 {
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w6 {
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w7 {
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w8 {
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w9 {
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w10 {
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w11 {
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.w12 {
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.wFull {
+	width: 100%;
+	float: left;
+}
+
+.gridWrap {
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
+
+/* -------------------------------------------------------- */
+
+/*             HEADER . STYLES OF THE HEADER                */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*             FOOTER . STYLES OF THE FOOTER                */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*         NAVIGATION . STYLES OF THE NAVIGATION            */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                  INIT THE MODULES                        */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*           SELECTBOX . STYLES OF OWN SELECTBOX            */
+
+/* -------------------------------------------------------- */
+
+.selectbox {
+	position: relative;
+	width: 100%;
+	cursor: pointer;
+	margin: 5px 0;
+}
+
+.selectbox .selectboxit-btn,
+.selectbox.native select {
+	display: block;
+	width: 100% !important;
+	padding: 6px 6px;
+	border: 1px solid #989898;
+	text-align: left;
+	cursor: pointer;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.selectbox .selectboxit-btn:hover,
+.selectbox.native select:hover,
+.selectbox .selectboxit-btn:focus,
+.selectbox.native select:focus {
+	background: #d9d9d9;
+}
+
+.selectbox.error .selectboxit-btn,
+.selectbox.error .selectbox.native select,
+.selectbox.native .selectbox.error select {
+	border: 1px solid #C10D00;
+}
+
+.selectbox .selectboxit-arrow-container {
+	position: absolute;
+	right: 15px;
+	top: 13px;
+	font-weight: bold;
+	color: #151515;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.selectbox .selectboxit-arrow-container .selectboxit-default-arrow {
+	display: block;
+	height: 9px;
+	width: 17px;
+	background: url("/images/arrow-down-big.svg");
+	background-size: 17px auto;
+}
+
+.selectbox .selectboxit-open .selectboxit-arrow-container {
+	-moz-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.selectbox .selectboxit-list {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	height: auto;
+	min-width: 100%;
+	z-index: 500;
+	background: #FFF;
+	border: 1px solid #989898;
+	border-top: none;
+	padding: 0;
+}
+
+.selectbox .selectboxit-list li {
+	list-style: none;
+	padding-left: 0;
+}
+
+.selectbox .selectboxit-list li:after {
+	display: none;
+}
+
+.selectbox .selectboxit-list li a {
+	display: block;
+	padding: 2px 5px;
+	color: #151515;
+}
+
+.selectbox .selectboxit-list .selectboxit-focus {
+	background: #d9d9d9;
+}
+
+.selectbox.native select {
+	padding: 3px 6px;
+}
+
+/* -------------------------------------------------------- */
+
+/*           CHECKBOX . STYLES OF OWN CHECKBOX              */
+
+/* -------------------------------------------------------- */
+
+.checkbox,
+.radiobox {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+
+.checkbox input,
+.radiobox input {
+	display: none;
+}
+
+.checkbox span,
+.radiobox span {
+	display: block;
+	margin-left: 25px;
+	min-height: 20px;
+	padding-top: 2px;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.checkbox span:before,
+.radiobox span:before {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 4px;
+	height: 20px;
+	width: 20px;
+	border: 1px solid #989898;
+	cursor: pointer;
+	content: "";
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+}
+
+.checkbox span:after,
+.radiobox span:after {
+	display: block;
+	position: absolute;
+	left: 3px;
+	top: 7px;
+	height: 14px;
+	width: 14px;
+	cursor: pointer;
+	background: transparent;
+	content: "";
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+}
+
+.checkbox input:checked + span:after,
+.radiobox input:checked + span:after {
+	background: #989898;
+}
+
+.checkbox .error span:before,
+.radiobox .error span:before {
+	border: 1px solid #C10D00;
+}
+
+/* -------------------------------------------------------- */
+
+/*           RADIOBOX . STYLES OF OWN RADIOBOX              */
+
+/* -------------------------------------------------------- */
+
+.radiobox span {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+}
+
+.radiobox span:before {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+}
+
+.radiobox span:after {
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+}
+
+/* -------------------------------------------------------- */
+
+/*              START . STYLES OF STARTPAGE                 */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*                   INIT THE SITES                         */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*              INDEX . STYLES OF STARTPAGE                 */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/* RETINA IMAGES FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*  RETINA . FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS  */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*            PRINT THINGS FOR PRINTER NOOBS                */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
+/*             PRINT . STYLES FOR PRINT DESIGN              */
+
+/* -------------------------------------------------------- */
+
+@media screen and (min-width: 480px) {
+
+.sw1 {
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw2 {
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw3 {
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw4 {
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw5 {
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw6 {
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw7 {
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw8 {
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw9 {
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw10 {
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw11 {
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.sw12 {
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.swFull {
+	width: 100%;
+	float: left;
+}
+
+.gridWrap {
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
+
+}
+
+@media screen and (min-width: 768px) {
+
+html {
+	font-size: 14px;
+}
+
+html main {
+	width: 95%;
+	padding: 0;
+}
+
+h1,
+.h1 {
+	font-size: 25px;
+}
+
+h2,
+.h2 {
+	font-size: 23px;
+}
+
+h3,
+.h3 {
+	font-size: 21px;
+}
+
+h4,
+.h4 {
+	font-size: 19px;
+}
+
+h5,
+.h5 {
+	font-size: 17px;
+}
+
+h6,
+.h6 {
+	font-size: 15px;
+}
+
+.mw1 {
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw2 {
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw3 {
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw4 {
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw5 {
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw6 {
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw7 {
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw8 {
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw9 {
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw10 {
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw11 {
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mw12 {
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.mwFull {
+	width: 100%;
+	float: left;
+}
+
+.gridWrap {
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
+
+}
+
+@media screen and (min-width: 1000px) {
+
+.lw1 {
+	width: 7.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw2 {
+	width: 15.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw3 {
+	width: 23.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw4 {
+	width: 32.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw5 {
+	width: 40.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw6 {
+	width: 48.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw7 {
+	width: 57.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw8 {
+	width: 65.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw9 {
+	width: 73.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw10 {
+	width: 82.33127%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw11 {
+	width: 90.6646%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lw12 {
+	width: 98.99794%;
+	margin: 0 0.49603%;
+	float: left;
+}
+
+.lwFull {
+	width: 100%;
+	float: left;
+}
+
+.gridWrap {
+	width: 100%;
+}
+
+.gridWrap:before,
+.gridWrap:after {
+	content: "";
+	display: table;
+}
+
+.gridWrap:after {
+	clear: both;
+}
+
+}
+
+@media print {
+
+* {
+	background: transparent !important;
+	color: #151515 !important;
+	text-shadow: none !important;
+	box-shadow: none !important;
+	opacity: 1 !important;
+}
+
+body {
+	width: 100% !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	line-height: 1.45 !important;
+	font-size: 14pt;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	page-break-after: avoid;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	orphans: 3;
+	widows: 3;
+}
+
+ul {
+	list-style: disc inside;
+	padding: 0 1em;
+}
+
+ol {
+	list-style: decimal inside;
+	padding: 0 1em;
+}
+
+a,
+a:visited {
+	color: #151515 !important;
+	text-decoration: none;
+}
+
+a[href^="#"],
+a[href^="javascript:"] {
+	display: none;
+}
+
+table {
+	margin: 1px;
+}
+
+thead {
+	display: table-header-group;
+}
+
+img,
+tr {
+	page-break-inside: avoid;
+}
+
+.navigation,
+iframe {
+	display: none !important;
+}
+
+}
+
