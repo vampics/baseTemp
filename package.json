@@ -8,20 +8,6 @@
   "main": "index.js",
 
   "devDependencies": {
-<<<<<<< HEAD
-    "browser-sync": "^2.7.13",
-    "gulp": "^3.9.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-file-include": "^0.13.2",
-    "gulp-imagemin": "^2.3.0",
-    "gulp-sass": "^2.0.3",
-    "gulp-uglify": "^1.2.0",
-    "gulp-svg-sprite": "^1.2.12",
-    "merge-stream": "^0.1.8"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-=======
     "browser-sync": "2.18.5",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
@@ -31,7 +17,6 @@
     "gulp-uglify": "^2.0.0",
     "merge-stream": "^1.0.1",
     "gulp-merge-media-queries": "^0.2.1"
->>>>>>> develop
   },
 
   "repository": {
