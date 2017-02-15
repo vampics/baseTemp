@@ -1,6 +1,6 @@
 {
   "name": "baseTemp",
-  "description": "Simply Frontend Framework with GULP, SASS, HTML, CSS & JS.",
+  "description": "Simply Frontend Framework with Gulp, SASS, HTML with Grid, CSS & JS",
   "version": "1.0",
   "url" : "https://github.com/vampics/baseTemp/issues",
   "author": "Tobias Wöstmann (https://github.com/vampics)",

@@ -1,5 +1,5 @@
 # baseTemp
-Simply Frontend Framework with Gulp, SASS, HTML with Grid, CSS &amp; JS for beginner+.
+Simply Frontend Framework with Gulp, SASS, HTML with Grid, CSS &amp; JS for beginners.
 
 #### Browsers
 - IE 10+
