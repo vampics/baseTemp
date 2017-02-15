@@ -1,6 +1,5 @@
 /* -------------------------------------------------------- */
-/*          PRINT . STYLES FOR DER PRINTER DESIGN           */
-/*            24.11.2015     @Tobias Wöstmann               */
+/*             PRINT . STYLES FOR PRINT DESIGN              */
 /* -------------------------------------------------------- */
 
 
@@ -46,7 +45,7 @@
     text-decoration: none;
   }
 
-  a[href^="#"], a[href^="javascript:"], {
+  a[href^="#"], a[href^="javascript:"] {
     display: none;
   }
 

@@ -30,11 +30,9 @@ modules.selectbox = {
 
             var SelectBoxOptions;
             var EffectSpeed = 150;
-            var downArrowIcon = "icon-down-open-big";
 
             SelectBoxOptions = {
                 autoWidth: false,
-                downArrowIcon: downArrowIcon,
                 showEffect: "slideDown",
                 showEffectSpeed: EffectSpeed,
                 hideEffect: "slideUp",

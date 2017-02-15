@@ -9,13 +9,9 @@ html .oldBrowserWarning {
     color: #ffffff;
     text-align: center;
     padding-top: 25%;
-    opacity: 0.8;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
     z-index: 9999;
 }
-html .oldBrowserWarning div {
-    display: inline-block;
-    background: #fff;
-    color: #000;
-    padding: 20px;
+html main {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }

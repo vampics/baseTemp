@@ -1,12 +1,5 @@
 ///////////////////////////////////////////////////////
 ///                  GULPFILE                       ///
-///                                                 ///
-///   for the all active value projects starting    ///
-///      08/2015. To Init gulp local tap "npm       ///
-///    install" in your console. Last Change of     ///
-///                 this File:                      ///
-///          03.08.2015 @Tobias Wöstmann            ///
-///                                                 ///
 ///////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////
@@ -22,7 +15,7 @@ var imagePath = 'htdocs/images/';
 var staticJsPath    = 'static/js/';
 var staticCssPath   = 'static/css/';
 var staticHtmlPath  = 'static';
-var staticImagePaths = ['static/images'];
+var staticImagePaths = ['static/images','htdocs/images'];
 
 var buildJsPath     = 'build/js/';
 var buildCssPath    = 'build/scss/';

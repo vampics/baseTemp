@@ -1,6 +1,5 @@
 /* -------------------------------------------------------- */
 /*           SELECTBOX . STYLES OF OWN SELECTBOX            */
-/*            23.03.2016     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
 .selectbox {
@@ -26,16 +25,25 @@
   }
 
   &.error .selectboxit-btn{
-    border: 2px solid $color-ui-red;
+    border: 1px solid $color-ui-red;
   }
 
   .selectboxit-arrow-container {
     position: absolute;
     right: 15px;
-    top: 7px;
+    top: 13px;
     font-weight: bold;
-    color: $color-black;
+    color: $color-black;;
     @include transition(all 0.3s ease);
+
+    .selectboxit-default-arrow {
+      display: block;
+      height: 9px;
+      width: 17px;
+      background: url("/images/arrow-down-big.svg");
+      background-size: 17px auto ;
+    }
+
   }
   .selectboxit-open  .selectboxit-arrow-container {
     -moz-transform: rotate(180deg);
@@ -56,11 +64,17 @@
     background: $color-white;
     border: 1px solid $color-grey;
     border-top: none;
+    padding: 0;
     li {
       list-style: none;
+      padding-left: 0;
+      &:after {
+        display: none;
+      }
       a {
         display: block;
         padding: 2px 5px;
+        color: $font-color;
       }
     }
     .selectboxit-focus {

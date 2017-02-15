@@ -2254,7 +2254,7 @@ modules.formvalidation = {
                 if(checkingElement.is(':visible')) {
 
                     if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyField)) {
-                        if (!fvValidations.validateEmptyField(checkingElement.html())) {
+                        if (!fvValidations.validateEmptyField(checkingElement.val())) {
                             textareaReturn = fvActions.setErrorHandling(checkingElement);
                         }
                     }
@@ -2488,24 +2488,8 @@ modules.formvalidation = {
 
 var header = {
 
-    ///////////////////////////////////////////////////////
-    ///             INIT HEADER MODULES                 ///
-    ///////////////////////////////////////////////////////
     init: function() {
 
-        header.demo.bindClick();
-
-    },
-
-    ///////////////////////////////////////////////////////
-    ///                      DEMO                       ///
-    ///////////////////////////////////////////////////////
-    demo: {
-
-        bindClick: function() {
-
-
-        }
 
     }
 
@@ -2543,11 +2527,9 @@ modules.selectbox = {
 
             var SelectBoxOptions;
             var EffectSpeed = 150;
-            var downArrowIcon = "icon-down-open-big";
 
             SelectBoxOptions = {
                 autoWidth: false,
-                downArrowIcon: downArrowIcon,
                 showEffect: "slideDown",
                 showEffectSpeed: EffectSpeed,
                 hideEffect: "slideUp",

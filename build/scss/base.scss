@@ -1,6 +1,5 @@
 /* -------------------------------------------------------- */
 /*           BASE . THE BASEMENT OF YOUR STYLE              */
-/*            13.08.2014     @Tobias Wöstmann               */
 /* -------------------------------------------------------- */
 
 body {
@@ -26,7 +25,7 @@ html {
     width: 100%;
     max-width: $grid-absolute-site-width;
     z-index: $zLevel1;
-    min-height: 100px;
+    min-height: 10px;
   }
 
   .oldBrowserWarning {
@@ -45,21 +44,33 @@ html {
 }
 
 h1,.h1{
+  display: block;
+  padding: 5px 0;
   font-size: $font-size-h1-mobile;
 }
 h2,.h2{
+  display: block;
+  padding: 5px 0;
   font-size: $font-size-h2-mobile;
 }
 h3,.h3{
+  display: block;
+  padding: 5px 0;
   font-size: $font-size-h3-mobile;
 }
 h4,.h4{
+  display: block;
+  padding: 5px 0;
   font-size: $font-size-h4-mobile;
 }
 h5,.h5{
+  display: block;
+  padding: 5px 0;
   font-size: $font-size-h5-mobile;
 }
 h6,.h6{
+  display: block;
+  padding: 5px 0;
   font-size: $font-size-h6-mobile;
 }
 
@@ -83,15 +94,16 @@ a, .link {
 
 button, input[type="button"], input[type="submit"], .button {
   display: inline-block;
-  background: $color-white;
-  color: $color-black;
+  background: $color-grey;
+  color: $color-white;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 6px 12px;
   margin: 0;
   @include transition(all 0.2s ease);
+  @include border-radius(3px);
   &:hover, &:active {
-    background: darken($color-white,20%);
+    background: lighten($color-grey,5%);
   }
 }
 
@@ -101,10 +113,11 @@ button, input[type="button"], input[type="submit"], .button {
 
 input[type="text"], input[type="password"], input[type="number"], input[type="email"], input[type="search"], input[type="tel"], input[type="url"], textarea {
   display: inline-block;
+  width: 100%;
   background: $color-white;
   color: $color-black;
   border: 1px solid $color-grey;
-  padding: 0 5px;
+  padding: 6px 6px;
   margin: 5px 0;
   @include transition(all 0.2s ease);
   @include border-radius(3px);
@@ -112,9 +125,13 @@ input[type="text"], input[type="password"], input[type="number"], input[type="em
     background: darken($color-white,5%);
   }
   &.error {
-    border: 2px solid $color-ui-red;
+    border: 1px solid $color-ui-red;
   }
   @include placeholdercolor($color-black);
+}
+
+textarea {
+  width: 100%;
 }
 
 
@@ -122,18 +139,23 @@ input[type="text"], input[type="password"], input[type="number"], input[type="em
 /*                    ELEMENT BASEMENT                      */
 /* -------------------------------------------------------- */
 
+p {
+  display: block;
+  padding: 5px 0;
+}
+
 strong, b {
   font-weight: $font-weight-bold;
 }
 
 sup {
-  font-size: .875em;
+  font-size: .875rem;
   vertical-align: super;
-  line-height: .875em;
+  line-height: .875rem;
 }
 
 small {
-  font-size: .875em;
+  font-size: .875rem;
 }
 
 strike, del {
@@ -160,11 +182,31 @@ iframe {
 
 hr {
   border:0;
-  margin:0;
+  margin:5px 0;
   padding:0;
   height:1px;
   display:block;
   background-color:$color-grey;
+}
+
+ul {
+  display: block;
+  padding:5px 0;
+  li {
+    position: relative;
+    list-style: none;
+    padding-left: 15px;
+    &:after {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 10px;
+      height: 5px;
+      width: 5px;
+      background: $color-black;
+      content: "";
+    }
+  }
 }
 
 
@@ -195,12 +237,6 @@ hr {
 }
 .fc-grey {
   color: $color-darkgrey;
-}
-.fc-green {
-  color: $color-theme-green;
-}
-.fc-red {
-  color: $color-theme-red;
 }
 .fc-white {
   color: $color-white;
