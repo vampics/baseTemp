@@ -1929,9 +1929,9 @@ var base = {
     ///////////////////////////////////////////////////////
     init: function() {
 
+        this.getAllMediaQuerys();
         this.loadModules.locate();
         this.recalculate.triggerResize();
-        this.IeModernizers.init();
         this.autosubmit();
         this.fastclick();
         this.fastclickIosFix();
@@ -1949,7 +1949,7 @@ var base = {
         documentHeight: $(document).height(),
 
         isTouchDevice: (window.navigator.msMaxTouchPoints || ('ontouchstart' in document.documentElement)),
-        mediaquerys: this.getAllMediaQuerys()
+        mediaquerys: []
 
     },
 
@@ -1958,7 +1958,6 @@ var base = {
     ///////////////////////////////////////////////////////
     loadModules: {
         locate: function() {
-
             var main = $("body");
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
@@ -1970,6 +1969,7 @@ var base = {
                 }
             });
             base.loadModules.startModules(allModulesToLoad);
+
         },
 
         startModules: function(allModulesToLoad) {
@@ -1984,36 +1984,6 @@ var base = {
             }
         }
     },
-
-    ///////////////////////////////////////////////////////
-    ///          INIT MODERNZIER FOR IE 8 & 9           ///
-    ///////////////////////////////////////////////////////
-    IeModernizers: {
-
-        init: function() {
-            var html = $('html');
-            if (html.hasClass('ie8') || html.hasClass('ie9')) {
-                base.IeModernizers.modulePlaceholder();
-                base.IeModernizers.modulePie();
-            }
-        },
-
-        modulePlaceholder: function() {
-            $('input, textarea').placeholder();
-        },
-
-        modulePie: function() {
-            $(function() {
-                if (window.PIE) {
-                    $('.rounded').each(function() {
-                        PIE.attach(this);
-                    });
-                }
-            });
-        }
-
-    },
-
 
     ///////////////////////////////////////////////////////
     ///      CALCULATE NEW VARS AFTER INTERACTION       ///
@@ -2049,17 +2019,14 @@ var base = {
 
     getAllMediaQuerys: function() {
 
-        var mediaquerys = [];
         var unsortedmediaquerystring = window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -2).substring(2).split(",");
 
         $.each(unsortedmediaquerystring, function( index, mediaquery ) {
 
             mediaquery = mediaquery.split(":");
-            mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
+            base.vars.mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
 
         });
-
-        return mediaquerys;
 
     },
 
