@@ -2024,6 +2024,8 @@ var base = {
             $( window ).resize(function() {
                 base.recalculate.windowWidth();
                 base.recalculate.windowHeight();
+                base.recalculate.documentWidth();
+                base.recalculate.documentHeight();
             });
         },
 
@@ -2033,6 +2035,14 @@ var base = {
 
         windowHeight: function() {
             base.vars.windowHeight = $( window ).height();
+        },
+
+        documentWidth: function() {
+            base.vars.documentWidth = $( document ).width();
+        },
+
+        documentHeight: function() {
+            base.vars.documentHeight = $( document ).height();
         }
 
     },
