@@ -1941,10 +1941,16 @@ var base = {
 
     vars: {
         windowRoot: $('html, body'),
-        windowWidth: $( window ).width(),
-        windowHeight: $( window ).height(),
+
+        windowWidth: $(window).width(),
+        windowHeight: $(window).height(),
+
+        documentWidth: $(document).width(),
+        documentHeight: $(document).height(),
+
         isTouchDevice: (window.navigator.msMaxTouchPoints || ('ontouchstart' in document.documentElement)),
-        breakpointMedium: 768
+        mediaquerys: this.getAllMediaQuerys()
+
     },
 
     ///////////////////////////////////////////////////////
@@ -1952,6 +1958,7 @@ var base = {
     ///////////////////////////////////////////////////////
     loadModules: {
         locate: function() {
+
             var main = $("body");
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
@@ -2030,6 +2037,21 @@ var base = {
 
     },
 
+    getAllMediaQuerys: function() {
+
+        var mediaquerys = [];
+        var unsortedmediaquerystring = window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -2).substring(2).split(",");
+
+        $.each(unsortedmediaquerystring, function( index, mediaquery ) {
+
+            mediaquery = mediaquery.split(":");
+            mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
+
+        });
+
+        return mediaquerys;
+
+    },
 
     ///////////////////////////////////////////////////////
     ///        CENTRAL SMOOTH SCROLLTO FUNCTION         ///
@@ -2124,6 +2146,9 @@ var fvErrors;
 modules.formvalidation = {
 
     globals: {
+
+        state: [],
+
         allDataJsElement: '*[data-js=formvalidation]',
         errorClass: 'error',
         errorMessageAttribute: "data-lang-message",

@@ -126,9 +126,12 @@ The base.js includes some little helper functions.
 
 Variable/Function | What it does
 --- | ---
-`base.vars.windowWidth` | Get Window Width (Recalculate automatically)
-`base.vars.windowHeight` | Get Window Height (Recalculate automatically)
+`base.vars.windowWidth` | Get window width (Recalculate automatically)
+`base.vars.windowHeight` | Get window height (Recalculate automatically)
+`base.vars.documentWidth` | Get document width (Recalculate automatically)
+`base.vars.documentHeight` | Get document height (Recalculate automatically)
 `base.vars.isTouchDevice` | Get boolean of is touch device
+`base.vars.mediaquerys` | Get all Mediaquerys from CSS as Array
 `base.scrollTo("0px")` | Smooth Scroll To Position (String)
 
 
