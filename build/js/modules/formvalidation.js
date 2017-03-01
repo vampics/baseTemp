@@ -12,6 +12,9 @@ var fvErrors;
 modules.formvalidation = {
 
     globals: {
+
+        state: [],
+
         allDataJsElement: '*[data-js=formvalidation]',
         errorClass: 'error',
         errorMessageAttribute: "data-lang-message",

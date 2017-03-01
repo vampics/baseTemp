@@ -4,6 +4,13 @@
 
 body {
   background: $color-mainbackground;
+
+  /* Hidden Element to transfer Mediaquerys in JS */
+  &::before {
+    display: none;
+    content:"" + $viewports;
+  }
+
 }
 
 /* -------------------------------------------------------- */
@@ -28,6 +35,7 @@ html {
     min-height: 10px;
   }
 
+  /* Hidden Element for Old Browsers */
   .oldBrowserWarning {
     display: none;
   }
@@ -124,6 +132,7 @@ input[type="text"], input[type="password"], input[type="number"], input[type="em
   &:hover {
     background: darken($color-white,5%);
   }
+  /* Error class for baseTemp Formvalidation */
   &.error {
     border: 1px solid $color-ui-red;
   }

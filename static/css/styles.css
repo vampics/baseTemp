@@ -296,7 +296,12 @@ ol {
 /* -------------------------------------------------------- */
 
 body {
-	background: #FFF;
+	background: #FFF; /* Hidden Element to transfer Mediaquerys in JS */
+}
+
+body::before {
+	display: none;
+	content: "(w: 0px, sw: 480px, mw: 768px, lw: 1000px)";
 }
 
 /* -------------------------------------------------------- */
@@ -311,7 +316,7 @@ html {
 	font-family: "Lato", Arial, sans-serif;
 	line-height: 1.6;
 	font-weight: 400;
-	letter-spacing: 0;
+	letter-spacing: 0; /* Hidden Element for Old Browsers */
 }
 
 html main {
@@ -472,7 +477,7 @@ textarea {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	-ms-border-radius: 3px;
+	-ms-border-radius: 3px; /* Error class for baseTemp Formvalidation */
 }
 
 input[type="text"]:hover,
