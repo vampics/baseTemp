@@ -99,12 +99,15 @@ var base = {
 
     getAllMediaQuerys: function() {
 
-        var unsortedmediaquerystring = window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -2).substring(2).split(",");
+        var unsortedmediaquerystring = window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -1).substring(1).split(",");
 
         $.each(unsortedmediaquerystring, function( index, mediaquery ) {
 
             mediaquery = mediaquery.split(":");
-            base.vars.mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
+
+            if (mediaquery.length > 1) {
+                base.vars.mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
+            }
 
         });
 
