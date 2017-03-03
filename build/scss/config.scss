@@ -69,30 +69,43 @@
 
 
 /* -------------------------------------------------------- */
-/*                 LETS ROCK THE FONTS                      */
+/*               GET FONT AND SET REM FUNCTION              */
 /* -------------------------------------------------------- */
 
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+  @import url('https://fonts.googleapis.com/css?family=Lato:400,700');
 
-  $font-size-desktop:			14px;
-  $font-size-mobile:			13px;
+  $font-size-main:			    14px;
+
+  // GET REM FONTSIZE
+  @function rem($font-size) {
+    $remSize: $font-size / $font-size-main;
+    @return $remSize * 1rem;
+  }
+
+/* -------------------------------------------------------- */
+/*                      FONTCONFIGS                         */
+/* -------------------------------------------------------- */
+
+
+  $font-size-desktop:			rem(14px);
+  $font-size-mobile:			rem(13px);
 
   $font-line-height-default:	1.6;
   $font-letter-spacing:         0;
 
-  $font-size-h1-mobile:			25px;
-  $font-size-h2-mobile:			23px;
-  $font-size-h3-mobile:			21px;
-  $font-size-h4-mobile:			19px;
-  $font-size-h5-mobile:			17px;
-  $font-size-h6-mobile:			15px;
+  $font-size-h1-mobile:			rem(25px);
+  $font-size-h2-mobile:			rem(23px);
+  $font-size-h3-mobile:			rem(21px);
+  $font-size-h4-mobile:			rem(19px);
+  $font-size-h5-mobile:			rem(17px);
+  $font-size-h6-mobile:			rem(15px);
 
-  $font-size-h1:				25px;
-  $font-size-h2:				23px;
-  $font-size-h3:				21px;
-  $font-size-h4:				19px;
-  $font-size-h5:				17px;
-  $font-size-h6:				15px;
+  $font-size-h1:				rem(25px);
+  $font-size-h2:				rem(23px);
+  $font-size-h3:				rem(21px);
+  $font-size-h4:				rem(19px);
+  $font-size-h5:				rem(17px);
+  $font-size-h6:				rem(15px);
 
   $font-weight-light:			400;
   $font-weight-normal:			400;
@@ -130,14 +143,10 @@
 /* -------------------------------------------------------- */
 
   // CSS3 MIXINS WITH PREFIXES
-  @mixin textshadow($x, $y, $blur,$color){
-    text-shadow: $x $y $blur $color;
-  }
-
   @mixin boxshadow($y, $x, $blur, $radius, $opacity){
-    -webkit-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
-    -moz-box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
-    box-shadow: 1px 1px $blur $radius rgba(0,0,0,$opacity);
+    -webkit-box-shadow: $y $x $blur $radius rgba(0,0,0,$opacity);
+    -moz-box-shadow: $y $x $blur $radius rgba(0,0,0,$opacity);
+    box-shadow: $y $x $blur $radius rgba(0,0,0,$opacity);
   }
 
   @mixin border-radius($radius) {
@@ -187,6 +196,14 @@
     -o-transform: rotate($degree);
     -moz-transform: rotate($degree);
     -ms-transform: rotate($degree);
+  }
+
+  // HYPHENS
+  @mixin hyphens($mode) {
+    -webkit-hyphens: $mode;
+    -moz-hyphens: $mode;
+    -ms-hyphens: $mode;
+    hyphens: $mode;
   }
 
   // PlACEHOLDER COLOR
@@ -252,7 +269,6 @@
   @mixin user-select() {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
