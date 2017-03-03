@@ -20,6 +20,12 @@
 
 /* -------------------------------------------------------- */
 
+/*              GET THE VIEWPORTS AS STRING                 */
+
+/* -------------------------------------------------------- */
+
+/* -------------------------------------------------------- */
+
 /*                    GENERATE GRIDS                        */
 
 /* -------------------------------------------------------- */
@@ -307,7 +313,7 @@ body {
 
 body::before {
 	display: none;
-	content: "(w: 0px, sw: 480px, mw: 768px, lw: 1000px)";
+	content: "w:0px,sw:480px,mw:768px,lw:1000px,";
 }
 
 /* -------------------------------------------------------- */
@@ -317,7 +323,7 @@ body::before {
 /* -------------------------------------------------------- */
 
 html {
-	font-size: 0.92857rem;
+	font-size: 13px;
 	color: #151515;
 	font-family: "Lato", Arial, sans-serif;
 	line-height: 1.6;
@@ -352,42 +358,42 @@ h1,
 .h1 {
 	display: block;
 	padding: 5px 0;
-	font-size: 1.78571rem;
+	font-size: 25px;
 }
 
 h2,
 .h2 {
 	display: block;
 	padding: 5px 0;
-	font-size: 1.64286rem;
+	font-size: 23px;
 }
 
 h3,
 .h3 {
 	display: block;
 	padding: 5px 0;
-	font-size: 1.5rem;
+	font-size: 21px;
 }
 
 h4,
 .h4 {
 	display: block;
 	padding: 5px 0;
-	font-size: 1.35714rem;
+	font-size: 19px;
 }
 
 h5,
 .h5 {
 	display: block;
 	padding: 5px 0;
-	font-size: 1.21429rem;
+	font-size: 17px;
 }
 
 h6,
 .h6 {
 	display: block;
 	padding: 5px 0;
-	font-size: 1.07143rem;
+	font-size: 15px;
 }
 
 /* -------------------------------------------------------- */
@@ -1201,7 +1207,7 @@ ul li:after {
 @media screen and (min-width: 768px) {
 
 html {
-	font-size: 1rem;
+	font-size: 14px;
 }
 
 html main {
@@ -1211,32 +1217,32 @@ html main {
 
 h1,
 .h1 {
-	font-size: 1.78571rem;
+	font-size: 25px;
 }
 
 h2,
 .h2 {
-	font-size: 1.64286rem;
+	font-size: 23px;
 }
 
 h3,
 .h3 {
-	font-size: 1.5rem;
+	font-size: 21px;
 }
 
 h4,
 .h4 {
-	font-size: 1.35714rem;
+	font-size: 19px;
 }
 
 h5,
 .h5 {
-	font-size: 1.21429rem;
+	font-size: 17px;
 }
 
 h6,
 .h6 {
-	font-size: 1.07143rem;
+	font-size: 15px;
 }
 
 .mw1 {
