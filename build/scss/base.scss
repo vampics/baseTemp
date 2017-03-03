@@ -8,7 +8,7 @@ body {
   /* Hidden Element to transfer Mediaquerys in JS */
   &::before {
     display: none;
-    content:"" + $viewports;
+    content:"" + $viewportsString;
   }
 
 }
