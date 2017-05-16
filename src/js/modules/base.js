@@ -10,11 +10,11 @@ var base = {
     init: function() {
 
         this.getAllMediaQuerys();
-        this.loadModules.locate();
+        this.loadModules.locate($("body"));
         this.recalculate.triggerResize();
         this.autosubmit();
         this.fastclick();
-        this.fastclickIosFix();
+        this.fastclickFix();
         this.scrollToTop();
 
     },
@@ -28,6 +28,8 @@ var base = {
         documentWidth: $(document).width(),
         documentHeight: $(document).height(),
 
+        vendorBasePath: '/js/libs/',
+
         isTouchDevice: (window.navigator.msMaxTouchPoints || ('ontouchstart' in document.documentElement)),
         mediaquerys: []
 
@@ -37,8 +39,7 @@ var base = {
     ///        INIT ALL MODULES NEEDED ON PAGE          ///
     ///////////////////////////////////////////////////////
     loadModules: {
-        locate: function() {
-            var main = $("body");
+        locate: function(main) {
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
                 var selectedmodule = $(this).data('js');
@@ -153,28 +154,44 @@ var base = {
         });
     },
 
-    fastclickIosFix: function() {
+    fastclickFix: function() {
 
-        if (this.vars.isTouchDevice) {
+        $('label').on("click",function(event) {
 
-            $('label').click(function() {
+            var input = $(this).find("input");
 
-                var input = $(this).find("input");
-                if (input.attr("type") == "radio") {
-                    input.prop("checked", true);
-                }else if (input.attr("type") == "checkbox") {
-                    if (input.prop("checked")) {
-                        input.prop("checked", false);
-                    }else{
-                        input.prop("checked", true);
-                    }
+            if (input.attr("type") == "radio") {
+
+                event.stopPropagation();
+                event.preventDefault();
+
+                input.prop("checked", true);
+                input.trigger("change");
+
+            }else if (input.attr("type") == "checkbox") {
+
+                event.stopPropagation();
+                event.preventDefault();
+
+                if (input.prop('checked') == false) {
+
+                    input.prop('checked',true);
+
                 }else{
-                    input.trigger("click");
+
+                    input.prop('checked',false);
+
                 }
 
-            });
+                input.trigger("change");
 
-        }
+            }else{
+
+                input.trigger("click");
+
+            }
+
+        });
 
     },
 

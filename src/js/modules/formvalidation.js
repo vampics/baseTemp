@@ -333,7 +333,7 @@ modules.formvalidation = {
 
         validateEmptyRadiobox: function (element) {
 
-            return $("input[name="+element.attr("name")+"]").is(':checked')
+            return $("input[name='"+element.attr("name")+"']").is(':checked')
 
         },
 

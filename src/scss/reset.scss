@@ -152,3 +152,10 @@ ul {
 ol {
   list-style: decimal outside;
 }
+
+figure {
+  img {
+    display: block;
+    width: 100%;
+  }
+}

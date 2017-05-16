@@ -301,6 +301,11 @@ ol {
 	list-style: decimal outside;
 }
 
+figure img {
+	display: block;
+	width: 100%;
+}
+
 /* -------------------------------------------------------- */
 
 /*           BASE . THE BASEMENT OF YOUR STYLE              */
@@ -632,19 +637,7 @@ ul {
 
 ul li {
 	position: relative;
-	list-style: none;
-	padding-left: 15px;
-}
-
-ul li:after {
-	display: block;
-	position: absolute;
-	left: 0;
-	top: 10px;
-	height: 5px;
-	width: 5px;
-	background: #151515;
-	content: "";
+	margin-left: 15px;
 }
 
 /* -------------------------------------------------------- */
@@ -844,7 +837,7 @@ ul li:after {
 
 /* -------------------------------------------------------- */
 
-/*                  INIT THE MODULES                        */
+/*                  INIT THE COMPONENTS                        */
 
 /* -------------------------------------------------------- */
 
@@ -1067,6 +1060,275 @@ ul li:after {
 	-ms-border-radius: 50%;
 }
 
+/* Slider */
+
+.slick-slider {
+	position: relative;
+	display: block;
+	box-sizing: border-box;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-ms-touch-action: pan-y;
+	touch-action: pan-y;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.slick-list {
+	position: relative;
+	overflow: hidden;
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+
+.slick-list:focus {
+	outline: none;
+}
+
+.slick-list.dragging {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.slick-slider .slick-track,
+.slick-slider .slick-list {
+	-webkit-transform: translate3d(0, 0, 0);
+	-moz-transform: translate3d(0, 0, 0);
+	-ms-transform: translate3d(0, 0, 0);
+	-o-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
+
+.slick-track {
+	position: relative;
+	left: 0;
+	top: 0;
+	display: block;
+}
+
+.slick-track:before,
+.slick-track:after {
+	content: "";
+	display: table;
+}
+
+.slick-track:after {
+	clear: both;
+}
+
+.slick-loading .slick-track {
+	visibility: hidden;
+}
+
+.slick-slide {
+	float: left;
+	height: 100%;
+	min-height: 1px;
+	display: none;
+}
+
+[dir="rtl"] .slick-slide {
+	float: right;
+}
+
+.slick-slide img {
+	display: block;
+}
+
+.slick-slide.slick-loading img {
+	display: none;
+}
+
+.slick-slide.dragging img {
+	pointer-events: none;
+}
+
+.slick-initialized .slick-slide {
+	display: block;
+}
+
+.slick-loading .slick-slide {
+	visibility: hidden;
+}
+
+.slick-vertical .slick-slide {
+	display: block;
+	height: auto;
+	border: 1px solid transparent;
+}
+
+.slick-arrow.slick-hidden {
+	display: none;
+}
+
+.slick-prev,
+.slick-next {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	background: transparent;
+	z-index: 200;
+	padding: 0;
+	transform: translate(0, -50%);
+	-webkit-transform: translate(0, -50%);
+	-o-transform: translate(0, -50%);
+	-moz-transform: translate(0, -50%);
+	-ms-transform: translate(0, -50%);
+}
+
+.slick-prev svg,
+.slick-next svg {
+	width: 50px;
+	transform: rotate(90deg);
+	-webkit-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+
+.slick-prev svg *,
+.slick-next svg * {
+	fill: #FFF;
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+	background: none;
+}
+
+.slick-prev:hover svg,
+.slick-next:hover svg {
+	opacity: 0.8;
+}
+
+.slick-next {
+	left: auto;
+	right: 0;
+}
+
+.slick-next svg {
+	transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+}
+
+.slick-dots {
+	display: block;
+	position: absolute;
+	left: 50%;
+	bottom: 10px;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+}
+
+.slick-dots li {
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+}
+
+.slick-dots li button {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	margin: 0 5px;
+	font-size: 0;
+	padding: 0;
+	background: #FFF;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+	border: none;
+}
+
+.slick-dots li button:hover {
+	background: #989898;
+}
+
+.slick-dots li.slick-active button {
+	background: #989898;
+}
+
+.slick-dots li:after {
+	display: none;
+}
+
+/* -------------------------------------------------------- */
+
+/*          ACCORDION . STYLES OF OWN ACCORDION             */
+
+/* -------------------------------------------------------- */
+
+*[data-js=accordion] > a {
+	display: block;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+*[data-js=accordion] > div {
+	display: none;
+}
+
+/* -------------------------------------------------------- */
+
+/*           MODALBOX . STYLES OF OWN MODALBOX              */
+
+/* -------------------------------------------------------- */
+
+.modalbox {
+	display: none;
+	opacity: 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 999;
+	background: rgba(0, 0, 0, 0.4);
+	text-align: center;
+	line-height: 100vh;
+	cursor: pointer;
+}
+
+.modalbox > div {
+	display: inline-block;
+	text-align: left;
+	vertical-align: middle;
+	background: #FFF;
+	max-width: 95vw;
+	max-height: 95vh;
+}
+
+/* -------------------------------------------------------- */
+
+/*                  INIT THE MODULES                        */
+
+/* -------------------------------------------------------- */
+
 /* -------------------------------------------------------- */
 
 /*              START . STYLES OF STARTPAGE                 */
@@ -1183,9 +1445,21 @@ ul li:after {
 	float: left;
 }
 
+.swRight {
+	float: right;
+}
+
 .swFull {
 	width: 100%;
 	float: left;
+}
+
+.swHidden {
+	display: none;
+}
+
+.swVisible {
+	display: block;
 }
 
 .gridWrap {
@@ -1317,9 +1591,21 @@ h6,
 	float: left;
 }
 
+.mwRight {
+	float: right;
+}
+
 .mwFull {
 	width: 100%;
 	float: left;
+}
+
+.mwHidden {
+	display: none;
+}
+
+.mwVisible {
+	display: block;
 }
 
 .gridWrap {
@@ -1412,9 +1698,21 @@ h6,
 	float: left;
 }
 
+.lwRight {
+	float: right;
+}
+
 .lwFull {
 	width: 100%;
 	float: left;
+}
+
+.lwHidden {
+	display: none;
+}
+
+.lwVisible {
+	display: block;
 }
 
 .gridWrap {

@@ -17,9 +17,9 @@ var staticCssPath   = 'static/css/';
 var staticHtmlPath  = 'static';
 var staticImagePaths = ['static/images','htdocs/images'];
 
-var buildJsPath     = 'build/js/';
-var buildCssPath    = 'build/scss/';
-var buildHtmlPath   = 'build/html/';
+var buildJsPath     = 'src/js/';
+var buildCssPath    = 'src/scss/';
+var buildHtmlPath   = 'src/html/';
 
 
 ///////////////////////////////////////////////////////
@@ -144,8 +144,8 @@ gulp.task('browser-sync', function () {
             baseDir: "./static"
         }
     });
-    gulp.watch(buildHtmlPath + '**/*.html', ['compile-html']);
-    gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload);
+    gulp.watch(buildHtmlPath + '**/*.html', ['compile-html']).on('error', onError);
+    gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload).on('error', onError);
 });
 
 
