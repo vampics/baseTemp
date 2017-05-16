@@ -33,10 +33,24 @@
           float: left;
         }
       }
+
+      .#{$current-viewport}Right {
+        float: right;
+      }
+
       .#{$current-viewport}Full {
         width: 100%;
         float: left;
       }
+
+      .#{$current-viewport}Hidden {
+        display: none;
+      }
+
+      .#{$current-viewport}Visible {
+        display: block;
+      }
+
       .gridWrap {
         width: 100%;
         @include clearfix();

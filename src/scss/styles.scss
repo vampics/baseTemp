@@ -16,14 +16,20 @@
   @import 'footer';
   @import 'navigation';
 
+/* -------------------------------------------------------- */
+/*                  INIT THE COMPONENTS                        */
+/* -------------------------------------------------------- */
+
+  @import 'components/selectbox';
+  @import 'components/checkbox';
+  @import 'components/radiobox';
+  @import 'components/slider';
+  @import 'components/accordion';
+  @import 'components/modalbox';
 
 /* -------------------------------------------------------- */
 /*                  INIT THE MODULES                        */
 /* -------------------------------------------------------- */
-
-  @import 'modules/selectbox';
-  @import 'modules/checkbox';
-  @import 'modules/radiobox';
 
   @import 'modules/start';
 

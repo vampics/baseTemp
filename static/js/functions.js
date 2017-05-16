@@ -1919,6 +1919,57 @@ var modules = {
 
 };
 ///////////////////////////////////////////////////////
+///                 ACCORDION JS                    ///
+///////////////////////////////////////////////////////
+
+modules.accordion = {
+
+    init: function() {
+        var me = this;
+        var accordions = $('*[data-js=accordion]');
+
+        accordions.on("click", "> a", function(event){
+
+            me.eventHandler(me,event,$(this),accordions);
+
+        });
+
+    },
+
+    eventHandler: function(me,event,link,accordions) {
+
+        event.preventDefault();
+
+        var isActive = link.parent().hasClass("active");
+
+        me.close(accordions);
+
+        if (!isActive) {
+            me.open(link);
+        }
+
+    },
+
+    open: function(link) {
+
+        link.parent().addClass("active").find(">div").slideDown(300);
+
+    },
+
+    close: function(accordions) {
+
+        accordions.each(function(){
+
+            $(this).removeClass("active").find(">div").slideUp(300);
+
+        });
+
+    }
+
+};
+
+
+///////////////////////////////////////////////////////
 ///                 BASE JS                         ///
 ///////////////////////////////////////////////////////
 
@@ -1930,11 +1981,11 @@ var base = {
     init: function() {
 
         this.getAllMediaQuerys();
-        this.loadModules.locate();
+        this.loadModules.locate($("body"));
         this.recalculate.triggerResize();
         this.autosubmit();
         this.fastclick();
-        this.fastclickIosFix();
+        this.fastclickFix();
         this.scrollToTop();
 
     },
@@ -1948,6 +1999,8 @@ var base = {
         documentWidth: $(document).width(),
         documentHeight: $(document).height(),
 
+        vendorBasePath: '/js/libs/',
+
         isTouchDevice: (window.navigator.msMaxTouchPoints || ('ontouchstart' in document.documentElement)),
         mediaquerys: []
 
@@ -1957,8 +2010,7 @@ var base = {
     ///        INIT ALL MODULES NEEDED ON PAGE          ///
     ///////////////////////////////////////////////////////
     loadModules: {
-        locate: function() {
-            var main = $("body");
+        locate: function(main) {
             var allModulesToLoad = {};
             main.find('*[data-js]').each(function() {
                 var selectedmodule = $(this).data('js');
@@ -2019,12 +2071,15 @@ var base = {
 
     getAllMediaQuerys: function() {
 
-        var unsortedmediaquerystring = window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -2).substring(2).split(",");
+        var unsortedmediaquerystring = window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -1).substring(1).split(",");
 
         $.each(unsortedmediaquerystring, function( index, mediaquery ) {
 
             mediaquery = mediaquery.split(":");
-            base.vars.mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
+
+            if (mediaquery.length > 1) {
+                base.vars.mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
+            }
 
         });
 
@@ -2070,28 +2125,44 @@ var base = {
         });
     },
 
-    fastclickIosFix: function() {
+    fastclickFix: function() {
 
-        if (this.vars.isTouchDevice) {
+        $('label').on("click",function(event) {
 
-            $('label').click(function() {
+            var input = $(this).find("input");
 
-                var input = $(this).find("input");
-                if (input.attr("type") == "radio") {
-                    input.prop("checked", true);
-                }else if (input.attr("type") == "checkbox") {
-                    if (input.prop("checked")) {
-                        input.prop("checked", false);
-                    }else{
-                        input.prop("checked", true);
-                    }
+            if (input.attr("type") == "radio") {
+
+                event.stopPropagation();
+                event.preventDefault();
+
+                input.prop("checked", true);
+                input.trigger("change");
+
+            }else if (input.attr("type") == "checkbox") {
+
+                event.stopPropagation();
+                event.preventDefault();
+
+                if (input.prop('checked') == false) {
+
+                    input.prop('checked',true);
+
                 }else{
-                    input.trigger("click");
+
+                    input.prop('checked',false);
+
                 }
 
-            });
+                input.trigger("change");
 
-        }
+            }else{
+
+                input.trigger("click");
+
+            }
+
+        });
 
     },
 
@@ -2106,6 +2177,97 @@ var base = {
     }
 
 
+};
+
+
+///////////////////////////////////////////////////////
+///               EQUAL HEIGHT JS                   ///
+///////////////////////////////////////////////////////
+
+modules.equalheight = {
+
+    init: function() {
+
+        var me = this;
+
+        var equalheight = $('*[data-js=equalheight]');
+
+        equalheight.each(function(){
+
+            var elements = $(this).find('*[data-equalheight-element]');
+            var mobile = $(this).attr('data-equalheight-mobile') === "true";
+            var intervalCheckForHeight;
+
+            if (mobile) {
+
+                me.setElementsToEqualHeight(me,elements);
+                intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements)}, 500);
+
+            }else{
+
+                if (base.vars.mediaquerys.mw <= base.vars.windowWidth) {
+
+                    me.setElementsToEqualHeight(me,elements);
+                    intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements)}, 500);
+
+                }
+
+            }
+
+            setTimeout( function(){ clearInterval(intervalCheckForHeight) }, 2500);
+
+            $(window).on("resize", function(){
+
+
+                if (mobile) {
+
+                    me.setElementsToEqualHeight(me,elements);
+
+                }else{
+
+                    if (base.vars.mediaquerys.mw <= base.vars.windowWidth) {
+
+                        me.setElementsToEqualHeight(me,elements);
+
+                    }else{
+
+                        me.resetElements(me,elements);
+
+                    }
+
+                }
+
+            });
+
+        });
+
+    },
+
+    setElementsToEqualHeight: function(me,elements) {
+
+        var highestHeight = 0;
+
+        me.resetElements(me,elements);
+
+        elements.each(function(){
+
+            if (highestHeight < Math.ceil($(this).outerHeight())) {
+
+                highestHeight = Math.ceil($(this).outerHeight())
+
+            }
+
+        });
+
+        elements.css("height",highestHeight);
+
+    },
+
+    resetElements: function(me,elements) {
+
+        elements.css("height","auto");
+
+    }
 };
 
 
@@ -2444,7 +2606,7 @@ modules.formvalidation = {
 
         validateEmptyRadiobox: function (element) {
 
-            return $("input[name="+element.attr("name")+"]").is(':checked')
+            return $("input[name='"+element.attr("name")+"']").is(':checked')
 
         },
 
@@ -2492,10 +2654,70 @@ var header = {
 
     init: function() {
 
-
     }
 
 }
+
+///////////////////////////////////////////////////////
+///                 MODALBOX JS                     ///
+///////////////////////////////////////////////////////
+
+modules.modalbox = {
+
+    init: function() {
+
+        var me = this;
+        var modalboxLink = $('*[data-js=modalbox]');
+
+        modalboxLink.on("click", function(event){
+
+            me.open(me,event,$(this));
+
+        });
+
+    },
+
+    open: function(me,event,element) {
+
+        event.stopPropagation();
+        event.preventDefault();
+
+        var modalbox = $("[data-modalbox-name='" + element.attr("data-modalbox") +"']");
+
+        modalbox.css("display","block").animate({opacity: 1},210);
+
+        $(document).on("click.modalbox", function(event2) {
+            me.bindClickToClose(me,event2,modalbox);
+        });
+
+    },
+
+    bindClickToClose: function (me,event,modalbox) {
+
+        if(modalbox.is(":visible")) {
+
+            if ($(event.target).hasClass("modalbox")) {
+                me.close(modalbox);
+            }
+
+        }
+
+    },
+
+    close: function(modalbox) {
+
+        $(document).off("click.modalbox");
+
+        modalbox.animate({opacity: 0},210, function() {
+
+            $(this).css("display","none");
+
+        });
+
+    }
+
+};
+
 
 ///////////////////////////////////////////////////////
 ///                 SELECTBOX JS                    ///
@@ -2513,9 +2735,11 @@ modules.selectbox = {
 
         var module = this;
 
-        $.getScript( "/js/libs/selectbox.js", function() {
+        $.getScript( base.vars.vendorBasePath + "selectbox.js", function() {
 
             module.startScript();
+
+            module.bindEvent();
 
         });
 
@@ -2541,7 +2765,12 @@ modules.selectbox = {
             if (!$(this).hasClass("showfirstoption")) {
 
                 SelectBoxOptions["showFirstOption"] = false;
-                $(this).find(".selectboxit-btn").addClass("selected");
+
+            }
+
+            $(this).find("select").selectBoxIt(SelectBoxOptions);
+
+            if (!$(this).hasClass("showfirstoption")) {
 
                 if ($(this).find(".selectboxit-text").html() != $(this).find("select").find("option:first-child").html()) {
                     $(this).find(".selectboxit-btn").addClass("selected");
@@ -2553,10 +2782,14 @@ modules.selectbox = {
 
             }
 
-            $(this).find("select").selectBoxIt(SelectBoxOptions);
-
 
         });
+
+    },
+
+    bindEvent: function() {
+
+        var selectbox = $('.selectbox');
 
         selectbox.find("select").bind({
             "changed": function(ev, obj) {
@@ -2565,6 +2798,59 @@ modules.selectbox = {
 
             }
         });
+
+    }
+
+};
+
+
+///////////////////////////////////////////////////////
+///                   SLIDER JS                     ///
+///////////////////////////////////////////////////////
+
+modules.slider = {
+
+    init: function() {
+
+        this.getLibary();
+
+    },
+
+    getLibary: function() {
+
+        var module = this;
+        var detailgallery = $("*[data-js=slider]");
+        var settings = [];
+
+        settings['arrows'] = (detailgallery.attr("data-arrows") === "true");
+        settings['dots'] = (detailgallery.attr("data-dots") === "true");
+        settings['speed'] = detailgallery.attr("data-speed");
+        settings['autoplay'] = (detailgallery.attr("data-autoplay") === "true");
+        settings['autoplayspeed'] = detailgallery.attr("data-autoplayspeed");
+        settings['show'] = detailgallery.attr("data-show");
+
+        $.getScript( base.vars.vendorBasePath + "slider.js", function() {
+
+            module.startScript(detailgallery,settings)
+
+        });
+
+    },
+
+    startScript: function(detailgallery,settings) {
+
+        detailgallery.slick({
+            prevArrow:'<button type="button" class="slick-prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon class="st0" points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>',
+            nextArrow:'<button type="button" class="slick-next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon class="st0" points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>',
+            infinite: true,
+            speed: settings.speed,
+            slidesToShow: settings.show,
+            autoplay: settings.autoplay,
+            autoplaySpeed: settings.autoplayspeed,
+            dots: settings.dots,
+            arrows: settings.arrows
+        });
+
 
     }
 

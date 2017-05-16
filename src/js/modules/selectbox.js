@@ -14,9 +14,11 @@ modules.selectbox = {
 
         var module = this;
 
-        $.getScript( "/js/libs/selectbox.js", function() {
+        $.getScript( base.vars.vendorBasePath + "selectbox.js", function() {
 
             module.startScript();
+
+            module.bindEvent();
 
         });
 
@@ -42,7 +44,12 @@ modules.selectbox = {
             if (!$(this).hasClass("showfirstoption")) {
 
                 SelectBoxOptions["showFirstOption"] = false;
-                $(this).find(".selectboxit-btn").addClass("selected");
+
+            }
+
+            $(this).find("select").selectBoxIt(SelectBoxOptions);
+
+            if (!$(this).hasClass("showfirstoption")) {
 
                 if ($(this).find(".selectboxit-text").html() != $(this).find("select").find("option:first-child").html()) {
                     $(this).find(".selectboxit-btn").addClass("selected");
@@ -54,10 +61,14 @@ modules.selectbox = {
 
             }
 
-            $(this).find("select").selectBoxIt(SelectBoxOptions);
-
 
         });
+
+    },
+
+    bindEvent: function() {
+
+        var selectbox = $('.selectbox');
 
         selectbox.find("select").bind({
             "changed": function(ev, obj) {

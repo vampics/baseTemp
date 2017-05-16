@@ -6,7 +6,6 @@ var header = {
 
     init: function() {
 
-
     }
 
 }

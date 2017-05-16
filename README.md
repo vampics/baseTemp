@@ -29,7 +29,7 @@ npm install
 
 ## Getting Started
 
-`/build/` - folder with all sass, js and html files like a vendor folder. Gulp generate from here.
+`/src/` - folder with all sass, js and html files like a vendor folder. Gulp generate from here.
 
 `/htdocs/` - result folder with all compiled files, ready to give this folder to your backend development.
 
@@ -130,6 +130,7 @@ Variable/Function | What it does
 `base.vars.windowHeight` | Get window height (Recalculate automatically)
 `base.vars.documentWidth` | Get document width (Recalculate automatically)
 `base.vars.documentHeight` | Get document height (Recalculate automatically)
+`base.vars.vendorBasePath` | Get folder path to third party libs
 `base.vars.isTouchDevice` | Get boolean of is touch device
 `base.vars.mediaquerys` | Get all Mediaquerys from CSS as Array
 `base.scrollTo("0px")` | Smooth Scroll To Position (String)
@@ -189,6 +190,84 @@ Class to set on form element | What it does
 `required` | Tests if its filled
 `validateZip` | Tests if its a german postcode
 `validateEmail` | Tests if its e-mail
+
+### Slider
+
+We include a standardized Slider JS Libary, too. We use the [Slick Slider](http://kenwheeler.github.io/slick/)
+
+##### Basic usage
+```bash
+<div data-js="slider" data-arrows="true" data-show="1" data-dots="true" data-speed="500" data-autoplay="true" data-autoplayspeed="5000">
+    <div>
+        <figure>
+            <img src="http://placehold.it/1280x768">
+        </figure>
+    </div>
+    <div>
+        <figure>
+            <img src="http://placehold.it/1280x768">
+        </figure>
+    </div>
+</div>
+```
+
+### Accordion
+
+A small accordion function for basic usages
+
+##### Usage
+```bash
+<div data-js="accordion">
+    <a href="javascript:void(0);">Click me</a>
+    <div>
+        <p>
+            Lorem ilor sit amet.
+        </p>
+    </div>
+</div>
+```
+
+### Modalbox
+
+A small modalbox function for basic usages
+
+##### Usage
+```bash
+<a href="javascript:void(0);" data-js="modalbox" data-modalbox="modalbox1">Click me</a>
+
+<div class="modalbox" data-modalbox-name="modalbox1">
+    <div>
+        <figure>
+            <img src="http://placehold.it/1280x768">
+        </figure>
+    </div>
+</div>
+```
+
+### Same Height Boxing
+
+A small equal height function for basic usages on div boxes. All boxes with the `data-equalheight-element` get the same height inner the parent box.
+
+##### Usage
+```bash
+<div data-js="equalheight">
+    <div data-equalheight-element="true">
+        <p>
+            Lorem ipsum dolor sit amet.
+        </p>
+    </div>
+    <div data-equalheight-element="true">
+        <p>
+            Lorem ipsum dolor sit amet.
+        </p>
+    </div>
+</div>
+```
+
+Attributes from parent | What it does
+--- | ---
+`data-equalheight-element` | Element that will be get the height
+`data-equalheight-mobile` | (On data-js element only) equal height function will be triggered in mobile, too.
 
 ### Selectbox
 

@@ -1,0 +1,26 @@
+/* -------------------------------------------------------- */
+/*           MODALBOX . STYLES OF OWN MODALBOX              */
+/* -------------------------------------------------------- */
+
+.modalbox {
+  display: none;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: $zLevel10;
+  background: rgba(0,0,0,0.4);
+  text-align: center;
+  line-height: 100vh;
+  cursor: pointer;
+  > div {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    background: $color-white;
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+}

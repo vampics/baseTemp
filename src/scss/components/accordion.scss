@@ -1,0 +1,16 @@
+/* -------------------------------------------------------- */
+/*          ACCORDION . STYLES OF OWN ACCORDION             */
+/* -------------------------------------------------------- */
+
+*[data-js=accordion] {
+
+  > a {
+    display: block;
+    @include user-select();
+  }
+
+  > div {
+    display: none;
+  }
+
+}

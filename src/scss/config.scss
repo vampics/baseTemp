@@ -7,22 +7,22 @@
 /*                   SET UP VIEWPORTS                       */
 /* -------------------------------------------------------- */
 
-$viewports: (
-        w: 0px,
-        sw: 480px,
-        mw: 768px,
-        lw: 1000px
-);
+  $viewports: (
+          w: 0px,
+          sw: 480px,
+          mw: 768px,
+          lw: 1000px
+  );
 
 /* -------------------------------------------------------- */
 /*              GET THE VIEWPORTS AS STRING                 */
 /* -------------------------------------------------------- */
 
-$viewportsString: "";
+  $viewportsString: "";
 
-@each $current-viewport,  $current-viewportwidth in $viewports {
-  $viewportsString: $viewportsString + $current-viewport + ":" + $current-viewportwidth + ",";
-}
+  @each $current-viewport,  $current-viewportwidth in $viewports {
+    $viewportsString: $viewportsString + $current-viewport + ":" + $current-viewportwidth + ",";
+  }
 
 /* -------------------------------------------------------- */
 /*                    GENERATE GRIDS                        */
