@@ -36,7 +36,7 @@ npm install
 `/static/` - (Optional) result folder with all compiled files but only for testing/creating without php. By default gulp browser-sync is rooted to this folder. Perfect to write or extend the frontend.  
 
 
-You just can primary work in the build folder with all frontend files.
+You just can primary work in the src folder with all frontend files.
 
 
 
@@ -44,9 +44,9 @@ You just can primary work in the build folder with all frontend files.
 
 Task | Result
 --- | ---
-`gulp compile-js` | Compile the JS from build to htdocs & static
-`gulp compile-scss` | Compile the CSS from build to htdocs & static
-`gulp compile-html` | Compile the HTML from build to static
+`gulp compile-js` | Compile the JS from src to htdocs & static
+`gulp compile-scss` | Compile the CSS from src to htdocs & static
+`gulp compile-html` | Compile the HTML from src to static
 `gulp compress-js` | Minify the JS in htdocs
 `gulp compress-js-libs` | Minify the JS libraries from static/js/libs to htdocs/js/libs
 `gulp compress-css` | Minify the CSS in htdocs
@@ -58,7 +58,7 @@ Task | Result
 
 ### Edit (S)CSS
 
-The structure is quite simple. In `/build/scss` you´ll find the basic structure of the baseTemp. In this root are all scss files where used across the site. The main sass configurations like grid, colors or fonts pooled in the config.scss. You find in this file also CSS3 Cross-Browser Helper functions called mixins. 
+The structure is quite simple. In `/src/scss` you´ll find the basic structure of the baseTemp. In this root are all scss files where used across the site. The main sass configurations like grid, colors or fonts pooled in the config.scss. You find in this file also CSS3 Cross-Browser Helper functions called mixins. 
 
 
 ##### Mediaquerys
@@ -102,7 +102,7 @@ We recommend this method. If you need a module across the site you can write it 
 ##### External Libarys
 
 
-The Framework differentiate external Libarys they used everytime across the site and external Libarys they used only punctual. Libarys they used everytime across the site you´ll find/set in `build/js/libs`. Libarys they used only punctual or once you´ll find/set in `static/js/libs` and `htdocs/js/libs`
+The Framework differentiate external Libarys they used everytime across the site and external Libarys they used only punctual. Libarys they used everytime across the site you´ll find/set in `src/js/libs`. Libarys they used only punctual or once you´ll find/set in `static/js/libs` and `htdocs/js/libs`
 
 Libarys they used everytime across the site will be merged in the concated js file (functions.js). The other Libarys can be dynamically loaded via Ajax in a Javascript Module.
 
