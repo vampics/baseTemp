@@ -937,6 +937,7 @@ ul li {
 .selectbox .selectboxit-list li {
 	list-style: none;
 	padding-left: 0;
+	margin-left: 0;
 }
 
 .selectbox .selectboxit-list li:after {
