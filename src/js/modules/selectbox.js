@@ -43,7 +43,7 @@ modules.selectbox = {
 
             if (!$(this).hasClass("showfirstoption")) {
 
-                SelectBoxOptions["showFirstOption"] = false;
+                SelectBoxOptions.showFirstOption = false;
 
             }
 

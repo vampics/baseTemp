@@ -240,7 +240,7 @@ modules.formvalidation = {
 
             var tempSubmit = true;
 
-            if (textinputCheck == false || textareaCheck == false || selectboxesCheck == false || checkboxesCheck == false || radioboxesCheck == false) {
+            if (textinputCheck === false || textareaCheck === false || selectboxesCheck === false || checkboxesCheck === false || radioboxesCheck === false) {
 
                 tempSubmit = false;
 
@@ -249,7 +249,7 @@ modules.formvalidation = {
 
             }
 
-            return tempSubmit
+            return tempSubmit;
 
         },
 
@@ -278,7 +278,7 @@ modules.formvalidation = {
 
             if (fvGlobals.scrollTo > top) {
                 if (top < siteCenter) {
-                    top = 0
+                    top = 0;
                 }else{
                     top = top - siteCenter;
                 }
@@ -300,7 +300,7 @@ modules.formvalidation = {
             var errorBox = "<div class='status error'>";
             $.each( fvErrors, function( key, value ) {
 
-                errorBox += "<p>" + value + "<br></p>"
+                errorBox += "<p>" + value + "<br></p>";
 
             });
             errorBox += "</div>";
@@ -327,13 +327,13 @@ modules.formvalidation = {
 
         validateEmptyCheckbox: function (element) {
 
-            return element.prop('checked')
+            return element.prop('checked');
 
         },
 
         validateEmptyRadiobox: function (element) {
 
-            return $("input[name='"+element.attr("name")+"']").is(':checked')
+            return $("input[name='"+element.attr("name")+"']").is(':checked');
 
         },
 
@@ -370,5 +370,4 @@ modules.formvalidation = {
 
     }
 
-
-}
+};

@@ -5,7 +5,7 @@
 
 @media print {
 
-  * {
+  html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, input, svg, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {
     background: transparent !important;
     color: $color-black!important;
     text-shadow: none !important;
@@ -45,7 +45,7 @@
     text-decoration: none;
   }
 
-  a[href^="#"], a[href^="javascript:"] {
+  a[href="#"], a[href="javascript:"] {
     display: none;
   }
 

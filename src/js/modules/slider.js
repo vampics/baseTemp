@@ -16,17 +16,17 @@ modules.slider = {
         var detailgallery = $("*[data-js=slider]");
         var settings = [];
 
-        settings['arrows'] = (detailgallery.attr("data-arrows") === "true");
-        settings['dots'] = (detailgallery.attr("data-dots") === "true");
-        settings['centermode'] = (detailgallery.attr("data-centermode") === "true");
-        settings['speed'] = detailgallery.attr("data-speed");
-        settings['autoplay'] = (detailgallery.attr("data-autoplay") === "true");
-        settings['autoplayspeed'] = detailgallery.attr("data-autoplayspeed");
-        settings['show'] = detailgallery.attr("data-show");
+        settings.arrows = (detailgallery.attr("data-arrows") === "true");
+        settings.dots = (detailgallery.attr("data-dots") === "true");
+        settings.centermode = (detailgallery.attr("data-centermode") === "true");
+        settings.speed = detailgallery.attr("data-speed");
+        settings.autoplay = (detailgallery.attr("data-autoplay") === "true");
+        settings.autoplayspeed = detailgallery.attr("data-autoplayspeed");
+        settings.show = detailgallery.attr("data-show");
 
         $.getScript( base.vars.vendorBasePath + "slider.js", function() {
 
-            module.startScript(detailgallery,settings)
+            module.startScript(detailgallery,settings);
 
         });
 

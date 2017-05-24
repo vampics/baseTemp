@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
-
 /* -------------------------------------------------------- */
 
 /*           SCSS SCHEME . IMPORTING ALL STYLES             */
@@ -66,19 +64,6 @@
 
 /* -------------------------------------------------------- */
 
-* { /* SET THE RIGHT BORDER BOXES  */
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-*:before,
-*:after { /* SET THE RIGHT BORDER BOXES  */
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
 html,
 body,
 div,
@@ -91,7 +76,11 @@ h3,
 h4,
 h5,
 h6,
+button,
 p,
+input,
+hr,
+svg,
 blockquote,
 main,
 pre,
@@ -149,20 +138,180 @@ mark,
 audio,
 video { /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
 	background: transparent;
-	font-size: 100%;
 	vertical-align: baseline;
 	border: 0;
 	outline: 0;
 	margin: 0;
-	padding: 0; /* DELETE MOBILE TAP HIGHLIGHING */
+	padding: 0;
+	font-size: inherit;
+	color: inherit;
+	font-family: inherit;
+	line-height: inherit;
+	font-weight: inherit;
+	letter-spacing: inherit; /* DELETE MOBILE TAP HIGHLIGHING */
 	-webkit-tap-highlight-color: transparent;
-	-webkit-focus-ring-color: transparent;
+	-webkit-focus-ring-color: transparent; /* SET THE RIGHT BORDER BOXES  */
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html:before,
+html:after,
+body:before,
+body:after,
+div:before,
+div:after,
+span:before,
+span:after,
+object:before,
+object:after,
+iframe:before,
+iframe:after,
+h1:before,
+h1:after,
+h2:before,
+h2:after,
+h3:before,
+h3:after,
+h4:before,
+h4:after,
+h5:before,
+h5:after,
+h6:before,
+h6:after,
+button:before,
+button:after,
+p:before,
+p:after,
+input:before,
+input:after,
+hr:before,
+hr:after,
+svg:before,
+svg:after,
+blockquote:before,
+blockquote:after,
+main:before,
+main:after,
+pre:before,
+pre:after,
+abbr:before,
+abbr:after,
+address:before,
+address:after,
+cite:before,
+cite:after,
+code:before,
+code:after,
+del:before,
+del:after,
+dfn:before,
+dfn:after,
+em:before,
+em:after,
+img:before,
+img:after,
+ins:before,
+ins:after,
+kbd:before,
+kbd:after,
+q:before,
+q:after,
+samp:before,
+samp:after,
+small:before,
+small:after,
+strong:before,
+strong:after,
+sub:before,
+sub:after,
+sup:before,
+sup:after,
+var:before,
+var:after,
+b:before,
+b:after,
+i:before,
+i:after,
+dl:before,
+dl:after,
+dt:before,
+dt:after,
+dd:before,
+dd:after,
+ol:before,
+ol:after,
+ul:before,
+ul:after,
+li:before,
+li:after,
+form:before,
+form:after,
+fieldset:before,
+fieldset:after,
+label:before,
+label:after,
+legend:before,
+legend:after,
+table:before,
+table:after,
+caption:before,
+caption:after,
+tbody:before,
+tbody:after,
+tfoot:before,
+tfoot:after,
+thead:before,
+thead:after,
+tr:before,
+tr:after,
+th:before,
+th:after,
+td:before,
+td:after,
+article:before,
+article:after,
+aside:before,
+aside:after,
+canvas:before,
+canvas:after,
+details:before,
+details:after,
+figcaption:before,
+figcaption:after,
+figure:before,
+figure:after,
+footer:before,
+footer:after,
+header:before,
+header:after,
+menu:before,
+menu:after,
+nav:before,
+nav:after,
+section:before,
+section:after,
+summary:before,
+summary:after,
+time:before,
+time:after,
+mark:before,
+mark:after,
+audio:before,
+audio:after,
+video:before,
+video:after { /* SET THE RIGHT BORDER BOXES  */
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 main,
 section,
 aside,
 footer,
+nav,
 header { /* Correct `block` display not defined in IE 11.*/
 	display: block;
 }
@@ -198,14 +347,18 @@ audio:not([controls]) { /* Prevent modern browsers from displaying `audio` witho
 
 input,
 button,
-textarea { /* DELETE MOBILE BROWSER FORM STANDARDS */
+textarea {
+	line-height: normal;
+	font-size: inherit;
+	color: inherit;
+	font-family: inherit; /* DELETE MOBILE BROWSER FORM STANDARDS */
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
-	border-radius: 0;
 	-ms-border-radius: 0;
+	border-radius: 0;
 }
 
 input[disabled],
@@ -223,8 +376,11 @@ textarea:active {
 	outline: none;
 }
 
-input {
+select {
 	line-height: normal;
+	font-size: inherit;
+	color: inherit;
+	font-family: inherit;
 }
 
 input[type="reset"],
@@ -248,11 +404,8 @@ input[type="number"]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 }
 
-/* Address `[hidden]` styling not present in IE 8/9/10.*/
-
 /* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
 
-[hidden],
 template {
 	display: none;
 }
@@ -313,7 +466,8 @@ figure img {
 /* -------------------------------------------------------- */
 
 body {
-	background: #FFF; /* Hidden Element to transfer Mediaquerys in JS */
+	background: #FFF;
+	font-size: 0.8125rem; /* Hidden Element to transfer Mediaquerys in JS */
 }
 
 body::before {
@@ -328,7 +482,7 @@ body::before {
 /* -------------------------------------------------------- */
 
 html {
-	font-size: 13px;
+	font-size: 16px;
 	color: #151515;
 	font-family: "Lato", Arial, sans-serif;
 	line-height: 1.6;
@@ -350,55 +504,50 @@ html .oldBrowserWarning {
 	display: none;
 }
 
-* {
-	font-size: inherit;
-	color: inherit;
-	font-family: inherit;
-	line-height: inherit;
-	font-weight: inherit;
-	letter-spacing: inherit;
-}
-
 h1,
-.h1 {
-	display: block;
-	padding: 5px 0;
-	font-size: 25px;
-}
-
+.h1,
 h2,
-.h2 {
-	display: block;
-	padding: 5px 0;
-	font-size: 23px;
-}
-
+.h2,
 h3,
-.h3 {
-	display: block;
-	padding: 5px 0;
-	font-size: 21px;
-}
-
+.h3,
 h4,
-.h4 {
-	display: block;
-	padding: 5px 0;
-	font-size: 19px;
-}
-
+.h4,
 h5,
-.h5 {
-	display: block;
-	padding: 5px 0;
-	font-size: 17px;
-}
-
+.h5,
 h6,
 .h6 {
 	display: block;
 	padding: 5px 0;
-	font-size: 15px;
+}
+
+h1,
+.h1 {
+	font-size: 1.5625rem;
+}
+
+h2,
+.h2 {
+	font-size: 1.4375rem;
+}
+
+h3,
+.h3 {
+	font-size: 1.3125rem;
+}
+
+h4,
+.h4 {
+	font-size: 1.1875rem;
+}
+
+h5,
+.h5 {
+	font-size: 1.0625rem;
+}
+
+h6,
+.h6 {
+	font-size: 0.9375rem;
 }
 
 /* -------------------------------------------------------- */
@@ -450,8 +599,8 @@ input[type="submit"],
 	transition: all 0.2s ease;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px;
 	-ms-border-radius: 3px;
+	border-radius: 3px;
 }
 
 button:hover,
@@ -493,8 +642,8 @@ textarea {
 	transition: all 0.2s ease;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px;
-	-ms-border-radius: 3px; /* Error class for baseTemp Formvalidation */
+	-ms-border-radius: 3px;
+	border-radius: 3px; /* Error class for baseTemp Formvalidation */
 }
 
 input[type="text"]:hover,
@@ -698,19 +847,7 @@ ul li {
 
 /* -------------------------------------------------------- */
 
-/*                 BASE MEDIAQUERYS SMALL                   */
-
-/* -------------------------------------------------------- */
-
-/* -------------------------------------------------------- */
-
 /*                BASE MEDIAQUERYS MEDIUM                   */
-
-/* -------------------------------------------------------- */
-
-/* -------------------------------------------------------- */
-
-/*                 BASE MEDIAQUERYS LARGE                   */
 
 /* -------------------------------------------------------- */
 
@@ -857,15 +994,15 @@ ul li {
 .selectbox .selectboxit-btn,
 .selectbox.native select {
 	display: block;
-	width: 100% !important;
+	width: 100%;
 	padding: 6px 6px;
 	border: 1px solid #989898;
 	text-align: left;
 	cursor: pointer;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px;
 	-ms-border-radius: 3px;
+	border-radius: 3px;
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
@@ -932,6 +1069,11 @@ ul li {
 	border: 1px solid #989898;
 	border-top: none;
 	padding: 0;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .selectbox .selectboxit-list li {
@@ -1003,8 +1145,8 @@ ul li {
 	content: "";
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px;
 	-ms-border-radius: 3px;
+	border-radius: 3px;
 }
 
 .checkbox span:after,
@@ -1020,8 +1162,8 @@ ul li {
 	content: "";
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px;
 	-ms-border-radius: 3px;
+	border-radius: 3px;
 }
 
 .checkbox input:checked + span:after,
@@ -1043,22 +1185,22 @@ ul li {
 .radiobox span {
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
-	border-radius: 50%;
 	-ms-border-radius: 50%;
+	border-radius: 50%;
 }
 
 .radiobox span:before {
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
-	border-radius: 50%;
 	-ms-border-radius: 50%;
+	border-radius: 50%;
 }
 
 .radiobox span:after {
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
-	border-radius: 50%;
 	-ms-border-radius: 50%;
+	border-radius: 50%;
 }
 
 /* Slider */
@@ -1175,21 +1317,21 @@ ul li {
 	background: transparent;
 	z-index: 200;
 	padding: 0;
-	transform: translate(0, -50%);
 	-webkit-transform: translate(0, -50%);
 	-o-transform: translate(0, -50%);
 	-moz-transform: translate(0, -50%);
 	-ms-transform: translate(0, -50%);
+	transform: translate(0, -50%);
 }
 
 .slick-prev svg,
 .slick-next svg {
 	width: 50px;
-	transform: rotate(90deg);
 	-webkit-transform: rotate(90deg);
 	-o-transform: rotate(90deg);
 	-moz-transform: rotate(90deg);
 	-ms-transform: rotate(90deg);
+	transform: rotate(90deg);
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
@@ -1197,8 +1339,20 @@ ul li {
 	transition: all 0.2s ease;
 }
 
-.slick-prev svg *,
-.slick-next svg * {
+.slick-prev svg path,
+.slick-prev svg circle,
+.slick-prev svg rect,
+.slick-prev svg polygon,
+.slick-prev svg ellipse,
+.slick-prev svg defs,
+.slick-prev svg mask,
+.slick-next svg path,
+.slick-next svg circle,
+.slick-next svg rect,
+.slick-next svg polygon,
+.slick-next svg ellipse,
+.slick-next svg defs,
+.slick-next svg mask {
 	fill: #FFF;
 }
 
@@ -1218,11 +1372,11 @@ ul li {
 }
 
 .slick-next svg {
-	transform: rotate(-90deg);
 	-webkit-transform: rotate(-90deg);
 	-o-transform: rotate(-90deg);
 	-moz-transform: rotate(-90deg);
 	-ms-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 
 .slick-dots {
@@ -1230,11 +1384,11 @@ ul li {
 	position: absolute;
 	left: 50%;
 	bottom: 10px;
-	transform: translate(-50%, -50%);
 	-webkit-transform: translate(-50%, -50%);
 	-o-transform: translate(-50%, -50%);
 	-moz-transform: translate(-50%, -50%);
 	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
 
 .slick-dots li {
@@ -1258,8 +1412,8 @@ ul li {
 	transition: all 0.2s ease;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
-	border-radius: 50%;
 	-ms-border-radius: 50%;
+	border-radius: 50%;
 	border: none;
 }
 
@@ -1481,8 +1635,8 @@ ul li {
 
 @media screen and (min-width: 768px) {
 
-html {
-	font-size: 14px;
+html body {
+	font-size: 0.875rem;
 }
 
 html main {
@@ -1492,32 +1646,32 @@ html main {
 
 h1,
 .h1 {
-	font-size: 25px;
+	font-size: 1.5625rem;
 }
 
 h2,
 .h2 {
-	font-size: 23px;
+	font-size: 1.4375rem;
 }
 
 h3,
 .h3 {
-	font-size: 21px;
+	font-size: 1.3125rem;
 }
 
 h4,
 .h4 {
-	font-size: 19px;
+	font-size: 1.1875rem;
 }
 
 h5,
 .h5 {
-	font-size: 17px;
+	font-size: 1.0625rem;
 }
 
 h6,
 .h6 {
-	font-size: 15px;
+	font-size: 0.9375rem;
 }
 
 .mw1 {
@@ -1734,7 +1888,77 @@ h6,
 
 @media print {
 
-* {
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+input,
+svg,
+blockquote,
+main,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+form,
+fieldset,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
 	background: transparent !important;
 	color: #151515 !important;
 	text-shadow: none !important;
@@ -1786,8 +2010,8 @@ a:visited {
 	text-decoration: none;
 }
 
-a[href^="#"],
-a[href^="javascript:"] {
+a[href="#"],
+a[href="javascript:"] {
 	display: none;
 }
 

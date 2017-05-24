@@ -2144,7 +2144,7 @@ var base = {
                 event.stopPropagation();
                 event.preventDefault();
 
-                if (input.prop('checked') == false) {
+                if (input.prop('checked') === false) {
 
                     input.prop('checked',true);
 
@@ -2201,20 +2201,20 @@ modules.equalheight = {
             if (mobile) {
 
                 me.setElementsToEqualHeight(me,elements);
-                intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements)}, 500);
+                intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements);}, 500);
 
             }else{
 
                 if (base.vars.mediaquerys.mw <= base.vars.windowWidth) {
 
                     me.setElementsToEqualHeight(me,elements);
-                    intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements)}, 500);
+                    intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements);}, 500);
 
                 }
 
             }
 
-            setTimeout( function(){ clearInterval(intervalCheckForHeight) }, 2500);
+            setTimeout( function(){ clearInterval(intervalCheckForHeight);}, 2500);
 
             $(window).on("resize", function(){
 
@@ -2253,7 +2253,7 @@ modules.equalheight = {
 
             if (highestHeight < Math.ceil($(this).outerHeight())) {
 
-                highestHeight = Math.ceil($(this).outerHeight())
+                highestHeight = Math.ceil($(this).outerHeight());
 
             }
 
@@ -2513,7 +2513,7 @@ modules.formvalidation = {
 
             var tempSubmit = true;
 
-            if (textinputCheck == false || textareaCheck == false || selectboxesCheck == false || checkboxesCheck == false || radioboxesCheck == false) {
+            if (textinputCheck === false || textareaCheck === false || selectboxesCheck === false || checkboxesCheck === false || radioboxesCheck === false) {
 
                 tempSubmit = false;
 
@@ -2522,7 +2522,7 @@ modules.formvalidation = {
 
             }
 
-            return tempSubmit
+            return tempSubmit;
 
         },
 
@@ -2551,7 +2551,7 @@ modules.formvalidation = {
 
             if (fvGlobals.scrollTo > top) {
                 if (top < siteCenter) {
-                    top = 0
+                    top = 0;
                 }else{
                     top = top - siteCenter;
                 }
@@ -2573,7 +2573,7 @@ modules.formvalidation = {
             var errorBox = "<div class='status error'>";
             $.each( fvErrors, function( key, value ) {
 
-                errorBox += "<p>" + value + "<br></p>"
+                errorBox += "<p>" + value + "<br></p>";
 
             });
             errorBox += "</div>";
@@ -2600,13 +2600,13 @@ modules.formvalidation = {
 
         validateEmptyCheckbox: function (element) {
 
-            return element.prop('checked')
+            return element.prop('checked');
 
         },
 
         validateEmptyRadiobox: function (element) {
 
-            return $("input[name='"+element.attr("name")+"']").is(':checked')
+            return $("input[name='"+element.attr("name")+"']").is(':checked');
 
         },
 
@@ -2643,8 +2643,7 @@ modules.formvalidation = {
 
     }
 
-
-}
+};
 
 ///////////////////////////////////////////////////////
 ///                    HEADER JS                    ///
@@ -2656,7 +2655,7 @@ var header = {
 
     }
 
-}
+};
 
 ///////////////////////////////////////////////////////
 ///                 MODALBOX JS                     ///
@@ -2764,7 +2763,7 @@ modules.selectbox = {
 
             if (!$(this).hasClass("showfirstoption")) {
 
-                SelectBoxOptions["showFirstOption"] = false;
+                SelectBoxOptions.showFirstOption = false;
 
             }
 
@@ -2822,17 +2821,17 @@ modules.slider = {
         var detailgallery = $("*[data-js=slider]");
         var settings = [];
 
-        settings['arrows'] = (detailgallery.attr("data-arrows") === "true");
-        settings['dots'] = (detailgallery.attr("data-dots") === "true");
-        settings['centermode'] = (detailgallery.attr("data-centermode") === "true");
-        settings['speed'] = detailgallery.attr("data-speed");
-        settings['autoplay'] = (detailgallery.attr("data-autoplay") === "true");
-        settings['autoplayspeed'] = detailgallery.attr("data-autoplayspeed");
-        settings['show'] = detailgallery.attr("data-show");
+        settings.arrows = (detailgallery.attr("data-arrows") === "true");
+        settings.dots = (detailgallery.attr("data-dots") === "true");
+        settings.centermode = (detailgallery.attr("data-centermode") === "true");
+        settings.speed = detailgallery.attr("data-speed");
+        settings.autoplay = (detailgallery.attr("data-autoplay") === "true");
+        settings.autoplayspeed = detailgallery.attr("data-autoplayspeed");
+        settings.show = detailgallery.attr("data-show");
 
         $.getScript( base.vars.vendorBasePath + "slider.js", function() {
 
-            module.startScript(detailgallery,settings)
+            module.startScript(detailgallery,settings);
 
         });
 

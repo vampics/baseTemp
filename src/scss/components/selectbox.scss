@@ -10,7 +10,7 @@
 
   .selectboxit-btn {
     display: block;
-    width: 100%!important;
+    width: 100%;
     padding: 6px 6px;
     border: 1px solid $color-grey;
     text-align: left;
@@ -65,6 +65,7 @@
     border: 1px solid $color-grey;
     border-top: none;
     padding: 0;
+    @include user-select();
     li {
       list-style: none;
       padding-left: 0;

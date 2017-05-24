@@ -4,6 +4,7 @@
 
 body {
   background: $color-mainbackground;
+  font-size: $font-size-mobile;
 
   /* Hidden Element to transfer Mediaquerys in JS */
   &::before {
@@ -18,7 +19,7 @@ body {
 /* -------------------------------------------------------- */
 
 html {
-  font-size: $font-size-mobile;
+  font-size: $font-size-main;
   color: $font-color;
   font-family: $font-family;
   line-height: $font-line-height-default;
@@ -42,43 +43,32 @@ html {
 
 }
 
-* {
-  font-size: inherit;
-  color: inherit;
-  font-family: inherit;
-  line-height: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit;
+h1,.h1,
+h2,.h2,
+h3,.h3,
+h4,.h4,
+h5,.h5,
+h6,.h6 {
+  display: block;
+  padding: 5px 0;
 }
 
 h1,.h1{
-  display: block;
-  padding: 5px 0;
   font-size: $font-size-h1-mobile;
 }
 h2,.h2{
-  display: block;
-  padding: 5px 0;
   font-size: $font-size-h2-mobile;
 }
 h3,.h3{
-  display: block;
-  padding: 5px 0;
   font-size: $font-size-h3-mobile;
 }
 h4,.h4{
-  display: block;
-  padding: 5px 0;
   font-size: $font-size-h4-mobile;
 }
 h5,.h5{
-  display: block;
-  padding: 5px 0;
   font-size: $font-size-h5-mobile;
 }
 h6,.h6{
-  display: block;
-  padding: 5px 0;
   font-size: $font-size-h6-mobile;
 }
 
@@ -256,20 +246,16 @@ ul {
 }
 
 /* -------------------------------------------------------- */
-/*                 BASE MEDIAQUERYS SMALL                   */
-/* -------------------------------------------------------- */
-
-@media screen and (min-width: map-get($viewports, sw)) {
-
-}
-
-/* -------------------------------------------------------- */
 /*                BASE MEDIAQUERYS MEDIUM                   */
 /* -------------------------------------------------------- */
 
 @media screen and (min-width: map-get($viewports, mw)) {
   html {
-    font-size: $font-size-desktop;
+
+    body {
+      font-size: $font-size-desktop;
+    }
+
     main {
       width: 95%;
       padding: 0;
@@ -294,13 +280,5 @@ ul {
   h6,.h6{
     font-size: $font-size-h6;
   }
-
-}
-
-/* -------------------------------------------------------- */
-/*                 BASE MEDIAQUERYS LARGE                   */
-/* -------------------------------------------------------- */
-
-@media screen and (min-width: map-get($viewports, lw)) {
 
 }
