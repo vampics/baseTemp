@@ -110,7 +110,13 @@
         width: 50px;
         @include transformRotate(90deg);
         @include transition(all 0.2s ease);
-        * {
+        path,
+        circle,
+        rect,
+        polygon,
+        ellipse,
+        defs,
+        mask  {
             fill: $color-white;
         }
     }

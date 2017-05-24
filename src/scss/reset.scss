@@ -2,37 +2,42 @@
 /*        RESET . JUST DELETE SHITI BROWSER THINGS          */
 /* -------------------------------------------------------- */
 
-* {
-  /* SET THE RIGHT BORDER BOXES  */
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, button, p, input, hr, svg, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {
 
-*:before, *:after {
-  /* SET THE RIGHT BORDER BOXES  */
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-
-html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, main, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, form, fieldset, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {
   /* ADD THE BASE, DELETE SHITI BROWSER STYLES  */
   background: transparent;
-  font-size: 100%;
   vertical-align: baseline;
   border: 0;
   outline: 0;
   margin: 0;
   padding: 0;
 
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+
   /* DELETE MOBILE TAP HIGHLIGHING */
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-focus-ring-color:  rgba(0,0,0,0);
+
+  /* SET THE RIGHT BORDER BOXES  */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  &:before, &:after {
+    /* SET THE RIGHT BORDER BOXES  */
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
 }
 
-main, section, aside, footer, header {
+main, section, aside, footer, nav, header {
   /* Correct `block` display not defined in IE 11.*/
   display: block;
 }
@@ -71,6 +76,11 @@ audio:not([controls]) {
 }
 
 input, button, textarea {
+  line-height: normal;
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+
   /* DELETE MOBILE BROWSER FORM STANDARDS */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -84,8 +94,14 @@ input, button, textarea {
   }
 }
 
-input {
+select {
   line-height: normal;
+  font-size: inherit;
+  color: inherit;
+  font-family: inherit;
+}
+
+input {
   &[type="reset"],
   &[type="submit"] {
     cursor: pointer;
@@ -106,9 +122,8 @@ input {
   }
 }
 
-/* Address `[hidden]` styling not present in IE 8/9/10.*/
 /* Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.*/
-[hidden], template {
+template {
   display: none;
 }
 

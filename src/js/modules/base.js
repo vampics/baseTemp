@@ -173,7 +173,7 @@ var base = {
                 event.stopPropagation();
                 event.preventDefault();
 
-                if (input.prop('checked') == false) {
+                if (input.prop('checked') === false) {
 
                     input.prop('checked',true);
 

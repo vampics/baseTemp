@@ -19,20 +19,20 @@ modules.equalheight = {
             if (mobile) {
 
                 me.setElementsToEqualHeight(me,elements);
-                intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements)}, 500);
+                intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements);}, 500);
 
             }else{
 
                 if (base.vars.mediaquerys.mw <= base.vars.windowWidth) {
 
                     me.setElementsToEqualHeight(me,elements);
-                    intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements)}, 500);
+                    intervalCheckForHeight = setInterval(function(){me.setElementsToEqualHeight(me,elements);}, 500);
 
                 }
 
             }
 
-            setTimeout( function(){ clearInterval(intervalCheckForHeight) }, 2500);
+            setTimeout( function(){ clearInterval(intervalCheckForHeight);}, 2500);
 
             $(window).on("resize", function(){
 
@@ -71,7 +71,7 @@ modules.equalheight = {
 
             if (highestHeight < Math.ceil($(this).outerHeight())) {
 
-                highestHeight = Math.ceil($(this).outerHeight())
+                highestHeight = Math.ceil($(this).outerHeight());
 
             }
 

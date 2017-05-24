@@ -34,6 +34,8 @@ var gulp        = require('gulp'),
     fileinclude = require('gulp-file-include'),
     imagemin    = require('gulp-imagemin'),
     merge       = require('merge-stream'),
+    jshint      = require('gulp-jshint'),
+    csslint     = require('gulp-csslint')
     mmq         = require('gulp-merge-media-queries');
 
 
@@ -148,6 +150,35 @@ gulp.task('browser-sync', function () {
     gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload).on('error', onError);
 });
 
+///////////////////////////////////////////////////////
+///              TESTING FUNCTIONS                  ///
+///////////////////////////////////////////////////////
+
+gulp.task('test-js', function() {
+    return gulp.src( buildJsPath + '/modules/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
+});
+
+gulp.task('test-css', function() {
+    gulp.src( staticCssPath + '*.css')
+        .pipe(csslint({
+            'order-alphabetical': false,
+            'outline-none': false,
+            'box-sizing': false,
+            'compatible-vendor-prefixes': false,
+            'unique-headings': false,
+            'box-model': false,
+            'adjoining-classes': false,
+            'font-sizes': false,
+            'overqualified-elements': false,
+            'important': false,
+            'floats': false,
+            'fallback-colors': false,
+            'qualified-headings': false
+        }))
+        .pipe(csslint.formatter());
+});
 
 ///////////////////////////////////////////////////////
 ///             GULP ERROR HANDLING                 ///
@@ -163,3 +194,5 @@ function onError(err) {
 ///////////////////////////////////////////////////////
 
 gulp.task('compress', ['compress-js', 'compress-js-libs', 'compress-css', 'compress-images']);
+
+gulp.task('test-frontend', ['test-js','test-css']);
