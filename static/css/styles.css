@@ -321,7 +321,6 @@ html { /* SET THE RIGHT FONT SIZE  */
 	-ms-text-size-adjust: 100%; /* SET THE SMOOTHING FOR OWN FONTS  */
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	height: 100%;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 }
