@@ -2129,36 +2129,36 @@ var base = {
 
         $('label').on("click",function(event) {
 
-            var input = $(this).find("input");
+            if (event.target.nodeName != "A") {
 
-            if (input.attr("type") == "radio") {
+                var input = $(this).find("input");
 
-                event.stopPropagation();
-                event.preventDefault();
+                if (input.attr("type") == "radio") {
 
-                input.prop("checked", true);
-                input.trigger("change");
+                    event.stopPropagation();
+                    event.preventDefault();
 
-            }else if (input.attr("type") == "checkbox") {
+                    input.prop("checked", true);
+                    input.trigger("change");
 
-                event.stopPropagation();
-                event.preventDefault();
+                } else if (input.attr("type") == "checkbox") {
 
-                if (input.prop('checked') === false) {
+                    event.stopPropagation();
+                    event.preventDefault();
 
-                    input.prop('checked',true);
+                    if (input.prop('checked') === false) {
 
-                }else{
+                        input.prop('checked', true);
 
-                    input.prop('checked',false);
+                    } else {
+
+                        input.prop('checked', false);
+
+                    }
+
+                    input.trigger("change");
 
                 }
-
-                input.trigger("change");
-
-            }else{
-
-                input.trigger("click");
 
             }
 
