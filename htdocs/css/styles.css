@@ -79,6 +79,7 @@ h6,
 button,
 p,
 input,
+textarea,
 hr,
 svg,
 blockquote,
@@ -186,6 +187,8 @@ p:before,
 p:after,
 input:before,
 input:after,
+textarea:before,
+textarea:after,
 hr:before,
 hr:after,
 svg:before,
@@ -796,34 +799,6 @@ ul li {
 
 .clear {
 	clear: both;
-}
-
-.ft-uppercase {
-	text-transform: uppercase;
-}
-
-.fw-light {
-	font-weight: 400;
-}
-
-.fw-regular {
-	font-weight: 400;
-}
-
-.fw-bold {
-	font-weight: 700;
-}
-
-.fc-black {
-	color: #151515;
-}
-
-.fc-grey {
-	color: #6d6d6d;
-}
-
-.fc-white {
-	color: #FFF;
 }
 
 /* -------------------------------------------------------- */
