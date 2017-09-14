@@ -469,12 +469,17 @@ figure img {
 
 body {
 	background: #FFF;
-	font-size: 0.8125rem; /* Hidden Element to transfer Mediaquerys in JS */
+	font-size: 0.8125rem; /* Hidden Element to transfer Mediaquerys in JS */ /* Hidden Element to transfer Grid in JS */
 }
 
 body::before {
 	display: none;
 	content: "w:0px,sw:480px,mw:768px,lw:1000px,";
+}
+
+body::after {
+	display: none;
+	content: "12";
 }
 
 /* -------------------------------------------------------- */
@@ -1473,18 +1478,6 @@ ul li {
 /* -------------------------------------------------------- */
 
 /*              INDEX . STYLES OF STARTPAGE                 */
-
-/* -------------------------------------------------------- */
-
-/* -------------------------------------------------------- */
-
-/* RETINA IMAGES FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS */
-
-/* -------------------------------------------------------- */
-
-/* -------------------------------------------------------- */
-
-/*  RETINA . FOR FILTHY RICH PEOPLE WITH OVERPAID DISPLAYS  */
 
 /* -------------------------------------------------------- */
 

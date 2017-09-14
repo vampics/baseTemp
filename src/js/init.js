@@ -8,6 +8,12 @@ $(document).ready(function() {
 
 });
 
+$(window).on("load", function() {
+
+    $(document).trigger("DOMLoaded");
+
+});
+
 
 ///////////////////////////////////////////////////////
 ///               INIT ALL MODULES                  ///

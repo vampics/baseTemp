@@ -10,6 +10,7 @@ var base = {
     init: function() {
 
         this.getAllMediaQuerys();
+        this.getGrid();
         this.loadModules.locate($("body"));
         this.recalculate.triggerResize();
         this.autosubmit();
@@ -31,6 +32,7 @@ var base = {
         vendorBasePath: '/js/libs/',
 
         isTouchDevice: (window.navigator.msMaxTouchPoints || ('ontouchstart' in document.documentElement)),
+        grid: '',
         mediaquerys: []
 
     },
@@ -111,6 +113,12 @@ var base = {
             }
 
         });
+
+    },
+
+    getGrid: function() {
+
+        base.vars.grid = window.getComputedStyle(document.body, ":after").getPropertyValue('content');
 
     },
 
