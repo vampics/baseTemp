@@ -12,6 +12,12 @@ body {
     content:"" + $viewportsString;
   }
 
+  /* Hidden Element to transfer Grid in JS */
+  &::after {
+    display: none;
+    content:"" + $grid;
+  }
+
 }
 
 /* -------------------------------------------------------- */
