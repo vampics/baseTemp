@@ -176,11 +176,11 @@ In this Example all 3 boxes are going on mobile over 12 columns. From 768px (mw)
 
 Syntax | Example | Function
 --- | --- | ---
-`(VIWPORT)(COLUMNS)` | mw12 | Element has a width of 12 columns in the mw viewport
-`(VIWPORT)Right` | mwRight | Element are right aligned  in the mw viewport
-`(VIWPORT)Full` | mwFull | Element has a 100% width and a float in the mw viewport
-`(VIWPORT)Hidden` | mwHidden | Element is hidden in the mw viewport
-`(VIWPORT)Visible` | mwVisible | Element is visible in the mw viewport
+`(VIEWPORT)(COLUMNS)` | mw12 | Element has a width of 12 columns in the mw viewport
+`(VIEWPORT)Right` | mwRight | Element are right aligned  in the mw viewport
+`(VIEWPORT)Full` | mwFull | Element has a 100% width and a float in the mw viewport
+`(VIEWPORT)Hidden` | mwHidden | Element is hidden in the mw viewport
+`(VIEWPORT)Visible` | mwVisible | Element is visible in the mw viewport
 
 
 ---
