@@ -53,7 +53,9 @@ Task | Result
 `gulp compress-images` | Minify all images in htdocs/images & static/images
 `gulp browser-sync` | Start the browser-sync. The Sync is rooted to /static [More Information](https://browsersync.io/)
 `gulp compress` | All compress tasks, perfect for a git pushing hook
-
+`gulp test-css` | Test your CSS with csslint
+`gulp test-js` | Test your JS with jslint
+`gulp test-frontend` | `gulp test-css` and `gulp test-js` in one task
 
 
 ### Edit (S)CSS
@@ -133,8 +135,12 @@ Variable/Function | What it does
 `base.vars.vendorBasePath` | Get folder path to third party libs
 `base.vars.isTouchDevice` | Get boolean of is touch device
 `base.vars.mediaquerys` | Get all Mediaquerys from CSS as Array
+`base.vars.grid` | Get the columns of the grid
 `base.scrollTo("0px")` | Smooth Scroll To Position (String)
 
+Events | Trigger
+--- | ---
+`DOMLoaded` | Triggers when DOM complety loaded. Included all images. (Since jQuery 3.0 $(window).on("load") isn´t working in a $(document).ready() anmyore.)
 
 ### Edit HTML / Grid
 
@@ -166,6 +172,15 @@ $grid-absolute-site-width:	1008px;  <-- Max. width of Content
 </main>
 ```
 In this Example all 3 boxes are going on mobile over 12 columns. From 768px (mw) up the first 2 boxes only going over 6 columns and slide into one line.
+
+
+Syntax | Example | Function
+--- | --- | ---
+`(VIWPORT)(COLUMNS)` | mw12 | Element has a width of 12 columns in the mw viewport
+`(VIWPORT)Right` | mwRight | Element are right aligned  in the mw viewport
+`(VIWPORT)Full` | mwFull | Element has a 100% width and a float in the mw viewport
+`(VIWPORT)Hidden` | mwHidden | Element is hidden in the mw viewport
+`(VIWPORT)Visible` | mwVisible | Element is visible in the mw viewport
 
 
 ---
@@ -246,7 +261,7 @@ A small modalbox function for basic usages
 
 ### Same Height Boxing
 
-A small equal height function for basic usages on div boxes. All boxes with the `data-equalheight-element` get the same height inner the parent box.
+A small equal height function for basic usages on div boxes. All boxes with the `data-equalheight-element` get the same height inner the parent box. 
 
 ##### Usage
 ```bash
@@ -267,7 +282,8 @@ A small equal height function for basic usages on div boxes. All boxes with the 
 Attributes from parent | What it does
 --- | ---
 `data-equalheight-element` | Element that will be get the height
-`data-equalheight-mobile` | (On data-js element only) equal height function will be triggered in mobile, too.
+`data-equalheight-option-mobile` | (On data-js element only) equal height function will be triggered in mobile, too.
+`data-equalheight-option-row` | (On data-js element only) Only the elements in a row get the same height
 
 ### Selectbox
 
