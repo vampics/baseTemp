@@ -208,11 +208,11 @@ Class to set on form element | What it does
 
 ### Slider
 
-We include a standardized Slider JS Libary, too. We use the [Slick Slider](http://kenwheeler.github.io/slick/)
+We include a standardized Slider JS Libary, too. We use the [Slick Slider](http://kenwheeler.github.io/slick/). We just added some nice features like a trigger for the framework when a slider is loaded and some options can be easy set with Data Attributes. With the Suffix of a Viewport you can set a specific option to a viewport.
 
 ##### Basic usage
 ```bash
-<div data-js="slider" data-arrows="true" data-show="1" data-dots="true" data-speed="500" data-autoplay="true" data-autoplayspeed="5000">
+<div data-js="slider" data-dots="true" data-arrows="false" data-arrows-mw="true" data-slidesToShow="1" data-slidesToShow-mw="2">
     <div>
         <figure>
             <img src="http://placehold.it/1280x768">
