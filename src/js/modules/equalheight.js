@@ -22,7 +22,7 @@ modules.equalheight = {
         eh = this;
         ehGlobals = this.globals;
 
-        // Start EH Script normallly
+        // Start EH Script normally
         eh.findAllParentNodes();
 
         // Start EH Script when DOM ist complete loaded
