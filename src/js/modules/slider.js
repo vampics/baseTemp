@@ -61,9 +61,9 @@ modules.slider = {
         slGlobals.options = {};
 
         // define standard options
-        slGlobals.options["infinite"] = true;
-        slGlobals.options["mobileFirst"] = true;
-        slGlobals.options["responsive"] = [];
+        slGlobals.options.infinite = true;
+        slGlobals.options.mobileFirst = true;
+        slGlobals.options.responsive = [];
 
         // define all changeable options via attribute for basic load. "" defines no viewport for basic loading
         sl.getSliderSettings(slider,slGlobals.options,"");
@@ -79,8 +79,8 @@ modules.slider = {
                     var breakpoint = {};
 
                     // define breakpoint size and create settings object
-                    breakpoint["breakpoint"] = parseInt(base.vars.mediaquerys[viewport]);
-                    breakpoint["settings"] = {};
+                    breakpoint.breakpoint = parseInt(base.vars.mediaquerys[viewport]);
+                    breakpoint.settings = {};
 
                     // define all changeable options via attribute for mediaquery. -viewport defines the medaiquery suffix for attribute
                     sl.getSliderSettings(slider,breakpoint.settings,"-" + viewport);
@@ -99,53 +99,53 @@ modules.slider = {
     getSliderSettings: function(slider,optionLevel,viewport){
 
         // html for other previous arrow
-        if (viewport == "" || slider.is("[data-prevArrow" + viewport + "]")) {
-            optionLevel["prevArrow"] = slider.attr("data-prevArrow" + viewport) || slGlobals.optionPrevButton;
+        if (viewport === "" || slider.is("[data-prevArrow" + viewport + "]")) {
+            optionLevel.prevArrow = slider.attr("data-prevArrow" + viewport) || slGlobals.optionPrevButton;
         }
 
         // html for other next arrow
-        if (viewport == "" || slider.is("[data-nextArrow" + viewport + "]")) {
-            optionLevel["nextArrow"] = slider.attr("data-nextArrow" + viewport) || slGlobals.optionNextButton;
+        if (viewport === "" || slider.is("[data-nextArrow" + viewport + "]")) {
+            optionLevel.nextArrow = slider.attr("data-nextArrow" + viewport) || slGlobals.optionNextButton;
         }
 
         // # of slides to show
-        if (viewport == "" || slider.is("[data-slidesToShow" + viewport + "]")) {
-            optionLevel["slidesToShow"] = slider.attr("data-slidesToShow" + viewport) || "1";
+        if (viewport === "" || slider.is("[data-slidesToShow" + viewport + "]")) {
+            optionLevel.slidesToShow = slider.attr("data-slidesToShow" + viewport) || "1";
         }
 
         // Enables adaptive height for single slide horizontal carousels.
-        if (viewport == "" || slider.is("[data-adaptiveHeight" + viewport + "]")) {
-            optionLevel["adaptiveHeight"] = (slider.attr("data-adaptiveHeight" + viewport) === "true");
+        if (viewport === "" || slider.is("[data-adaptiveHeight" + viewport + "]")) {
+            optionLevel.adaptiveHeight = (slider.attr("data-adaptiveHeight" + viewport) === "true");
         }
 
         // Show dot indicators
-        if (viewport == "" || slider.is("[data-dots" + viewport + "]")) {
-            optionLevel["dots"] = (slider.attr("data-dots" + viewport) === "true");
+        if (viewport === "" || slider.is("[data-dots" + viewport + "]")) {
+            optionLevel.dots = (slider.attr("data-dots" + viewport) === "true");
         }
 
         // Slide animation speed
-        if (viewport == "" || slider.is("[data-speed" + viewport + "]")) {
-            optionLevel["speed"] = slider.attr("data-speed" + viewport) || "300";
+        if (viewport === "" || slider.is("[data-speed" + viewport + "]")) {
+            optionLevel.speed = slider.attr("data-speed" + viewport) || "300";
         }
 
         // Enables centered view with partial prev/next slides. Use with odd numbered slidesToShow counts.
-        if (viewport == "" || slider.is("[data-centerMode" + viewport + "]")) {
-            optionLevel["centerMode"] = (slider.attr("data-centerMode" + viewport) === "true");
+        if (viewport === "" || slider.is("[data-centerMode" + viewport + "]")) {
+            optionLevel.centerMode = (slider.attr("data-centerMode" + viewport) === "true");
         }
 
         // Enables Autoplay
-        if (viewport == "" || slider.is("[data-autoplay" + viewport + "]")) {
-            optionLevel["autoplay"] = (slider.attr("data-autoplay" + viewport) === "true");
+        if (viewport === "" || slider.is("[data-autoplay" + viewport + "]")) {
+            optionLevel.autoplay = (slider.attr("data-autoplay" + viewport) === "true");
         }
 
         // Autoplay Speed in milliseconds
-        if (viewport == "" || slider.is("[data-autoplaySpeed" + viewport + "]")) {
-            optionLevel["autoplaySpeed"] = slider.attr("data-autoplaySpeed" + viewport);
+        if (viewport === "" || slider.is("[data-autoplaySpeed" + viewport + "]")) {
+            optionLevel.autoplaySpeed = slider.attr("data-autoplaySpeed" + viewport);
         }
 
         // Show prev/next Arrows
-        if (viewport == "" || slider.is("[data-arrows" + viewport + "]")) {
-            optionLevel["arrows"] = (slider.attr("data-arrows" + viewport) === "true");
+        if (viewport === "" || slider.is("[data-arrows" + viewport + "]")) {
+            optionLevel.arrows = (slider.attr("data-arrows" + viewport) === "true");
         }
 
     },
