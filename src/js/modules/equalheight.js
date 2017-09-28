@@ -130,7 +130,7 @@ modules.equalheight = {
         $.each(rows, function( index, rowArray ) {
 
             // set equal height with rows
-            eh.setChildNodesToEqualHeight($($.map(rowArray, function(element){return $.makeArray(element)})));
+            eh.setChildNodesToEqualHeight($($.map(rowArray, function(element){return $.makeArray(element);})));
 
         });
 
