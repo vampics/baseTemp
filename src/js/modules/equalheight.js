@@ -99,6 +99,8 @@ modules.equalheight = {
         var row = [];
         var rowValue = 0;
 
+        nodes.css("height","2px");
+
         // cycle each element
         nodes.each(function(){
 
@@ -122,6 +124,9 @@ modules.equalheight = {
 
         });
 
+
+        nodes.css("height","auto");
+
         //only when row not empty, push last row in array
         if (row.length > 0) {
             rows.push(row);
@@ -134,11 +139,13 @@ modules.equalheight = {
 
         });
 
+        $(document).trigger("DOMFinished");
+
     },
 
     setChildNodesToEqualHeight: function(nodes) {
 
-        // start ech cycle with 0
+        // start each cycle with 0
         var highestHeight = 0;
 
         // reset all elements

@@ -78,6 +78,7 @@ h5,
 h6,
 button,
 p,
+a,
 input,
 textarea,
 hr,
@@ -185,6 +186,8 @@ button:before,
 button:after,
 p:before,
 p:after,
+a:before,
+a:after,
 input:before,
 input:after,
 textarea:before,
@@ -599,6 +602,7 @@ input[type="submit"],
 	cursor: pointer;
 	padding: 6px 12px;
 	margin: 0;
+	text-decoration: none;
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;

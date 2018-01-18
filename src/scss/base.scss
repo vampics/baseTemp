@@ -16,7 +16,7 @@ body {
   &::after {
     display: none;
     content:"" + $grid;
-  }
+ }
 
 }
 
@@ -104,6 +104,7 @@ button, input[type="button"], input[type="submit"], .button {
   cursor: pointer;
   padding: 6px 12px;
   margin: 0;
+  text-decoration: none;
   @include transition(all 0.2s ease);
   @include border-radius(3px);
   &:hover, &:active {

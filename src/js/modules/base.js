@@ -11,9 +11,11 @@ var base = {
 
         this.getAllMediaQuerys();
         this.getGrid();
+        this.getSizes();
         this.loadModules.locate($("body"));
         this.recalculate.triggerResize();
         this.autosubmit();
+        this.autolink();
         this.fastclick();
         this.fastclickFix();
         this.scrollToTop();
@@ -23,11 +25,11 @@ var base = {
     vars: {
         windowRoot: $('html, body'),
 
-        windowWidth: $(window).width(),
-        windowHeight: $(window).height(),
+        windowWidth: 0,
+        windowHeight: 0,
 
-        documentWidth: $(document).width(),
-        documentHeight: $(document).height(),
+        documentWidth: 0,
+        documentHeight: 0,
 
         vendorBasePath: '/js/libs/',
 
@@ -68,6 +70,15 @@ var base = {
         }
     },
 
+    getSizes: function() {
+
+        base.recalculate.windowWidth();
+        base.recalculate.windowHeight();
+        base.recalculate.documentWidth();
+        base.recalculate.documentHeight();
+
+    },
+
     ///////////////////////////////////////////////////////
     ///      CALCULATE NEW VARS AFTER INTERACTION       ///
     ///////////////////////////////////////////////////////
@@ -83,11 +94,24 @@ var base = {
         },
 
         windowWidth: function() {
-            base.vars.windowWidth = $( window ).width();
+
+            var windowWidth = window.outerWidth;
+
+            if (parseInt(windowWidth) === 0) {
+                windowWidth = $(window).width();
+            }
+
+            base.vars.windowWidth = windowWidth;
         },
 
         windowHeight: function() {
-            base.vars.windowHeight = $( window ).height();
+            var windowHeight = window.outerHeight;
+
+            if (parseInt(windowHeight) === 0) {
+                windowHeight = $(window).height();
+            }
+
+            base.vars.windowHeight = windowHeight;
         },
 
         documentWidth: function() {
@@ -211,7 +235,13 @@ var base = {
         $('*[data-auto-submit]').change(function() {
             $(this).closest("form").submit();
         });
-    }
+    },
+
+    autolink: function() {
+        $('*[data-auto-link]').change(function() {
+            window.location = $(this).attr("data-auto-link");
+        });
+    },
 
 
 };

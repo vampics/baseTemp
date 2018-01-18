@@ -79,7 +79,7 @@ modules.slider = {
                     var breakpoint = {};
 
                     // define breakpoint size and create settings object
-                    breakpoint.breakpoint = parseInt(base.vars.mediaquerys[viewport]);
+                    breakpoint.breakpoint = parseInt(base.vars.mediaquerys[viewport]) - 1;
                     breakpoint.settings = {};
 
                     // define all changeable options via attribute for mediaquery. -viewport defines the medaiquery suffix for attribute
@@ -106,6 +106,31 @@ modules.slider = {
         // html for other next arrow
         if (viewport === "" || slider.is("[data-nextArrow" + viewport + "]")) {
             optionLevel.nextArrow = slider.attr("data-nextArrow" + viewport) || slGlobals.optionNextButton;
+        }
+
+        // set slider sync
+        if (viewport === "" || slider.is("[data-asNavFor" + viewport + "]")) {
+            optionLevel.asNavFor = slider.attr("data-asNavFor" + viewport) || null;
+        }
+
+        // Enables variable Width of slides.
+        if (viewport === "" || slider.is("[data-variableWidth" + viewport + "]")) {
+            optionLevel.variableWidth = (slider.attr("data-variableWidth" + viewport) === "true");
+        }
+
+        // Enables draggable slides.
+        if (viewport === "" || slider.is("[data-draggable" + viewport + "]")) {
+            optionLevel.draggable = (slider.attr("data-draggable" + viewport) === "true");
+        }
+
+        // set focus on select
+        if (viewport === "" || slider.is("[data-focusOnSelect" + viewport + "]")) {
+            optionLevel.focusOnSelect = slider.attr("data-focusOnSelect" + viewport) === "true";
+        }
+
+        // set variable width of slides
+        if (viewport === "" || slider.is("[data-fade" + viewport + "]")) {
+            optionLevel.fade = slider.attr("data-fade" + viewport) === "true";
         }
 
         // # of slides to show
@@ -163,6 +188,7 @@ modules.slider = {
         slider.on('init', function(){
 
             $(document).trigger("sliderLoaded");
+            $(document).trigger("DOMFinished");
 
         });
 
