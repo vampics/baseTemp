@@ -147,6 +147,9 @@ gulp.task('browser-sync', function () {
         }
     });
     gulp.watch(buildHtmlPath + '**/*.html', ['compile-html']).on('error', onError);
+    gulp.watch(buildJsPath + '**/*.js', ['compile-js']).on('error', onError);
+    gulp.watch(buildCssPath + '**/*.scss', ['compile-scss']).on('error', onError);
+
     gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "*.css"]).on('change', browserSync.reload).on('error', onError);
 });
 
