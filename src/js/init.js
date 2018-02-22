@@ -1,31 +1,49 @@
-///////////////////////////////////////////////////////
-///                    INIT JS                      ///
-///////////////////////////////////////////////////////
+/**
+ * BaseTemp JS Framework
+ *
+ * ES6 JS Framework with dynamic function initialisation
+ * @version 2.0
+ * @author Tobias Wöstmann
+ * @link https://github.com/vampics/baseTemp/
+ */
 
-$(document).ready(function() {
+/**
+ * loading framework after document is ready
+ * */
+
+$(() => {
 
     ui.init();
 
 });
 
-$(window).on("load", function() {
+/**
+ * set load trigger for functions in document ready
+ * */
+
+$(window).on("load",() => {
 
     $(document).trigger("DOMLoaded");
 
 });
 
+/**
+ * declarate ui object with all base js
+ * */
 
-///////////////////////////////////////////////////////
-///               INIT ALL MODULES                  ///
-///////////////////////////////////////////////////////
+const ui = {
 
-var ui = {
+    init: () => {
 
-    init: function() {
-
-        base.init();
-        header.init();
+        new base();
 
     }
+};
 
-}
+/**
+ * declarate modules object with all js it requires on active page
+ * */
+
+const modules = {
+
+};
