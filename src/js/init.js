@@ -23,7 +23,7 @@ $(() => {
 
 $(window).on("load",() => {
 
-    $(document).trigger("DOMLoaded");
+    $(document).trigger("loadComplete");
 
 });
 
@@ -35,7 +35,7 @@ const ui = {
 
     init: () => {
 
-        new base();
+        base.init();
 
     }
 };

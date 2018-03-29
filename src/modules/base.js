@@ -12,6 +12,7 @@ var base = {
         this.getAllMediaQuerys();
         this.getGrid();
         this.getSizes();
+
         this.loadModules.locate($("body"));
         this.recalculate.triggerResize();
         this.autosubmit();
