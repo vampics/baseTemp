@@ -14,7 +14,7 @@ class Base {
         this.$modulesRoot           = $('body');
 
         /**
-         * phrase for find and trigger the module
+         * phrase to find and trigger the module
          * loader in the $modulesRoot
          */
         this.modulesTrigger         = 'data-js';
@@ -48,7 +48,7 @@ class Base {
 
             if (typeof selectedmodule !== 'undefined') {
 
-                if (typeof modules[selectedmodule] === 'undefined') {
+                if (typeof modulesStorage[selectedmodule] === 'undefined') {
 
                     modulesStorage[selectedmodule] = selectedmodule;
                 }
@@ -62,7 +62,7 @@ class Base {
     }
 
     /**
-     * Find alle loaded to load in modules object and start it.
+     * Get lal modules to load and start the init function of it
      * Throw console info when a module not found in js
      *
      */
@@ -178,7 +178,7 @@ class Base {
          * Stop Scroll Event when user is scrolling
          *
          */
-        $(baseVars.$windowRoot).on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", (event) => {
+        $(baseVars.$windowRoot).on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", () => {
 
             $(baseVars.$windowRoot).stop();
 
@@ -188,7 +188,7 @@ class Base {
          * Animate a smotth scroll to defined postion
          *
          */
-        $(baseVars.$windowRoot).animate({ scrollTop: scrollTopPosition }, this.scrollAnimationSpeed, 'swing', (event) => {
+        $(baseVars.$windowRoot).animate({ scrollTop: scrollTopPosition }, this.scrollAnimationSpeed, 'swing', () => {
 
             $(baseVars.$windowRoot).off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
 

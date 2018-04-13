@@ -643,29 +643,14 @@ textarea {
 	width: 100%;
 	background: #FFF;
 	color: #151515;
-	border: 1px solid #989898;
+	border: 1px solid #d9d9d9;
 	padding: 6px 6px;
 	margin: 5px 0;
 	-webkit-transition: all 0.2s ease;
 	-moz-transition: all 0.2s ease;
 	-ms-transition: all 0.2s ease;
 	-o-transition: all 0.2s ease;
-	transition: all 0.2s ease;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
-	border-radius: 3px; /* Error class for baseTemp Formvalidation */
-}
-
-input[type="text"]:hover,
-input[type="password"]:hover,
-input[type="number"]:hover,
-input[type="email"]:hover,
-input[type="search"]:hover,
-input[type="tel"]:hover,
-input[type="url"]:hover,
-textarea:hover {
-	background: #f2f2f2;
+	transition: all 0.2s ease; /* Error class for baseTemp Formvalidation */
 }
 
 input[type="text"].error,
@@ -967,132 +952,10 @@ ul li {
 
 /* -------------------------------------------------------- */
 
-.selectbox {
-	position: relative;
-	width: 100%;
-	cursor: pointer;
-	margin: 5px 0;
-}
-
-.selectbox .selectboxit-btn,
-.selectbox.native select {
-	display: block;
-	width: 100%;
-	padding: 6px 6px;
-	border: 1px solid #989898;
-	text-align: left;
-	cursor: pointer;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
-	border-radius: 3px;
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
-	transition: all 0.2s ease;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.selectbox .selectboxit-btn:hover,
-.selectbox.native select:hover,
-.selectbox .selectboxit-btn:focus,
-.selectbox.native select:focus {
-	background: #d9d9d9;
-}
-
-.selectbox.error .selectboxit-btn,
-.selectbox.error .selectbox.native select,
-.selectbox.native .selectbox.error select {
-	border: 1px solid #C10D00;
-}
-
-.selectbox .selectboxit-arrow-container {
-	position: absolute;
-	right: 15px;
-	top: 13px;
-	font-weight: bold;
-	color: #151515;
-	-webkit-transition: all 0.3s ease;
-	-moz-transition: all 0.3s ease;
-	-ms-transition: all 0.3s ease;
-	-o-transition: all 0.3s ease;
-	transition: all 0.3s ease;
-}
-
-.selectbox .selectboxit-arrow-container .selectboxit-default-arrow {
-	display: block;
-	height: 9px;
-	width: 17px;
-	background: url("/images/arrow-down-big.svg");
-	background-size: 17px auto;
-}
-
-.selectbox .selectboxit-open .selectboxit-arrow-container {
-	-moz-transform: rotate(180deg);
-	-ms-transform: rotate(180deg);
-	-o-transform: rotate(180deg);
-	-webkit-transform: rotate(180deg);
-	transform: rotate(180deg);
-}
-
-.selectbox .selectboxit-list {
-	display: none;
-	position: absolute;
-	top: 100%;
-	left: 0;
-	height: auto;
-	min-width: 100%;
-	z-index: 500;
-	background: #FFF;
-	border: 1px solid #989898;
-	border-top: none;
-	padding: 0;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.selectbox .selectboxit-list li {
-	list-style: none;
-	padding-left: 0;
-	margin-left: 0;
-}
-
-.selectbox .selectboxit-list li:after {
-	display: none;
-}
-
-.selectbox .selectboxit-list li a {
-	display: block;
-	padding: 2px 5px;
-	color: #151515;
-}
-
-.selectbox .selectboxit-list .selectboxit-focus {
-	background: #d9d9d9;
-}
-
-.selectbox.native select {
-	padding: 3px 6px;
-}
-
-.selectbox .selectboxit-container select {
-	width: 100% !important;
-	height: auto !important;
-	bottom: 0 !important;
-	right: 0 !important;
-}
-
 .selectric-wrapper {
 	position: relative;
 	cursor: pointer;
+	margin: 5px 0;
 }
 
 .selectric-responsive {
@@ -1100,9 +963,9 @@ ul li {
 }
 
 .selectric {
-	border: 1px solid #DDD;
-	border-radius: 0px;
-	background: #F8F8F8;
+	border: 1px solid #d9d9d9;
+	border-radius: 0;
+	background: #FFF;
 	position: relative;
 	overflow: hidden;
 }
@@ -1112,11 +975,9 @@ ul li {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	margin: 0 38px 0 10px;
-	font-size: 12px;
-	line-height: 38px;
-	color: #444;
-	height: 38px;
+	margin: 6px 6px;
+	color: #151515;
+	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -1126,16 +987,20 @@ ul li {
 .selectric .button {
 	display: block;
 	position: absolute;
-	right: 0;
-	top: 0;
-	width: 38px;
-	height: 38px;
-	line-height: 38px;
-	background-color: #F8f8f8;
-	color: #BBB;
+	right: 10px;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	color: #151515;
+	background: transparent;
 	text-align: center;
 	font: 0/0 a;
 	*font: 20px/38px Lucida Sans Unicode, Arial Unicode MS, Arial;
+	-webkit-transform: translate(0, -50%);
+	-o-transform: translate(0, -50%);
+	-moz-transform: translate(0, -50%);
+	-ms-transform: translate(0, -50%);
+	transform: translate(0, -50%);
 }
 
 .selectric .button:after {
@@ -1154,27 +1019,19 @@ ul li {
 }
 
 .selectric-focus .selectric {
-	border-color: #aaaaaa;
+	border-color: #989898;
 }
 
 .selectric-hover .selectric {
-	border-color: #c4c4c4;
-}
-
-.selectric-hover .selectric .button {
-	color: #a2a2a2;
-}
-
-.selectric-hover .selectric .button:after {
-	border-top-color: #a2a2a2;
+	border-color: #989898;
 }
 
 .selectric-open {
-	z-index: 9999;
+	z-index: 700;
 }
 
 .selectric-open .selectric {
-	border-color: #c4c4c4;
+	border-color: #989898;
 }
 
 .selectric-open .selectric-items {
@@ -1185,6 +1042,7 @@ ul li {
 	filter: alpha(opacity=50);
 	opacity: 0.5;
 	cursor: default;
+	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -1250,10 +1108,10 @@ ul li {
 .selectric-items {
 	display: none;
 	position: absolute;
-	top: 100%;
+	top: calc(100% - 1px);
 	left: 0;
-	background: #F8F8F8;
-	border: 1px solid #c4c4c4;
+	background: #FFF;
+	border: 1px solid #989898;
 	z-index: -1;
 	box-shadow: 0 0 10px -6px;
 }
@@ -1263,41 +1121,29 @@ ul li {
 	overflow: auto;
 }
 
-.selectric-above .selectric-items {
-	top: auto;
-	bottom: 100%;
-}
-
 .selectric-items ul,
 .selectric-items li {
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	font-size: 12px;
-	line-height: 20px;
-	min-height: 20px;
 }
 
 .selectric-items li {
 	display: block;
-	padding: 10px;
-	color: #666;
+	padding: 6px;
 	cursor: pointer;
 }
 
 .selectric-items li.selected {
 	background: #E0E0E0;
-	color: #444;
 }
 
 .selectric-items li.highlighted {
 	background: #D0D0D0;
-	color: #444;
 }
 
 .selectric-items li:hover {
 	background: #D5D5D5;
-	color: #444;
 }
 
 .selectric-items .disabled {
@@ -1306,6 +1152,7 @@ ul li {
 	cursor: default !important;
 	background: none !important;
 	color: #666 !important;
+	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -1316,12 +1163,12 @@ ul li {
 	font-weight: bold;
 	padding-left: 10px;
 	cursor: default;
+	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 	background: none;
-	color: #444;
 }
 
 .selectric-items .selectric-group.disabled li {
@@ -1331,6 +1178,11 @@ ul li {
 
 .selectric-items .selectric-group li {
 	padding-left: 25px;
+}
+
+.selectric-above .selectric-items {
+	top: auto;
+	bottom: 100%;
 }
 
 /* -------------------------------------------------------- */
@@ -1691,24 +1543,18 @@ ul li {
 	display: none;
 	opacity: 0;
 	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	top: 50%;
+	left: 50%;
 	z-index: 999;
-	background: rgba(0, 0, 0, 0.4);
-	text-align: center;
-	line-height: 100vh;
-	cursor: pointer;
-}
-
-.modalbox > div {
-	display: inline-block;
-	text-align: left;
-	vertical-align: middle;
 	background: #FFF;
 	max-width: 95vw;
 	max-height: 95vh;
+	box-shadow: 0 0 2000px 2000px rgba(0, 0, 0, 0.3);
+	-webkit-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
 
 /* -------------------------------------------------------- */

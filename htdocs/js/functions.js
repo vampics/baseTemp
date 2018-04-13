@@ -1829,12 +1829,12 @@ const base = {
 
     },
 
-    init: () => {
+    init () {
 
         /**
          * set var for the vars object
          * */
-        baseVars = base.vars;
+        baseVars = this.vars;
 
         /**
          * set var for the base class
@@ -1844,43 +1844,43 @@ const base = {
         /**
          * set the mediaquery array
          * */
-        base.mediaquerys.set();
+        this.mediaquerys.set();
 
         /**
          * set the grid int
          * */
-        base.grid.set();
+        this.grid.set();
 
         /**
          * set the documents measures
          * */
-        base.measurement.set();
+        this.measurement.set();
 
         /**
          * trigger resize for the documents measures
          * */
-        base.measurement.trigger();
+        this.measurement.trigger();
 
         /**
          * load all inital modules
          * */
-        base.modules.init();
+        this.modules.init();
 
         /**
          * wait for finish the resize to Trigger event
          * */
-        base.slowResize.trigger();
+        this.slowResize.trigger();
 
         /**
          * init helper functions
          * */
-        base.helper.init();
+        this.helper.init();
 
     },
 
     mediaquerys: {
 
-        set: () => {
+        set ()  {
 
             /**
              * get the mediaquerys from the base class
@@ -1892,7 +1892,7 @@ const base = {
 
     grid: {
 
-        set: () => {
+        set () {
 
             /**
              * get the grid from the base class
@@ -1904,7 +1904,7 @@ const base = {
 
     measurement: {
 
-        set: () => {
+        set () {
 
             /**
              * get the documents measures from the base class
@@ -1916,7 +1916,7 @@ const base = {
 
         },
 
-        trigger: () => {
+        trigger () {
 
             /**
              * trigger windows resize
@@ -1936,7 +1936,7 @@ const base = {
 
     modules: {
 
-        init: () => {
+        init () {
 
             /**
              * get all modules to load
@@ -1950,7 +1950,7 @@ const base = {
 
         },
 
-        get: () => {
+        get () {
 
             /**
              * save the module object in a baseVar instance
@@ -1959,7 +1959,7 @@ const base = {
 
         },
 
-        set: () => {
+        set () {
 
             /**
              * set all modules in the modules baseVar instance
@@ -1972,7 +1972,7 @@ const base = {
 
     slowResize: {
 
-        trigger: () => {
+        trigger () {
 
             /**
              * set timer for waiting
@@ -1989,7 +1989,7 @@ const base = {
                 /**
                  * trigger the slowResize when its finish
                  * */
-                resizeFinishTimer = setTimeout(() => { $(document).trigger("slowResize") }, 20);
+                resizeFinishTimer = setTimeout(() => { $(document).trigger("resized") }, 20);
 
             });
 
@@ -2006,7 +2006,7 @@ const base = {
         /**
          * init all helper functions
          * */
-        init() {
+        init () {
 
             base.helper.autoScrollTop();
 
@@ -2018,7 +2018,7 @@ const base = {
         /**
          * helper for a smooth scroll animation to the top postion
          * */
-        autoScrollTop: () => {
+        autoScrollTop () {
 
             $(baseVars.helperAttributes.scrollToTrigger).on("click", (event) => {
 
@@ -2033,7 +2033,7 @@ const base = {
         /**
          * helper for a automatic form submit when a triggered input are changing
          * */
-        autoSubmit: () => {
+        autoSubmit () {
 
             $(baseVars.helperAttributes.autoSubmitTrigger).on("change", (event) => {
 
@@ -2046,7 +2046,7 @@ const base = {
         /**
          * helper for a automatic forwarding when a triggered input are changing
          * */
-        autoLink: () => {
+        autoLink () {
 
             $(baseVars.helperAttributes.autoLinkTrigger).on("change", (event) => {
 
@@ -2084,7 +2084,7 @@ $(() => {
 
 $(window).on("load",() => {
 
-    $(document).trigger("loadComplete");
+    $(document).trigger("DOMLoaded");
 
 });
 
@@ -2125,7 +2125,7 @@ class Base {
         this.$modulesRoot           = $('body');
 
         /**
-         * phrase for find and trigger the module
+         * phrase to find and trigger the module
          * loader in the $modulesRoot
          */
         this.modulesTrigger         = 'data-js';
@@ -2159,7 +2159,7 @@ class Base {
 
             if (typeof selectedmodule !== 'undefined') {
 
-                if (typeof modules[selectedmodule] === 'undefined') {
+                if (typeof modulesStorage[selectedmodule] === 'undefined') {
 
                     modulesStorage[selectedmodule] = selectedmodule;
                 }
@@ -2173,7 +2173,7 @@ class Base {
     }
 
     /**
-     * Find alle loaded to load in modules object and start it.
+     * Get lal modules to load and start the init function of it
      * Throw console info when a module not found in js
      *
      */
@@ -2289,7 +2289,7 @@ class Base {
          * Stop Scroll Event when user is scrolling
          *
          */
-        $(baseVars.$windowRoot).on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", (event) => {
+        $(baseVars.$windowRoot).on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", () => {
 
             $(baseVars.$windowRoot).stop();
 
@@ -2299,7 +2299,7 @@ class Base {
          * Animate a smotth scroll to defined postion
          *
          */
-        $(baseVars.$windowRoot).animate({ scrollTop: scrollTopPosition }, this.scrollAnimationSpeed, 'swing', (event) => {
+        $(baseVars.$windowRoot).animate({ scrollTop: scrollTopPosition }, this.scrollAnimationSpeed, 'swing', () => {
 
             $(baseVars.$windowRoot).off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
 
@@ -2308,3 +2308,1565 @@ class Base {
     }
 
 }
+/**
+ * Accordion Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let acc;
+
+let accVars;
+
+modules.accordion = {
+
+    vars: {
+        moduleQuery:                    '*[data-js=accordion]',
+        moduleTriggerQuery:             '*[data-accordion-trigger]',
+        moduleContentQuery:             '*[data-accordion-content]',
+        moduleAnimationSpeed:            300,
+        moduleActiveClass:              'active',
+        $accordions:                     {}
+    },
+
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        acc = this;
+
+        /**
+         * save shorthand for the accordion vars
+         * */
+        accVars = this.vars;
+
+        /**
+         * set on click event trigger
+         * */
+        this.eventTrigger();
+
+    },
+
+    eventTrigger () {
+
+        /**
+         * bind click event to moduleTriggerQuery in moduleQuery
+         * */
+        $(document).on("click", accVars.moduleQuery + ' ' + accVars.moduleTriggerQuery, (event) => {
+
+            this.eventHandler(event, event.currentTarget);
+
+        });
+
+    },
+
+    eventHandler (event, accordionQuery) {
+
+        event.preventDefault();
+
+        /**
+         * save all accordions on active site
+         * */
+        accVars.$accordions = $(accVars.moduleQuery);
+
+        /**
+         * save event accordion
+         * */
+        let $accordion = $(accordionQuery).closest(accVars.moduleQuery);
+
+        /**
+         * class status
+         * */
+        let accordionHasClass = $accordion.hasClass(accVars.moduleActiveClass)
+
+        /**
+         * close all accordions
+         * */
+        this.close();
+
+        /**
+         * check if the event accordion
+         * is open/active
+         * */
+        if (!accordionHasClass) {
+
+            this.open($accordion);
+
+        }
+
+    },
+
+    open ($accordion) {
+
+        /**
+         * add the active class and
+         * slide down the content with an animation
+         * */
+        $accordion.addClass(accVars.moduleActiveClass).find(accVars.moduleContentQuery).slideDown(accVars.moduleAnimationSpeed);
+
+    },
+
+    close () {
+
+        /**
+         * cycle all accordions
+         * */
+        accVars.$accordions.each( (index, accordionQuery) => {
+
+            /**
+             * remove the active class and
+             * slide up the content with an animation
+             * */
+            $(accordionQuery).removeClass(accVars.moduleActiveClass).find(accVars.moduleContentQuery).slideUp(accVars.moduleAnimationSpeed);
+
+        });
+
+    }
+
+};
+/**
+ * Equalheight Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let eh;
+
+let ehVars;
+
+modules.equalheight = {
+
+    vars: {
+        moduleQuery:                    '*[data-js=equalheight]',
+        moduleChildNodeQuery:           '*[data-equalheight-element]',
+        fallbackDesktopMediaquery:      'mw',
+
+        optionBreakpointAttr:           'data-equalheight-option-breakpoint',
+        optionMobileAttr:               'data-equalheight-option-mobile',
+        optionRowAttr:                  'data-equalheight-option-row'
+    },
+
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        eh = this;
+
+        /**
+         * save shorthand for the equalheight vars
+         * */
+        ehVars = this.vars;
+
+        /**
+         * start script inital
+         * */
+        this.find.parentNodes();
+
+        /**
+         * trigger when its complete loaded and when its finished to resize
+         * */
+        $(document).on("DOMLoaded resized", () => {
+            this.find.parentNodes();
+        });
+
+    },
+
+    find: {
+
+        parentNodes () {
+
+            $(ehVars.moduleQuery).each((index, moduleQuery) => {
+
+                /**
+                 * Save instance
+                 */
+                let $module = $(moduleQuery);
+
+                /**
+                 * Get all childs of the module to set eh
+                 */
+                let $moduleChildNodes = this.childNodes($module);
+
+                /**
+                 * Set options - return false when mobile option false and mobile viewport active
+                 */
+                return eh.setOptions($module,$moduleChildNodes);
+
+            });
+
+        },
+
+        childNodes ($module) {
+
+            /**
+             * Find and return all child nodes with attribute as jquery object
+             */
+            return $module.find(ehVars.moduleChildNodeQuery);
+
+        },
+
+    },
+
+    setOptions ($module,$moduleChildNodes) {
+
+        /**
+         * Get all options from the parent attribute
+         */
+        let moduleOptionBreakpoint      = ($module.attr(ehVars.optionBreakpointAttr) || ehVars.fallbackDesktopMediaquery);
+        let moduleOptionMobile          = ($module.attr(ehVars.optionMobileAttr) === "true");
+        let moduleOptionRow             = ($module.attr(ehVars.optionRowAttr) === "true");
+
+        /**
+         * Check if mobile option is true, otherwise stop the script.
+         * Compare mobile indicator with the module option breakpoint
+         */
+        if (!moduleOptionMobile && baseVars.mediaquerys[moduleOptionBreakpoint] > baseVars.windowWidth) {
+
+            this.resetNodes($moduleChildNodes);
+
+            return false;
+        }
+
+        /**
+         * When row option true ... calculate rows.
+         */
+        if (moduleOptionRow){
+
+            this.splitNodesPerRow($moduleChildNodes);
+
+        }else{
+
+            /**
+             * set equal height without rows
+             */
+            this.setEqualHeight($moduleChildNodes);
+
+        }
+
+        return true;
+
+    },
+
+    splitNodesPerRow: function($equalHeightElements){
+
+        /**
+         * declarate row/rows array and inital row postion
+         */
+        let rows            = [];
+        let row             = [];
+        let rowPostion      = 0;
+
+        /**
+         * give each element same height
+         * to build correct rows
+         */
+        $equalHeightElements.css("height","2px");
+
+        /**
+         * cycle all equal height elements to split the rows
+         */
+        $equalHeightElements.each((index, equalHeightElementQuery) => {
+
+            /**
+             * check if the element top postion
+             * not like the previous
+             */
+            if ($(equalHeightElementQuery).offset().top !== rowPostion) {
+
+                /**
+                 * set the new row position
+                 */
+                rowPostion = $(equalHeightElementQuery).offset().top;
+
+                /**
+                 * check if active row not empty
+                 */
+                if (row.length > 0) {
+
+                    /**
+                     * then push it as new row in rows
+                     * and start new row
+                     */
+                    rows.push(row);
+                    row = [];
+                }
+
+            }
+
+            /**
+             * push the equalHeightElement in the row
+             */
+            row.push(equalHeightElementQuery);
+
+        });
+
+        /**
+         * only when row not empty, push
+         * the last row in array
+         */
+        if (row.length > 0) {
+            rows.push(row);
+        }
+
+        /**
+         * reset all nodes
+         */
+        this.resetNodes($equalHeightElements);
+
+
+        /**
+         * cycle all rows
+         */
+        $.each(rows, (index, rowArray) => {
+
+            /**
+             * make all equalheight elements in
+             * row to array and set the equal height
+             * function
+             */
+            this.setEqualHeight( $($.map(rowArray, $equalHeightElementsInRow => $.makeArray($equalHeightElementsInRow))));
+
+        });
+
+        $(document).trigger("DOMFinished");
+
+    },
+
+    setEqualHeight: function($equalHeightElements) {
+
+        /**
+         * reset each module cycle with height 0
+         */
+        let highestHeight = 0;
+
+        /**
+         * reset all nodes
+         */
+        this.resetNodes($equalHeightElements);
+
+        /**
+         * cycle all child nodes to get the highest box
+         */
+        $equalHeightElements.each((index, equalHeightElementQuery) => {
+
+            /**
+             * if highestHeight lower than the current box
+             * height and overide highestHeight
+             */
+            if (highestHeight < Math.ceil($(equalHeightElementQuery).outerHeight())) {
+
+                highestHeight = Math.ceil($(equalHeightElementQuery).outerHeight());
+
+            }
+
+        });
+
+        /**
+         * set the highest height
+         * to all nodes
+         */
+        $equalHeightElements.css("height", highestHeight);
+
+    },
+
+    resetNodes ($equalHeightElement) {
+        $equalHeightElement.css("height","auto");
+    }
+
+};
+/**
+ * Formvalidation Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let fv;
+
+let fvVars;
+
+let fvValidate;
+
+let fvAction;
+
+let fvErrors;
+
+modules.formvalidation = {
+
+    vars: {
+        moduleQuery:                    '*[data-js=formvalidation]',
+
+        errorClass:                     'error',
+        errorMessageAttribute:          "data-lang-message",
+        errorMessageQuery:              ".status.error",
+        errorMessageClass:              "status error",
+        errorMessage:                   "Bitte prüfen Sie Ihre Eingaben!",
+        errorElementToInsertBeforeQuery:".element",
+
+        validateEmptyFieldAttribute:    'data-validation-required',
+        validateZipFieldAttribute:      'data-validation-zip',
+        validateEmailFieldAttribute:    'data-validation-email',
+        validateLengthAttribute:        'data-validation-length',
+
+        textinputQuery:                 "input[type=text], input[type=date], input[type=email], input[type=password], input[type=number], input[type=search], input[type=time], input[type=url], input[type=tel]",
+        textareaQuery:                  "textarea",
+        selectboxQuery:                 "*[data-js=selectbox]",
+        checkboxQuery:                  ".checkbox input",
+        radioboxQuery:                  ".radiobox input",
+
+        selectBoxSelectedAttribute:     "data-selectbox-selected",
+
+        /**
+         * module storage vars
+         * */
+        state:                          [],
+        thisActiveElement:              '',
+        scrollTo:                       9000000,
+        errors:                         [],
+
+    },
+
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        fv = this;
+
+        /**
+         * save shorthand for the formvalidation vars
+         * */
+        fvVars = this.vars;
+
+        /**
+         * save shorthand for the formvalidation validations
+         * */
+        fvValidate = this.validate;
+
+        /**
+         * save shorthand for the formvalidation actions
+         * */
+        fvAction = this.action;
+
+        /**
+         * save shorthand for the formvalidation error array
+         * */
+        fvErrors = fvVars.errors;
+
+        /**
+         * bind submit event
+         * */
+        this.bindSubmit();
+
+    },
+
+    bindSubmit () {
+
+        /**
+         * trigger submit event of the form
+         * */
+
+        $(fvVars.moduleQuery).on('submit', (event) => {
+
+            /**
+             * set active form
+             * */
+            fvVars.thisActiveForm = $(event.currentTarget);
+
+            /**
+             * reset all errors
+             * */
+            fvAction.resetErrors();
+
+            /**
+             * check the form
+             * */
+            return this.action.checkFormSubmit();
+
+        });
+
+    },
+
+    typecases: {
+
+        textinput () {
+
+            let checkingPassed = true;
+
+            /**
+             * cycle all queryed text input form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.textinputQuery).each( (index, inputQuery) => {
+
+                /**
+                 * assign input element
+                 * */
+                let $checkingInput = $(inputQuery);
+
+                /**
+                 * remove error class
+                 * */
+                $checkingInput.removeClass(fvVars.errorClass);
+
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingInput.is(':visible')) {
+
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
+                        }
+
+                    }
+
+                    /**
+                     * check if the input are a german zip code
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateZipFieldAttribute)) {
+
+                        if (!fvValidate.zipField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
+                        }
+
+                    }
+
+                    /**
+                     * check if the input are a e-mail
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateEmailFieldAttribute)) {
+
+                        if (!fvValidate.emailField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
+                        }
+
+                    }
+
+                    /**
+                     * check if the input has a minimal length
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateLengthAttribute)) {
+
+                        if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+            return checkingPassed;
+
+        },
+
+        textarea () {
+
+            let checkingPassed = true;
+
+            /**
+             * cycle all queryed textarea form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.textareaQuery).each( (index, inputQuery) => {
+
+                /**
+                 * assign input element
+                 * */
+                let $checkingInput = $(inputQuery);
+
+                /**
+                 * remove error class
+                 * */
+                $checkingInput.removeClass(fvVars.errorClass);
+
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingInput.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
+                        }
+
+                    }
+
+                    /**
+                     * check if the input has a minimal length
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateLengthAttribute)) {
+
+                        if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+            return checkingPassed;
+
+        },
+
+        selectbox () {
+
+            let checkingPassed = true;
+
+            /**
+             * cycle all queryed select elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.selectboxQuery).each( (index, inputQuery) => {
+
+                /**
+                 * assign select element
+                 * */
+                let $checkingComponent = $(inputQuery);
+
+                /**
+                 * remove error class
+                 * */
+                $checkingComponent.removeClass(fvVars.errorClass);
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingComponent.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkingComponent.find("select").is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptySelectbox($checkingComponent)) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingComponent);
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+            return checkingPassed;
+
+        },
+
+        checkbox () {
+
+            let checkingPassed = true;
+
+            /**
+             * cycle all queryed text input form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.checkboxQuery).each( (index, inputQuery) => {
+
+                /**
+                 * assign input element
+                 * */
+                let $checkingComponent = $(inputQuery).parent().parent();
+                let $checkinginput = $(inputQuery);
+
+                /**
+                 * remove error class
+                 * */
+                $checkingComponent.removeClass(fvVars.errorClass);
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingComponent.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyCheckbox($checkinginput)) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingComponent);
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+            return checkingPassed;
+
+        },
+
+        radiobox () {
+
+            let checkingPassed = true;
+
+            /**
+             * cycle all queryed text input form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.radioboxQuery).each( (index, inputQuery) => {
+
+                /**
+                 * assign input element
+                 * */
+                let $checkingComponent = $(inputQuery).parent().parent();
+                let $checkinginput = $(inputQuery);
+
+                /**
+                 * remove error class
+                 * */
+                $checkingComponent.removeClass(fvVars.errorClass);
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingComponent.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyRadiobox($checkinginput)) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingComponent);
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+            return checkingPassed;
+
+        },
+
+    },
+
+    action: {
+
+        checkFormSubmit () {
+
+            let checkingPassed = true;
+
+            /**
+             * cycle all typecases to test all
+             * form elements
+             * */
+            $.each(fv.typecases, (key, typecase) => {
+
+                /**
+                 * if the test fails set passed to false
+                 * */
+                if (!typecase()) {
+                    checkingPassed = false;
+                }
+
+            });
+
+            /**
+             * if the test fails display errors and scroll
+             * to postion of first cuased error
+             * */
+            if (!checkingPassed) {
+
+                baseClass.scrollTo(fvVars.scrollTo + "px");
+
+                fvAction.displayErrors();
+
+            }
+
+            return checkingPassed;
+
+        },
+
+        setError ($checkedFormElement) {
+
+            /**
+             * add error styling to the element
+             * */
+            $checkedFormElement.addClass(fvVars.errorClass);
+
+            /**
+             * set scroll postion
+             * */
+            fvAction.windowScrollToCalculation(parseInt($checkedFormElement.offset().top));
+
+            /**
+             * load optional error message
+             * */
+            let errorMessage = $checkedFormElement.attr(fvVars.errorMessageAttribute);
+
+            /**
+             * check if individual error
+             * message exist
+             * */
+            if (errorMessage === undefined || errorMessage === null) {
+                errorMessage = fvVars.errorMessage;
+            }
+
+            /**
+             * push error message in array
+             * when it didnt exist
+             * */
+            if (fvErrors.indexOf("- " + errorMessage) === -1){
+                fvErrors.push("- " + errorMessage);
+            }
+
+            /**
+             * return false to prevent submit
+             * */
+            return false;
+        },
+
+        windowScrollToCalculation (errorElementTopPosition) {
+
+            /**
+             * get the vertical center fo the site
+             * */
+            let siteCenter = parseInt(baseVars.windowHeight) / 2;
+
+            /**
+             * get position off the highest element that caused a error.
+             * check saved scroll positon > the postion of the error element
+             * and set it to 0 when the the element is in the highest viewport
+             * */
+            if (fvVars.scrollTo > errorElementTopPosition) {
+
+                if (errorElementTopPosition < siteCenter) {
+
+                    errorElementTopPosition = 0;
+
+                }else{
+
+                    errorElementTopPosition = errorElementTopPosition - siteCenter;
+                }
+
+                /**
+                 * overide scroll top postion
+                 * */
+                fvVars.scrollTo = errorElementTopPosition;
+            }
+
+        },
+
+        resetErrors () {
+
+            /**
+             * remove the error message box
+             * */
+            $(fvVars.errorMessageQuery).remove();
+
+            /**
+             * clear error array
+             * */
+            fvErrors = [];
+
+        },
+
+        displayErrors () {
+
+            /**
+             * build error box with all
+             * saved error messages from the
+             * fvErrors error
+             * */
+            let errorBox = `<div class="${fvVars.errorMessageClass}">`;
+
+            $.each( fvErrors, (key, errorMessage) => {
+
+                errorBox += `<p>${ errorMessage }<br></p>`;
+
+            });
+
+            errorBox += `</div>`;
+
+            /**
+             * get the first element from the
+             * errorElementToInsertBefore query
+             * */
+
+            let $elementToInsert =  $(fvVars.errorElementToInsertBeforeQuery).first();
+
+            /**
+             * insert error in DOM
+             * */
+
+            $(errorBox).insertBefore($elementToInsert);
+
+        }
+
+    },
+
+    validate: {
+
+        emptyField (stValue) {
+
+            return fvValidate.length(stValue,1);
+
+        },
+
+        emptySelectbox ($selectbox) {
+
+            return $selectbox.is(`[${fvVars.selectBoxSelectedAttribute}]`);
+
+        },
+
+        emptyCheckbox ($checkbox) {
+
+            return $checkbox.prop('checked');
+
+        },
+
+        emptyRadiobox ($radiobox) {
+
+            return $("input[name='" + $radiobox.attr("name") + "']").is(':checked');
+
+        },
+
+        zipField (zip) {
+
+            zip = jQuery.trim(zip);
+            let reg = /^[0-9]{4,5}$/;
+            return reg.test(zip);
+
+        },
+
+        emailField (email) {
+            email = jQuery.trim(email);
+            let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            return reg.test(email);
+        },
+
+        length (stValue, length = 1) {
+
+            stValue = jQuery.trim( stValue );
+            return stValue.length >= length;
+
+        }
+
+    }
+
+};
+/**
+ * Modalbox Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let mob;
+
+let mobVars;
+
+modules.modalbox = {
+
+    vars: {
+        moduleQuery:                    '*[data-js=modalbox]',
+        modalIdTriggerAttribute:        'data-modalbox',
+        modalIdAttribute:               'data-modalbox-name',
+        rootAppendingQuery:             'body',
+        $activeModalbox:                '',
+        animationSpeed:                 300,
+    },
+
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        mob = this;
+
+        /**
+         * save shorthand for the modalbox vars
+         * */
+        mobVars = this.vars;
+
+        /**
+         * set on click event trigger
+         * */
+        this.eventTrigger();
+
+    },
+
+    eventTrigger () {
+
+        /**
+         * bind click event to moduleQuery
+         * */
+        $(document).on("click", mobVars.moduleQuery, (event) => {
+
+            this.eventHandler(event, event.currentTarget);
+
+        });
+
+    },
+
+    eventHandler (event, modalboxQuery) {
+
+        event.stopPropagation();
+
+        event.preventDefault();
+
+        /**
+         * prepare modalbox to open it
+         * */
+        this.build($(modalboxQuery));
+
+        /**
+         * open new builded modalbox
+         * */
+        this.open();
+
+    },
+
+    build ($modalboxParent) {
+
+        /**
+         * find modalbox template and clone it
+         * */
+        let $modalboxChild = $("*[" + mobVars.modalIdAttribute + "='" + $modalboxParent.attr(mobVars.modalIdTriggerAttribute) +"']").clone();
+
+        /**
+         * append the cloned $ object to the root element
+         * */
+        $(mobVars.rootAppendingQuery).append($modalboxChild);
+
+        /**
+         * find element in new DOM and save it
+         * */
+        mobVars.$activeModalbox = $(mobVars.rootAppendingQuery).find( "> *[" + mobVars.modalIdAttribute + "]");
+
+    },
+
+    open () {
+
+
+        /**
+         * display the modalbox with animation
+         * */
+        mobVars.$activeModalbox.css("display","block").animate(
+            {
+                opacity: 1
+            },
+            mobVars.animationSpeed
+        );
+
+        /**
+         * bind the click outside closing
+         * */
+        $(document).on("click.modalbox", (clickEvent) => {
+
+            this.bindClickToClose(clickEvent);
+
+        });
+
+    },
+
+    bindClickToClose (event) {
+
+        /**
+         * check if the modal are visible
+         * */
+        if(mobVars.$activeModalbox.is(":visible")) {
+
+            /**
+             * check if the clicked element
+             * in the modalbox layer
+             * */
+            if ($(event.target).closest("*[" + mobVars.modalIdAttribute + "]").length === 0) {
+
+                this.close();
+
+            }
+
+        }
+
+    },
+
+    close () {
+
+        /**
+         * deactivate the click event
+         * */
+        $(document).off("click.modalbox");
+
+        /**
+         * hide the modalbox with animation
+         * */
+        mobVars.$activeModalbox.animate(
+            {
+                opacity: 0
+            },
+            mobVars.animationSpeed,
+            () => {
+
+                mobVars.$activeModalbox.css("display","none");
+                this.destroy();
+
+            });
+
+    },
+
+    destroy () {
+
+        /**
+         * removed the cloned modalbox
+         * */
+        mobVars.$activeModalbox.remove();
+
+    }
+
+};
+/**
+ * Selectbox Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let sb;
+
+let sbVars;
+
+modules.selectbox = {
+
+    vars: {
+        moduleQuery:                    '*[data-js=selectbox]',
+        selectboxListQuery:             '.selectric-items',
+        placeholderQuery:               '.disabled.selected',
+        selectedAttribute:              'data-selectbox-selected',
+    },
+
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        sb = this;
+
+        /**
+         * save shorthand for the selectbox vars
+         * */
+        sbVars = this.vars;
+
+        /**
+         * init selectric libary
+         * */
+        $(sbVars.moduleQuery).find('select').selectric({
+            responsive: true,
+            onInit (selectboxQuery) {
+
+                /**
+                 * outsourced event action for after init event
+                 * */
+                sb.events.onInit(selectboxQuery);
+
+            },
+            onChange (selectboxQuery) {
+
+                /**
+                 * outsourced event action for change event
+                 * */
+                sb.events.onChange(selectboxQuery);
+
+            },
+
+        });
+
+    },
+
+    events: {
+
+        onInit (selectboxQuery) {
+
+            /**
+             * save the active list as var
+             * */
+            let $selectboxList = sb.getSelectboxList(selectboxQuery);
+
+            /**
+             * remove the placeholder list item from
+             * the builded list.
+             * */
+            if ($selectboxList.find(sbVars.placeholderQuery).length > 0) {
+
+                $selectboxList.find(sbVars.placeholderQuery).remove();
+
+            }else{
+
+                /**
+                 * set flag for a validation that an item is selected
+                 * */
+                sb.setSelectedAttribute(selectboxQuery);
+
+            }
+
+        },
+
+        onChange (selectboxQuery) {
+
+            /**
+             * trigger  manually a change on the select box
+             * */
+            $(selectboxQuery).trigger("change");
+
+            /**
+             * set flag for a validation that an item selected
+             * */
+            sb.setSelectedAttribute(selectboxQuery);
+
+        },
+
+    },
+
+    getSelectboxList (selectboxQuery) {
+
+        /**
+         * return the active list as jquery object
+         * */
+        return $(selectboxQuery).closest(sbVars.moduleQuery).find(sbVars.selectboxListQuery);
+
+    },
+
+    setSelectedAttribute (selectboxQuery) {
+
+        /**
+         * set flag for a validation that an item selected
+         * */
+        $(selectboxQuery).closest(sbVars.moduleQuery).attr(sbVars.selectedAttribute,true);
+
+    }
+
+};
+/**
+ * Slider Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let sl;
+
+let slVars;
+
+modules.slider = {
+
+    vars: {
+        moduleQuery:                    '*[data-js=slider]',
+        scriptPath:                     base.vars.vendorBasePath + "slider.js",
+
+        options:                        {},
+        optionPrevButton:               '<button type="button" class="slick-prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>',
+        optionNextButton:               '<button type="button" class="slick-next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>'
+    },
+
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        sl = this;
+
+        /**
+         * save shorthand for the accordion vars
+         * */
+        slVars = this.vars;
+
+        /**
+         * set on click event trigger
+         * */
+        this.getLibary();
+
+    },
+
+    getLibary () {
+
+        $.getScript( slVars.scriptPath, () => {
+
+            /**
+             * Start slider Script inital
+             * */
+            this.getModules();
+
+        });
+
+    },
+
+    getModules () {
+
+        /**
+         * cycle each slider module
+         * */
+        $(slVars.moduleQuery).each((index, moduleQuery) => {
+
+            /**
+             * save slider module instance options
+             * */
+            this.saveSliderSettings($(moduleQuery));
+
+            /**
+             * start slider module instance
+             * */
+            this.startSlider($(moduleQuery));
+
+            /**
+             * trigger slider module events
+             * */
+            this.triggerSliderEvents($(moduleQuery));
+
+        });
+
+    },
+    
+    saveSliderSettings ($slider) {
+
+        /**
+         * create option object for slick method
+         * */
+        slVars.options = {};
+
+        /**
+         * define standard options
+         * */
+        slVars.options.infinite = true;
+        slVars.options.mobileFirst = true;
+        slVars.options.responsive = [];
+
+        /**
+         * define all changeable options via attribute for basic load.
+         * "" defines no viewport for basic loading
+         * */
+        this.getSliderSettings($slider,slVars.options,"");
+
+        /**
+         * loop all mediaquerys
+         * */
+        for (let viewport in base.vars.mediaquerys){
+            if (baseVars.mediaquerys.hasOwnProperty(viewport)) {
+
+                /**
+                 * skip 0px mediaquery
+                 * */
+                if (parseInt(baseVars.mediaquerys[viewport]) > 0) {
+
+                    /**
+                     * create breakpoint object for mediaquery
+                     * */
+                    let breakpoint = {};
+
+                    /**
+                     * define breakpoint size and create settings object
+                     * */
+                    breakpoint.breakpoint = parseInt(baseVars.mediaquerys[viewport]) - 1;
+                    breakpoint.settings = {};
+
+                    /**
+                     *  define all changeable options via attribute for mediaquery.
+                     *  -viewport defines the medaiquery suffix for attribute
+                     * */
+                    this.getSliderSettings($slider,breakpoint.settings,"-" + viewport);
+
+                    /**
+                     *  only push in object when breakpoint has options
+                     * */
+                    if (!jQuery.isEmptyObject(breakpoint.settings)) {
+                        slVars.options.responsive.push(breakpoint);
+                    }
+
+                }
+            }
+        }
+
+    },
+
+    getSliderSettings ($slider,optionLevel,viewport){
+
+        /**
+         * html for other previous arrow
+         * */
+        if (viewport === "" || $slider.is("[data-prevArrow" + viewport + "]")) {
+            optionLevel.prevArrow = $slider.attr("data-prevArrow" + viewport) || slVars.optionPrevButton;
+        }
+
+        /**
+         * html for other next arrow
+         * */
+        if (viewport === "" || $slider.is("[data-nextArrow" + viewport + "]")) {
+            optionLevel.nextArrow = $slider.attr("data-nextArrow" + viewport) || slVars.optionNextButton;
+        }
+
+        /**
+         * html for a conntection to an other slider
+         * */
+        if (viewport === "" || $slider.is("[data-asNavFor" + viewport + "]")) {
+            optionLevel.asNavFor = $slider.attr("data-asNavFor" + viewport) || null;
+        }
+        /**
+         * Enables variable Width of slides.
+         * */
+        // Enables variable Width of slides.
+        if (viewport === "" || $slider.is("[data-variableWidth" + viewport + "]")) {
+            optionLevel.variableWidth = ($slider.attr("data-variableWidth" + viewport) === "true");
+        }
+
+        /**
+         * Enables draggable slides.
+         * */
+        if (viewport === "" || $slider.is("[data-draggable" + viewport + "]")) {
+            optionLevel.draggable = ($slider.attr("data-draggable" + viewport) === "true");
+        }
+
+        /**
+         * set focus on select
+         * */
+        if (viewport === "" || $slider.is("[data-focusOnSelect" + viewport + "]")) {
+            optionLevel.focusOnSelect = $slider.attr("data-focusOnSelect" + viewport) === "true";
+        }
+
+        /**
+         * change slide animation to fade
+         * */
+        if (viewport === "" || $slider.is("[data-fade" + viewport + "]")) {
+            optionLevel.fade = $slider.attr("data-fade" + viewport) === "true";
+        }
+
+        /**
+         *  # of slides to show
+         * */
+        if (viewport === "" || $slider.is("[data-slidesToShow" + viewport + "]")) {
+            optionLevel.slidesToShow = $slider.attr("data-slidesToShow" + viewport) || "1";
+        }
+
+        /**
+         * Enables adaptive height for single slide horizontal carousels.
+         * */
+        if (viewport === "" || $slider.is("[data-adaptiveHeight" + viewport + "]")) {
+            optionLevel.adaptiveHeight = ($slider.attr("data-adaptiveHeight" + viewport) === "true");
+        }
+
+        /**
+         * Show dot indicators
+         * */
+        if (viewport === "" || $slider.is("[data-dots" + viewport + "]")) {
+            optionLevel.dots = ($slider.attr("data-dots" + viewport) === "true");
+        }
+
+        /**
+         * Slide animation speed
+         * */
+        if (viewport === "" || $slider.is("[data-speed" + viewport + "]")) {
+            optionLevel.speed = $slider.attr("data-speed" + viewport) || "300";
+        }
+
+        /**
+         * Enables centered view with partial prev/next slides.
+         * Use with odd numbered slidesToShow counts.
+         * */
+        if (viewport === "" || $slider.is("[data-centerMode" + viewport + "]")) {
+            optionLevel.centerMode = ($slider.attr("data-centerMode" + viewport) === "true");
+        }
+
+        /**
+         * Enables Autoplay
+         * */
+        if (viewport === "" || $slider.is("[data-autoplay" + viewport + "]")) {
+            optionLevel.autoplay = ($slider.attr("data-autoplay" + viewport) === "true");
+        }
+
+        /**
+         * Autoplay Speed in milliseconds
+         * */
+        if (viewport === "" || $slider.is("[data-autoplaySpeed" + viewport + "]")) {
+            optionLevel.autoplaySpeed = $slider.attr("data-autoplaySpeed" + viewport);
+        }
+
+        /**
+         * Show prev/next Arrows
+         * */
+        if (viewport === "" || $slider.is("[data-arrows" + viewport + "]")) {
+            optionLevel.arrows = ($slider.attr("data-arrows" + viewport) === "true");
+        }
+
+    },
+
+    startSlider ($slider) {
+
+        /**
+         * start libary and set the options
+         * */
+        $slider.slick(slVars.options);
+
+    },
+
+    triggerSliderEvents ($slider) {
+
+        /**
+         * trigger a event when slider is finished
+         * */
+        $slider.on('init', () => {
+
+            $(document).trigger("sliderLoaded");
+            $(document).trigger("DOMFinished");
+
+        });
+
+    }
+
+
+};

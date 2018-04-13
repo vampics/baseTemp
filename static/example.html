@@ -66,7 +66,7 @@
 
 </head>
 
-<body class="index">
+<body class="example">
 
     <main class="gridWrap">
 
@@ -102,26 +102,23 @@
 
         <div class="w12">
 
-            <div class="selectbox showfirstoption" data-js="selectbox">
-                <label>
-                    <select name="selectbox">
-                        <option>Her111r</option>
-                        <option>Frau</option>
-                    </select>
-                </label>
+            <div class="selectbox" data-js="selectbox">
+                <select name="selectbox" data-validation-required title="Anrede">
+                    <option disabled selected>Bitte wählen</option>
+                    <option>Herr</option>
+                    <option>Frau</option>
+                </select>
             </div>
 
         </div>
 
         <div class="w12 mw6">
 
-            <label>
-                <input type="text" class="required" title="example">
-            </label>
+            <input type="text" data-validation-required title="example">
 
-            <input type="text" class="required" title="example">
+            <input type="text" data-validation-required title="example">
 
-            <input type="text" class="required" title="example">
+            <input type="text" title="example">
 
        </div>
 
@@ -154,7 +151,7 @@
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" class="required" name="checkbox">
+                        <input type="checkbox" data-validation-required name="checkbox">
                         <span>Das ist ein Checkbox Feld</span>
                     </label>
                 </div>
@@ -177,7 +174,7 @@
 
         <div class="w12">
 
-            <textarea title="textarea"></textarea>
+            <textarea title="textarea" data-validation-required></textarea>
 
         </div>
 
@@ -250,8 +247,8 @@
             <hr>
 
             <div data-js="accordion">
-                <a href="javascript:void(0);">Klick me</a>
-                <div>
+                <a href="javascript:void(0);" data-accordion-trigger>Klick me</a>
+                <div data-accordion-content>
                    <p>
                        Lorem ilor sit amet.
                    </p>
@@ -267,11 +264,9 @@
 
             <div class="modalbox" data-modalbox-name="modalbox1">
 
-                <div>
-                    <figure>
-                        <img src="http://placehold.it/1280x768">
-                    </figure>
-                </div>
+                <figure>
+                    <img src="http://placehold.it/1280x768">
+                </figure>
 
             </div>
 

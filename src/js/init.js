@@ -23,7 +23,7 @@ $(() => {
 
 $(window).on("load",() => {
 
-    $(document).trigger("loadComplete");
+    $(document).trigger("DOMLoaded");
 
 });
 

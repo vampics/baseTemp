@@ -60,12 +60,12 @@ const base = {
 
     },
 
-    init: () => {
+    init () {
 
         /**
          * set var for the vars object
          * */
-        baseVars = base.vars;
+        baseVars = this.vars;
 
         /**
          * set var for the base class
@@ -75,43 +75,43 @@ const base = {
         /**
          * set the mediaquery array
          * */
-        base.mediaquerys.set();
+        this.mediaquerys.set();
 
         /**
          * set the grid int
          * */
-        base.grid.set();
+        this.grid.set();
 
         /**
          * set the documents measures
          * */
-        base.measurement.set();
+        this.measurement.set();
 
         /**
          * trigger resize for the documents measures
          * */
-        base.measurement.trigger();
+        this.measurement.trigger();
 
         /**
          * load all inital modules
          * */
-        base.modules.init();
+        this.modules.init();
 
         /**
          * wait for finish the resize to Trigger event
          * */
-        base.slowResize.trigger();
+        this.slowResize.trigger();
 
         /**
          * init helper functions
          * */
-        base.helper.init();
+        this.helper.init();
 
     },
 
     mediaquerys: {
 
-        set: () => {
+        set ()  {
 
             /**
              * get the mediaquerys from the base class
@@ -123,7 +123,7 @@ const base = {
 
     grid: {
 
-        set: () => {
+        set () {
 
             /**
              * get the grid from the base class
@@ -135,7 +135,7 @@ const base = {
 
     measurement: {
 
-        set: () => {
+        set () {
 
             /**
              * get the documents measures from the base class
@@ -147,7 +147,7 @@ const base = {
 
         },
 
-        trigger: () => {
+        trigger () {
 
             /**
              * trigger windows resize
@@ -167,7 +167,7 @@ const base = {
 
     modules: {
 
-        init: () => {
+        init () {
 
             /**
              * get all modules to load
@@ -181,7 +181,7 @@ const base = {
 
         },
 
-        get: () => {
+        get () {
 
             /**
              * save the module object in a baseVar instance
@@ -190,7 +190,7 @@ const base = {
 
         },
 
-        set: () => {
+        set () {
 
             /**
              * set all modules in the modules baseVar instance
@@ -203,7 +203,7 @@ const base = {
 
     slowResize: {
 
-        trigger: () => {
+        trigger () {
 
             /**
              * set timer for waiting
@@ -220,7 +220,7 @@ const base = {
                 /**
                  * trigger the slowResize when its finish
                  * */
-                resizeFinishTimer = setTimeout(() => { $(document).trigger("slowResize") }, 20);
+                resizeFinishTimer = setTimeout(() => { $(document).trigger("resized") }, 20);
 
             });
 
@@ -237,7 +237,7 @@ const base = {
         /**
          * init all helper functions
          * */
-        init() {
+        init () {
 
             base.helper.autoScrollTop();
 
@@ -249,7 +249,7 @@ const base = {
         /**
          * helper for a smooth scroll animation to the top postion
          * */
-        autoScrollTop: () => {
+        autoScrollTop () {
 
             $(baseVars.helperAttributes.scrollToTrigger).on("click", (event) => {
 
@@ -264,7 +264,7 @@ const base = {
         /**
          * helper for a automatic form submit when a triggered input are changing
          * */
-        autoSubmit: () => {
+        autoSubmit () {
 
             $(baseVars.helperAttributes.autoSubmitTrigger).on("change", (event) => {
 
@@ -277,7 +277,7 @@ const base = {
         /**
          * helper for a automatic forwarding when a triggered input are changing
          * */
-        autoLink: () => {
+        autoLink () {
 
             $(baseVars.helperAttributes.autoLinkTrigger).on("change", (event) => {
 
