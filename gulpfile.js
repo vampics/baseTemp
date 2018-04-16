@@ -57,11 +57,8 @@ gulp.task('compile-js', () => {
 
 gulp.task('compile-js-es5', () => {
     return gulp.src([
-        buildJsPath + 'libs/**/*.js',
-        buildJsPath + '*.js',
-        buildJsPath + 'classes/**/*.js'
+        staticJsPath + 'functions.js'
     ])
-        .pipe(concat('functions.js'))
         .pipe(babel({ presets: ['env'] }))
         .on('error', onError)
         .pipe(gulp.dest(jsPath))
