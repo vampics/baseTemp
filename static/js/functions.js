@@ -3410,6 +3410,12 @@ modules.modalbox = {
         );
 
         /**
+         * set fastclick fix for iOS to remove
+         * the delay
+         * */
+        $("html").css("cursor", "pointer");
+
+        /**
          * bind the click outside closing
          * */
         $(document).on("click.modalbox", (clickEvent) => {
@@ -3442,6 +3448,12 @@ modules.modalbox = {
     },
 
     close () {
+
+        /**
+         * unset fastclick fix for iOS to remove
+         * the delay
+         * */
+        $("html").css("cursor", "default");
 
         /**
          * deactivate the click event
@@ -3507,6 +3519,11 @@ modules.selectbox = {
         sbVars = this.vars;
 
         /**
+         * bind a change event for native users
+         * */
+        this.bindChange();
+
+        /**
          * init selectric libary
          * */
         $(sbVars.moduleQuery).find('select').selectric({
@@ -3522,11 +3539,24 @@ modules.selectbox = {
             onChange (selectboxQuery) {
 
                 /**
-                 * outsourced event action for change event
+                 * trigger  manually a change on the select box
                  * */
-                sb.events.onChange(selectboxQuery);
+                $(selectboxQuery).trigger("change");
 
             },
+
+        });
+
+    },
+
+    bindChange () {
+
+        $(sbVars.moduleQuery).find('select').on("change", (event) => {
+
+            /**
+             * outsourced event action for change event
+             * */
+            sb.events.onChange(event.currentTarget);
 
         });
 
@@ -3561,11 +3591,6 @@ modules.selectbox = {
         },
 
         onChange (selectboxQuery) {
-
-            /**
-             * trigger  manually a change on the select box
-             * */
-            $(selectboxQuery).trigger("change");
 
             /**
              * set flag for a validation that an item selected

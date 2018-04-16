@@ -102,6 +102,12 @@ modules.modalbox = {
         );
 
         /**
+         * set fastclick fix for iOS to remove
+         * the delay
+         * */
+        $("html").css("cursor", "pointer");
+
+        /**
          * bind the click outside closing
          * */
         $(document).on("click.modalbox", (clickEvent) => {
@@ -134,6 +140,12 @@ modules.modalbox = {
     },
 
     close () {
+
+        /**
+         * unset fastclick fix for iOS to remove
+         * the delay
+         * */
+        $("html").css("cursor", "default");
 
         /**
          * deactivate the click event
