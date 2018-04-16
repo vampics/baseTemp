@@ -1,6 +1,6 @@
 {
   "name": "baseTemp",
-  "description": "Simple Frontend Framework with Gulp, SASS, HTML with Grid, CSS & JS",
+  "description": "Simple Frontend Boilerplate with Gulp, SASS, HTML with Grid and JS ES6 Framework.",
   "url": "https://github.com/vampics/baseTemp/issues",
   "author": "Tobias Wöstmann (https://github.com/vampics)",
   "license": "MIT",
