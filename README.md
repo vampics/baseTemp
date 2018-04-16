@@ -1,10 +1,10 @@
 # baseTemp
-Simple Frontend Framework with Gulp, SASS, HTML with Grid, CSS &amp; JS for beginners.
+Simple Frontend Boilerplate with Gulp, SASS, HTML with Grid &amp; JS ES6 Framework.
 
 #### Browsers
-- IE 10+
-- Firefox 40+, Chrome 44+
-- iOS 8, Android 4.4
+- IE 11+
+- Firefox 50+, Chrome 55+
+- iOS 10, Android 4.4.4
 
 #### Requirements
 - IDE or simply HTML/CSS Editor
@@ -45,6 +45,7 @@ You just can primary work in the src folder with all frontend files.
 Task | Result
 --- | ---
 `gulp compile-js` | Compile the JS from src to htdocs & static
+`gulp compile-js-es5` | Compile the JS from src to htdocs & static as ES5 version
 `gulp compile-scss` | Compile the CSS from src to htdocs & static
 `gulp compile-html` | Compile the HTML from src to static
 `gulp compress-js` | Minify the JS in htdocs
@@ -60,7 +61,7 @@ Task | Result
 
 ### Edit (S)CSS
 
-The structure is quite simple. In `/src/scss` you´ll find the basic structure of the baseTemp. In this root are all scss files where used across the site. The main sass configurations like grid, colors or fonts pooled in the config.scss. You find in this file also CSS3 Cross-Browser Helper functions called mixins. 
+The structure is quite simple. In `/src/scss` you´ll find the basic structure of the baseTemp. In this root are all scss files where used across the site. The main sass configurations like grid, colors or fonts pooled in the config.scss.
 
 
 ##### Mediaquerys
@@ -124,23 +125,35 @@ modules.selectbox = {
 
 ##### Helper
 
-The base.js includes some little helper functions.
+The framework includes some little helper for optimal codeing.
 
-Variable/Function | What it does
+Variables | What it does
 --- | ---
-`base.vars.windowWidth` | Get window width (Recalculate automatically)
-`base.vars.windowHeight` | Get window height (Recalculate automatically)
-`base.vars.documentWidth` | Get document width (Recalculate automatically)
-`base.vars.documentHeight` | Get document height (Recalculate automatically)
-`base.vars.vendorBasePath` | Get folder path to third party libs
-`base.vars.isTouchDevice` | Get boolean of is touch device
-`base.vars.mediaquerys` | Get all Mediaquerys from CSS as Array
-`base.vars.grid` | Get the columns of the grid
-`base.scrollTo("0px")` | Smooth Scroll To Position (String)
+`baseVars.windowWidth` | Get window width (Recalculate automatically)
+`baseVars.windowHeight` | Get window height (Recalculate automatically)
+`baseVars.documentWidth` | Get document width (Recalculate automatically)
+`baseVars.documentHeight` | Get document height (Recalculate automatically)
+`baseVars.vendorBasePath` | Get folder path to third party libs
+`baseVars.mediaquerys` | Get all Mediaquerys from CSS as Array
+`baseVars.grid` | Get the columns of the grid
+
+Functions | What it does
+--- | ---
+`baseClass.scrollTo(<string>)` | Scroll to a postion (as string)
+`$(object).imagesLoaded( () => {})` | Triggers when all images are loaded (include images come from ajax) ([ImagesLoaded Plugin](https://imagesloaded.desandro.com/))
+`$(object).bind('inview', (event, visible, topOrBottomOrBoth) => {})` | Triggers when the binded object scrolls into the visible viewport) ([InView Plugin](https://github.com/zuk/jquery.inview/))
 
 Events | Trigger
 --- | ---
 `DOMLoaded` | Triggers when DOM complety loaded. Included all images. (Since jQuery 3.0 $(window).on("load") isn´t working in a $(document).ready() anmyore.)
+`DOMFinished` | Triggers when DOM complety finished (incl. framework JS functions linke slider or equalheight). Can triggered multiple times.
+`resized` | Triggers when the user stop scrolling to prevent bunch of unnecessary functions executions
+
+Attribute Functions | What it does
+--- | ---
+`data-auto-scrolltop` | Scroll on Click to the top of the page
+`data-auto-submit` | Submit closest form on change
+`data-auto-scrolltop` | link to target on change (target define the attribute data-auto-link)
 
 ### Edit HTML / Grid
 
@@ -196,15 +209,16 @@ We include a standardized formvalidation JS Libary.
 ##### Usage
 ```bash
 <form data-js="formvalidation">
-    <input type="text" class="required" title="example">
+    <input type="text" data-validation-required title="example">
 </form>
 ```
 
-Class to set on form element | What it does
+Attribute to set on form element | What it does
 --- | ---
-`required` | Tests if its filled
-`validateZip` | Tests if its a german postcode
-`validateEmail` | Tests if its e-mail
+`data-validation-required` | Tests if its filled
+`data-validation-zip` | Tests if its a german postcode
+`data-validation-email` | Tests if its  a e-mail
+`data-validation-length` | Tests if has a minimum length (data-min="X")
 
 ### Slider
 
@@ -233,8 +247,8 @@ A small accordion function for basic usages
 ##### Usage
 ```bash
 <div data-js="accordion">
-    <a href="javascript:void(0);">Click me</a>
-    <div>
+    <a href="javascript:void(0);" data-accordion-trigger>Click me</a>
+    <div data-accordion-content>
         <p>
             Lorem ilor sit amet.
         </p>
@@ -265,7 +279,7 @@ A small equal height function for basic usages on div boxes. All boxes with the 
 
 ##### Usage
 ```bash
-<div data-js="equalheight">
+<div data-js="equalheight" data-equalheight-option-breakpoint="mw">
     <div data-equalheight-element="true">
         <p>
             Lorem ipsum dolor sit amet.
@@ -282,9 +296,10 @@ A small equal height function for basic usages on div boxes. All boxes with the 
 Attributes from parent | What it does
 --- | ---
 `data-equalheight-element` | Element that will be get the height
-`data-equalheight-option-mobile` | (On data-js element only) equal height function will be triggered in mobile, too.
-`data-equalheight-option-row` | (On data-js element only) Only the elements in a row get the same height
+`data-equalheight-option-mobile` | (Optional, On data-js element only) equal height function will be triggered in mobile, too.
+`data-equalheight-option-row` | (Optional, On data-js element only) Only the elements in a row get the same height
+`data-equalheight-option-breakpoint` | (Optional, On data-js element only) 'Define the breakpoint to mobile (Default: mw)
 
 ### Selectbox
 
-We include also in this Framework the [SelectBoxIt](http://gregfranko.com/jquery.selectBoxIt.js/) Libary from Greg Franko. 
+We include also in this Framework the [Selectric](http://lcdsantos.github.io/jQuery-Selectric/) Libary from Leonardo Santos. 
