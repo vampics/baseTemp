@@ -86,7 +86,7 @@ a, .link {
   color: $font-link-color;
   text-decoration: $font-text-decoration;
   cursor: pointer;
-  @include transition(all 0.2s ease);
+  transition: all $transitionTime ease;
   &:hover, &:active {
     color: $font-link-color-hover;
   }
@@ -105,8 +105,8 @@ button, input[type="button"], input[type="submit"], .button {
   padding: 6px 12px;
   margin: 0;
   text-decoration: none;
-  @include transition(all 0.2s ease);
-  @include border-radius(3px);
+  transition: all $transitionTime ease;
+  border-radius: 0;
   &:hover, &:active {
     background: lighten($color-grey,5%);
   }
@@ -121,19 +121,15 @@ input[type="text"], input[type="password"], input[type="number"], input[type="em
   width: 100%;
   background: $color-white;
   color: $color-black;
-  border: 1px solid $color-grey;
+  border: 1px solid $color-lightgrey;
   padding: 6px 6px;
   margin: 5px 0;
-  @include transition(all 0.2s ease);
-  @include border-radius(3px);
-  &:hover {
-    background: darken($color-white,5%);
-  }
+  transition: all $transitionTime ease;
   /* Error class for baseTemp Formvalidation */
   &.error {
     border: 1px solid $color-ui-red;
   }
-  @include placeholdercolor($color-black);
+  @include set-placeholdercolor($color-black);
 }
 
 textarea {

@@ -1,84 +1,133 @@
-///////////////////////////////////////////////////////
-///                 SELECTBOX JS                    ///
-///////////////////////////////////////////////////////
+/**
+ * Selectbox Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let sb;
+
+let sbVars;
 
 modules.selectbox = {
 
-    init: function() {
-
-        this.getLibary();
-
+    vars: {
+        moduleQuery:                    '*[data-js=selectbox]',
+        selectboxListQuery:             '.selectric-items',
+        placeholderQuery:               '.disabled.selected',
+        selectedAttribute:              'data-selectbox-selected',
     },
 
-    getLibary: function() {
+    init () {
 
-        var module = this;
+        /**
+         * save module shorthand
+         * */
+        sb = this;
 
-        $.getScript( base.vars.vendorBasePath + "selectbox.js", function() {
+        /**
+         * save shorthand for the selectbox vars
+         * */
+        sbVars = this.vars;
 
-            module.startScript();
+        /**
+         * bind a change event for native users
+         * */
+        this.bindChange();
 
-            module.bindEvent();
+        /**
+         * init selectric libary
+         * */
+        $(sbVars.moduleQuery).find('select').selectric({
+            responsive: true,
+            onInit (selectboxQuery) {
+
+                /**
+                 * outsourced event action for after init event
+                 * */
+                sb.events.onInit(selectboxQuery);
+
+            },
+            onChange (selectboxQuery) {
+
+                /**
+                 * trigger  manually a change on the select box
+                 * */
+                $(selectboxQuery).trigger("change");
+
+            },
 
         });
 
     },
 
-    startScript: function() {
+    bindChange () {
 
-        var selectbox = $('.selectbox');
+        $(sbVars.moduleQuery).find('select').on("change", (event) => {
 
-        $.each(selectbox, function() {
-
-            var SelectBoxOptions;
-            var EffectSpeed = 150;
-
-            SelectBoxOptions = {
-                autoWidth: false,
-                showEffect: "slideDown",
-                showEffectSpeed: EffectSpeed,
-                hideEffect: "slideUp",
-                hideEffectSpeed: EffectSpeed
-            };
-
-            if (!$(this).hasClass("showfirstoption")) {
-
-                SelectBoxOptions.showFirstOption = false;
-
-            }
-
-            $(this).find("select").selectBoxIt(SelectBoxOptions);
-
-            if (!$(this).hasClass("showfirstoption")) {
-
-                if ($(this).find(".selectboxit-text").html() != $(this).find("select").find("option:first-child").html()) {
-                    $(this).find(".selectboxit-btn").addClass("selected");
-                }
-
-            } else {
-
-                $(this).find(".selectboxit-btn").addClass("selected");
-
-            }
-
+            /**
+             * outsourced event action for change event
+             * */
+            sb.events.onChange(event.currentTarget);
 
         });
 
     },
 
-    bindEvent: function() {
+    events: {
 
-        var selectbox = $('.selectbox');
+        onInit (selectboxQuery) {
 
-        selectbox.find("select").bind({
-            "changed": function(ev, obj) {
+            /**
+             * save the active list as var
+             * */
+            let $selectboxList = sb.getSelectboxList(selectboxQuery);
 
-                $(obj.dropdown).addClass("selected");
+            /**
+             * remove the placeholder list item from
+             * the builded list.
+             * */
+            if ($selectboxList.find(sbVars.placeholderQuery).length > 0) {
+
+                $selectboxList.find(sbVars.placeholderQuery).remove();
+
+            }else{
+
+                /**
+                 * set flag for a validation that an item is selected
+                 * */
+                sb.setSelectedAttribute(selectboxQuery);
 
             }
-        });
+
+        },
+
+        onChange (selectboxQuery) {
+
+            /**
+             * set flag for a validation that an item selected
+             * */
+            sb.setSelectedAttribute(selectboxQuery);
+
+        },
+
+    },
+
+    getSelectboxList (selectboxQuery) {
+
+        /**
+         * return the active list as jquery object
+         * */
+        return $(selectboxQuery).closest(sbVars.moduleQuery).find(sbVars.selectboxListQuery);
+
+    },
+
+    setSelectedAttribute (selectboxQuery) {
+
+        /**
+         * set flag for a validation that an item selected
+         * */
+        $(selectboxQuery).closest(sbVars.moduleQuery).attr(sbVars.selectedAttribute,true);
 
     }
 
 };
-

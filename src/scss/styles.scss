@@ -3,18 +3,19 @@
 /* -------------------------------------------------------- */
 
   @import 'config';
+  @import 'mixins';
 
   @import 'reset';
-  @import 'base';
+  @import 'includes/base';
 
 /* -------------------------------------------------------- */
 /*                 INIT THE FRAMEWORK                       */
 /* -------------------------------------------------------- */
 
   @import 'grid';
-  @import 'header';
-  @import 'footer';
-  @import 'navigation';
+  @import 'includes/header';
+  @import 'includes/footer';
+  @import 'includes/navigation';
 
 /* -------------------------------------------------------- */
 /*                  INIT THE COMPONENTS                        */

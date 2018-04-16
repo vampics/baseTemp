@@ -1,844 +1,145 @@
-;(function () {
-	'use strict';
-
-	/**
-	 * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
-	 *
-	 * @codingstandard ftlabs-jsv2
-	 * @copyright The Financial Times Limited [All Rights Reserved]
-	 * @license MIT License (see LICENSE.txt)
-	 */
-
-	/*jslint browser:true, node:true*/
-	/*global define, Event, Node*/
-
-
-	/**
-	 * Instantiate fast-clicking listeners on the specified layer.
-	 *
-	 * @constructor
-	 * @param {Element} layer The layer to listen on
-	 * @param {Object} [options={}] The options to override the defaults
-	 */
-	function FastClick(layer, options) {
-		var oldOnClick;
-
-		options = options || {};
-
-		/**
-		 * Whether a click is currently being tracked.
-		 *
-		 * @type boolean
-		 */
-		this.trackingClick = false;
-
-
-		/**
-		 * Timestamp for when click tracking started.
-		 *
-		 * @type number
-		 */
-		this.trackingClickStart = 0;
-
-
-		/**
-		 * The element being tracked for a click.
-		 *
-		 * @type EventTarget
-		 */
-		this.targetElement = null;
-
-
-		/**
-		 * X-coordinate of touch start event.
-		 *
-		 * @type number
-		 */
-		this.touchStartX = 0;
-
-
-		/**
-		 * Y-coordinate of touch start event.
-		 *
-		 * @type number
-		 */
-		this.touchStartY = 0;
-
-
-		/**
-		 * ID of the last touch, retrieved from Touch.identifier.
-		 *
-		 * @type number
-		 */
-		this.lastTouchIdentifier = 0;
-
-
-		/**
-		 * Touchmove boundary, beyond which a click will be cancelled.
-		 *
-		 * @type number
-		 */
-		this.touchBoundary = options.touchBoundary || 10;
-
-
-		/**
-		 * The FastClick layer.
-		 *
-		 * @type Element
-		 */
-		this.layer = layer;
-
-		/**
-		 * The minimum time between tap(touchstart and touchend) events
-		 *
-		 * @type number
-		 */
-		this.tapDelay = options.tapDelay || 200;
-
-		/**
-		 * The maximum time for a tap
-		 *
-		 * @type number
-		 */
-		this.tapTimeout = options.tapTimeout || 700;
-
-		if (FastClick.notNeeded(layer)) {
-			return;
-		}
-
-		// Some old versions of Android don't have Function.prototype.bind
-		function bind(method, context) {
-			return function() { return method.apply(context, arguments); };
-		}
-
-
-		var methods = ['onMouse', 'onClick', 'onTouchStart', 'onTouchMove', 'onTouchEnd', 'onTouchCancel'];
-		var context = this;
-		for (var i = 0, l = methods.length; i < l; i++) {
-			context[methods[i]] = bind(context[methods[i]], context);
-		}
-
-		// Set up event handlers as required
-		if (deviceIsAndroid) {
-			layer.addEventListener('mouseover', this.onMouse, true);
-			layer.addEventListener('mousedown', this.onMouse, true);
-			layer.addEventListener('mouseup', this.onMouse, true);
-		}
-
-		layer.addEventListener('click', this.onClick, true);
-		layer.addEventListener('touchstart', this.onTouchStart, false);
-		layer.addEventListener('touchmove', this.onTouchMove, false);
-		layer.addEventListener('touchend', this.onTouchEnd, false);
-		layer.addEventListener('touchcancel', this.onTouchCancel, false);
-
-		// Hack is required for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
-		// which is how FastClick normally stops click events bubbling to callbacks registered on the FastClick
-		// layer when they are cancelled.
-		if (!Event.prototype.stopImmediatePropagation) {
-			layer.removeEventListener = function(type, callback, capture) {
-				var rmv = Node.prototype.removeEventListener;
-				if (type === 'click') {
-					rmv.call(layer, type, callback.hijacked || callback, capture);
-				} else {
-					rmv.call(layer, type, callback, capture);
-				}
-			};
-
-			layer.addEventListener = function(type, callback, capture) {
-				var adv = Node.prototype.addEventListener;
-				if (type === 'click') {
-					adv.call(layer, type, callback.hijacked || (callback.hijacked = function(event) {
-						if (!event.propagationStopped) {
-							callback(event);
-						}
-					}), capture);
-				} else {
-					adv.call(layer, type, callback, capture);
-				}
-			};
-		}
-
-		// If a handler is already declared in the element's onclick attribute, it will be fired before
-		// FastClick's onClick handler. Fix this by pulling out the user-defined handler function and
-		// adding it as listener.
-		if (typeof layer.onclick === 'function') {
-
-			// Android browser on at least 3.2 requires a new reference to the function in layer.onclick
-			// - the old one won't work if passed to addEventListener directly.
-			oldOnClick = layer.onclick;
-			layer.addEventListener('click', function(event) {
-				oldOnClick(event);
-			}, false);
-			layer.onclick = null;
-		}
-	}
-
-	/**
-	* Windows Phone 8.1 fakes user agent string to look like Android and iPhone.
-	*
-	* @type boolean
-	*/
-	var deviceIsWindowsPhone = navigator.userAgent.indexOf("Windows Phone") >= 0;
-
-	/**
-	 * Android requires exceptions.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsAndroid = navigator.userAgent.indexOf('Android') > 0 && !deviceIsWindowsPhone;
-
-
-	/**
-	 * iOS requires exceptions.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !deviceIsWindowsPhone;
-
-
-	/**
-	 * iOS 4 requires an exception for select elements.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsIOS4 = deviceIsIOS && (/OS 4_\d(_\d)?/).test(navigator.userAgent);
-
-
-	/**
-	 * iOS 6.0-7.* requires the target element to be manually derived
-	 *
-	 * @type boolean
-	 */
-	var deviceIsIOSWithBadTarget = deviceIsIOS && (/OS [6-7]_\d/).test(navigator.userAgent);
-
-	/**
-	 * BlackBerry requires exceptions.
-	 *
-	 * @type boolean
-	 */
-	var deviceIsBlackBerry10 = navigator.userAgent.indexOf('BB10') > 0;
-
-	/**
-	 * Determine whether a given element requires a native click.
-	 *
-	 * @param {EventTarget|Element} target Target DOM element
-	 * @returns {boolean} Returns true if the element needs a native click
-	 */
-	FastClick.prototype.needsClick = function(target) {
-		switch (target.nodeName.toLowerCase()) {
-
-		// Don't send a synthetic click to disabled inputs (issue #62)
-		case 'button':
-		case 'select':
-		case 'textarea':
-			if (target.disabled) {
-				return true;
-			}
-
-			break;
-		case 'input':
-
-			// File inputs need real clicks on iOS 6 due to a browser bug (issue #68)
-			if ((deviceIsIOS && target.type === 'file') || target.disabled) {
-				return true;
-			}
-
-			break;
-		case 'label':
-		case 'iframe': // iOS8 homescreen apps can prevent events bubbling into frames
-		case 'video':
-			return true;
-		}
-
-		return (/\bneedsclick\b/).test(target.className);
-	};
-
-
-	/**
-	 * Determine whether a given element requires a call to focus to simulate click into element.
-	 *
-	 * @param {EventTarget|Element} target Target DOM element
-	 * @returns {boolean} Returns true if the element requires a call to focus to simulate native click.
-	 */
-	FastClick.prototype.needsFocus = function(target) {
-		switch (target.nodeName.toLowerCase()) {
-		case 'textarea':
-			return true;
-		case 'select':
-			return !deviceIsAndroid;
-		case 'input':
-			switch (target.type) {
-			case 'button':
-			case 'checkbox':
-			case 'file':
-			case 'image':
-			case 'radio':
-			case 'submit':
-				return false;
-			}
-
-			// No point in attempting to focus disabled inputs
-			return !target.disabled && !target.readOnly;
-		default:
-			return (/\bneedsfocus\b/).test(target.className);
-		}
-	};
-
-
-	/**
-	 * Send a click event to the specified element.
-	 *
-	 * @param {EventTarget|Element} targetElement
-	 * @param {Event} event
-	 */
-	FastClick.prototype.sendClick = function(targetElement, event) {
-		var clickEvent, touch;
-
-		// On some Android devices activeElement needs to be blurred otherwise the synthetic click will have no effect (#24)
-		if (document.activeElement && document.activeElement !== targetElement) {
-			document.activeElement.blur();
-		}
-
-		touch = event.changedTouches[0];
-
-		// Synthesise a click event, with an extra attribute so it can be tracked
-		clickEvent = document.createEvent('MouseEvents');
-		clickEvent.initMouseEvent(this.determineEventType(targetElement), true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
-		clickEvent.forwardedTouchEvent = true;
-		targetElement.dispatchEvent(clickEvent);
-	};
-
-	FastClick.prototype.determineEventType = function(targetElement) {
-
-		//Issue #159: Android Chrome Select Box does not open with a synthetic click event
-		if (deviceIsAndroid && targetElement.tagName.toLowerCase() === 'select') {
-			return 'mousedown';
-		}
-
-		return 'click';
-	};
-
-
-	/**
-	 * @param {EventTarget|Element} targetElement
-	 */
-	FastClick.prototype.focus = function(targetElement) {
-		var length;
-
-		// Issue #160: on iOS 7, some input elements (e.g. date datetime month) throw a vague TypeError on setSelectionRange. These elements don't have an integer value for the selectionStart and selectionEnd properties, but unfortunately that can't be used for detection because accessing the properties also throws a TypeError. Just check the type instead. Filed as Apple bug #15122724.
-		if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
-			length = targetElement.value.length;
-			targetElement.setSelectionRange(length, length);
-		} else {
-			targetElement.focus();
-		}
-	};
-
-
-	/**
-	 * Check whether the given target element is a child of a scrollable layer and if so, set a flag on it.
-	 *
-	 * @param {EventTarget|Element} targetElement
-	 */
-	FastClick.prototype.updateScrollParent = function(targetElement) {
-		var scrollParent, parentElement;
-
-		scrollParent = targetElement.fastClickScrollParent;
-
-		// Attempt to discover whether the target element is contained within a scrollable layer. Re-check if the
-		// target element was moved to another parent.
-		if (!scrollParent || !scrollParent.contains(targetElement)) {
-			parentElement = targetElement;
-			do {
-				if (parentElement.scrollHeight > parentElement.offsetHeight) {
-					scrollParent = parentElement;
-					targetElement.fastClickScrollParent = parentElement;
-					break;
-				}
-
-				parentElement = parentElement.parentElement;
-			} while (parentElement);
-		}
-
-		// Always update the scroll top tracker if possible.
-		if (scrollParent) {
-			scrollParent.fastClickLastScrollTop = scrollParent.scrollTop;
-		}
-	};
-
-
-	/**
-	 * @param {EventTarget} targetElement
-	 * @returns {Element|EventTarget}
-	 */
-	FastClick.prototype.getTargetElementFromEventTarget = function(eventTarget) {
-
-		// On some older browsers (notably Safari on iOS 4.1 - see issue #56) the event target may be a text node.
-		if (eventTarget.nodeType === Node.TEXT_NODE) {
-			return eventTarget.parentNode;
-		}
-
-		return eventTarget;
-	};
-
-
-	/**
-	 * On touch start, record the position and scroll offset.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onTouchStart = function(event) {
-		var targetElement, touch, selection;
-
-		// Ignore multiple touches, otherwise pinch-to-zoom is prevented if both fingers are on the FastClick element (issue #111).
-		if (event.targetTouches.length > 1) {
-			return true;
-		}
-
-		targetElement = this.getTargetElementFromEventTarget(event.target);
-		touch = event.targetTouches[0];
-
-		if (deviceIsIOS) {
-
-			// Only trusted events will deselect text on iOS (issue #49)
-			selection = window.getSelection();
-			if (selection.rangeCount && !selection.isCollapsed) {
-				return true;
-			}
-
-			if (!deviceIsIOS4) {
-
-				// Weird things happen on iOS when an alert or confirm dialog is opened from a click event callback (issue #23):
-				// when the user next taps anywhere else on the page, new touchstart and touchend events are dispatched
-				// with the same identifier as the touch event that previously triggered the click that triggered the alert.
-				// Sadly, there is an issue on iOS 4 that causes some normal touch events to have the same identifier as an
-				// immediately preceeding touch event (issue #52), so this fix is unavailable on that platform.
-				// Issue 120: touch.identifier is 0 when Chrome dev tools 'Emulate touch events' is set with an iOS device UA string,
-				// which causes all touch events to be ignored. As this block only applies to iOS, and iOS identifiers are always long,
-				// random integers, it's safe to to continue if the identifier is 0 here.
-				if (touch.identifier && touch.identifier === this.lastTouchIdentifier) {
-					event.preventDefault();
-					return false;
-				}
-
-				this.lastTouchIdentifier = touch.identifier;
-
-				// If the target element is a child of a scrollable layer (using -webkit-overflow-scrolling: touch) and:
-				// 1) the user does a fling scroll on the scrollable layer
-				// 2) the user stops the fling scroll with another tap
-				// then the event.target of the last 'touchend' event will be the element that was under the user's finger
-				// when the fling scroll was started, causing FastClick to send a click event to that layer - unless a check
-				// is made to ensure that a parent layer was not scrolled before sending a synthetic click (issue #42).
-				this.updateScrollParent(targetElement);
-			}
-		}
-
-		this.trackingClick = true;
-		this.trackingClickStart = event.timeStamp;
-		this.targetElement = targetElement;
-
-		this.touchStartX = touch.pageX;
-		this.touchStartY = touch.pageY;
-
-		// Prevent phantom clicks on fast double-tap (issue #36)
-		if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
-			event.preventDefault();
-		}
-
-		return true;
-	};
-
-
-	/**
-	 * Based on a touchmove event object, check whether the touch has moved past a boundary since it started.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.touchHasMoved = function(event) {
-		var touch = event.changedTouches[0], boundary = this.touchBoundary;
-
-		if (Math.abs(touch.pageX - this.touchStartX) > boundary || Math.abs(touch.pageY - this.touchStartY) > boundary) {
-			return true;
-		}
-
-		return false;
-	};
-
-
-	/**
-	 * Update the last position.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onTouchMove = function(event) {
-		if (!this.trackingClick) {
-			return true;
-		}
-
-		// If the touch has moved, cancel the click tracking
-		if (this.targetElement !== this.getTargetElementFromEventTarget(event.target) || this.touchHasMoved(event)) {
-			this.trackingClick = false;
-			this.targetElement = null;
-		}
-
-		return true;
-	};
-
-
-	/**
-	 * Attempt to find the labelled control for the given label element.
-	 *
-	 * @param {EventTarget|HTMLLabelElement} labelElement
-	 * @returns {Element|null}
-	 */
-	FastClick.prototype.findControl = function(labelElement) {
-
-		// Fast path for newer browsers supporting the HTML5 control attribute
-		if (labelElement.control !== undefined) {
-			return labelElement.control;
-		}
-
-		// All browsers under test that support touch events also support the HTML5 htmlFor attribute
-		if (labelElement.htmlFor) {
-			return document.getElementById(labelElement.htmlFor);
-		}
-
-		// If no for attribute exists, attempt to retrieve the first labellable descendant element
-		// the list of which is defined here: http://www.w3.org/TR/html5/forms.html#category-label
-		return labelElement.querySelector('button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea');
-	};
-
-
-	/**
-	 * On touch end, determine whether to send a click event at once.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onTouchEnd = function(event) {
-		var forElement, trackingClickStart, targetTagName, scrollParent, touch, targetElement = this.targetElement;
-
-		if (!this.trackingClick) {
-			return true;
-		}
-
-		// Prevent phantom clicks on fast double-tap (issue #36)
-		if ((event.timeStamp - this.lastClickTime) < this.tapDelay) {
-			this.cancelNextClick = true;
-			return true;
-		}
-
-		if ((event.timeStamp - this.trackingClickStart) > this.tapTimeout) {
-			return true;
-		}
-
-		// Reset to prevent wrong click cancel on input (issue #156).
-		this.cancelNextClick = false;
-
-		this.lastClickTime = event.timeStamp;
-
-		trackingClickStart = this.trackingClickStart;
-		this.trackingClick = false;
-		this.trackingClickStart = 0;
-
-		// On some iOS devices, the targetElement supplied with the event is invalid if the layer
-		// is performing a transition or scroll, and has to be re-detected manually. Note that
-		// for this to function correctly, it must be called *after* the event target is checked!
-		// See issue #57; also filed as rdar://13048589 .
-		if (deviceIsIOSWithBadTarget) {
-			touch = event.changedTouches[0];
-
-			// In certain cases arguments of elementFromPoint can be negative, so prevent setting targetElement to null
-			targetElement = document.elementFromPoint(touch.pageX - window.pageXOffset, touch.pageY - window.pageYOffset) || targetElement;
-			targetElement.fastClickScrollParent = this.targetElement.fastClickScrollParent;
-		}
-
-		targetTagName = targetElement.tagName.toLowerCase();
-		if (targetTagName === 'label') {
-			forElement = this.findControl(targetElement);
-			if (forElement) {
-				this.focus(targetElement);
-				if (deviceIsAndroid) {
-					return false;
-				}
-
-				targetElement = forElement;
-			}
-		} else if (this.needsFocus(targetElement)) {
-
-			// Case 1: If the touch started a while ago (best guess is 100ms based on tests for issue #36) then focus will be triggered anyway. Return early and unset the target element reference so that the subsequent click will be allowed through.
-			// Case 2: Without this exception for input elements tapped when the document is contained in an iframe, then any inputted text won't be visible even though the value attribute is updated as the user types (issue #37).
-			if ((event.timeStamp - trackingClickStart) > 100 || (deviceIsIOS && window.top !== window && targetTagName === 'input')) {
-				this.targetElement = null;
-				return false;
-			}
-
-			this.focus(targetElement);
-			this.sendClick(targetElement, event);
-
-			// Select elements need the event to go through on iOS 4, otherwise the selector menu won't open.
-			// Also this breaks opening selects when VoiceOver is active on iOS6, iOS7 (and possibly others)
-			if (!deviceIsIOS || targetTagName !== 'select') {
-				this.targetElement = null;
-				event.preventDefault();
-			}
-
-			return false;
-		}
-
-		if (deviceIsIOS && !deviceIsIOS4) {
-
-			// Don't send a synthetic click event if the target element is contained within a parent layer that was scrolled
-			// and this tap is being used to stop the scrolling (usually initiated by a fling - issue #42).
-			scrollParent = targetElement.fastClickScrollParent;
-			if (scrollParent && scrollParent.fastClickLastScrollTop !== scrollParent.scrollTop) {
-				return true;
-			}
-		}
-
-		// Prevent the actual click from going though - unless the target node is marked as requiring
-		// real clicks or if it is in the whitelist in which case only non-programmatic clicks are permitted.
-		if (!this.needsClick(targetElement)) {
-			event.preventDefault();
-			this.sendClick(targetElement, event);
-		}
-
-		return false;
-	};
-
-
-	/**
-	 * On touch cancel, stop tracking the click.
-	 *
-	 * @returns {void}
-	 */
-	FastClick.prototype.onTouchCancel = function() {
-		this.trackingClick = false;
-		this.targetElement = null;
-	};
-
-
-	/**
-	 * Determine mouse events which should be permitted.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onMouse = function(event) {
-
-		// If a target element was never set (because a touch event was never fired) allow the event
-		if (!this.targetElement) {
-			return true;
-		}
-
-		if (event.forwardedTouchEvent) {
-			return true;
-		}
-
-		// Programmatically generated events targeting a specific element should be permitted
-		if (!event.cancelable) {
-			return true;
-		}
-
-		// Derive and check the target element to see whether the mouse event needs to be permitted;
-		// unless explicitly enabled, prevent non-touch click events from triggering actions,
-		// to prevent ghost/doubleclicks.
-		if (!this.needsClick(this.targetElement) || this.cancelNextClick) {
-
-			// Prevent any user-added listeners declared on FastClick element from being fired.
-			if (event.stopImmediatePropagation) {
-				event.stopImmediatePropagation();
-			} else {
-
-				// Part of the hack for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
-				event.propagationStopped = true;
-			}
-
-			// Cancel the event
-			event.stopPropagation();
-			event.preventDefault();
-
-			return false;
-		}
-
-		// If the mouse event is permitted, return true for the action to go through.
-		return true;
-	};
-
-
-	/**
-	 * On actual clicks, determine whether this is a touch-generated click, a click action occurring
-	 * naturally after a delay after a touch (which needs to be cancelled to avoid duplication), or
-	 * an actual click which should be permitted.
-	 *
-	 * @param {Event} event
-	 * @returns {boolean}
-	 */
-	FastClick.prototype.onClick = function(event) {
-		var permitted;
-
-		// It's possible for another FastClick-like library delivered with third-party code to fire a click event before FastClick does (issue #44). In that case, set the click-tracking flag back to false and return early. This will cause onTouchEnd to return early.
-		if (this.trackingClick) {
-			this.targetElement = null;
-			this.trackingClick = false;
-			return true;
-		}
-
-		// Very odd behaviour on iOS (issue #18): if a submit element is present inside a form and the user hits enter in the iOS simulator or clicks the Go button on the pop-up OS keyboard the a kind of 'fake' click event will be triggered with the submit-type input element as the target.
-		if (event.target.type === 'submit' && event.detail === 0) {
-			return true;
-		}
-
-		permitted = this.onMouse(event);
-
-		// Only unset targetElement if the click is not permitted. This will ensure that the check for !targetElement in onMouse fails and the browser's click doesn't go through.
-		if (!permitted) {
-			this.targetElement = null;
-		}
-
-		// If clicks are permitted, return true for the action to go through.
-		return permitted;
-	};
-
-
-	/**
-	 * Remove all FastClick's event listeners.
-	 *
-	 * @returns {void}
-	 */
-	FastClick.prototype.destroy = function() {
-		var layer = this.layer;
-
-		if (deviceIsAndroid) {
-			layer.removeEventListener('mouseover', this.onMouse, true);
-			layer.removeEventListener('mousedown', this.onMouse, true);
-			layer.removeEventListener('mouseup', this.onMouse, true);
-		}
-
-		layer.removeEventListener('click', this.onClick, true);
-		layer.removeEventListener('touchstart', this.onTouchStart, false);
-		layer.removeEventListener('touchmove', this.onTouchMove, false);
-		layer.removeEventListener('touchend', this.onTouchEnd, false);
-		layer.removeEventListener('touchcancel', this.onTouchCancel, false);
-	};
-
-
-	/**
-	 * Check whether FastClick is needed.
-	 *
-	 * @param {Element} layer The layer to listen on
-	 */
-	FastClick.notNeeded = function(layer) {
-		var metaViewport;
-		var chromeVersion;
-		var blackberryVersion;
-		var firefoxVersion;
-
-		// Devices that don't support touch don't need FastClick
-		if (typeof window.ontouchstart === 'undefined') {
-			return true;
-		}
-
-		// Chrome version - zero for other browsers
-		chromeVersion = +(/Chrome\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
-
-		if (chromeVersion) {
-
-			if (deviceIsAndroid) {
-				metaViewport = document.querySelector('meta[name=viewport]');
-
-				if (metaViewport) {
-					// Chrome on Android with user-scalable="no" doesn't need FastClick (issue #89)
-					if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-						return true;
-					}
-					// Chrome 32 and above with width=device-width or less don't need FastClick
-					if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
-						return true;
-					}
-				}
-
-			// Chrome desktop doesn't need FastClick (issue #15)
-			} else {
-				return true;
-			}
-		}
-
-		if (deviceIsBlackBerry10) {
-			blackberryVersion = navigator.userAgent.match(/Version\/([0-9]*)\.([0-9]*)/);
-
-			// BlackBerry 10.3+ does not require Fastclick library.
-			// https://github.com/ftlabs/fastclick/issues/251
-			if (blackberryVersion[1] >= 10 && blackberryVersion[2] >= 3) {
-				metaViewport = document.querySelector('meta[name=viewport]');
-
-				if (metaViewport) {
-					// user-scalable=no eliminates click delay.
-					if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-						return true;
-					}
-					// width=device-width (or less than device-width) eliminates click delay.
-					if (document.documentElement.scrollWidth <= window.outerWidth) {
-						return true;
-					}
-				}
-			}
-		}
-
-		// IE10 with -ms-touch-action: none or manipulation, which disables double-tap-to-zoom (issue #97)
-		if (layer.style.msTouchAction === 'none' || layer.style.touchAction === 'manipulation') {
-			return true;
-		}
-
-		// Firefox version - zero for other browsers
-		firefoxVersion = +(/Firefox\/([0-9]+)/.exec(navigator.userAgent) || [,0])[1];
-
-		if (firefoxVersion >= 27) {
-			// Firefox 27+ does not have tap delay if the content is not zoomable - https://bugzilla.mozilla.org/show_bug.cgi?id=922896
-
-			metaViewport = document.querySelector('meta[name=viewport]');
-			if (metaViewport && (metaViewport.content.indexOf('user-scalable=no') !== -1 || document.documentElement.scrollWidth <= window.outerWidth)) {
-				return true;
-			}
-		}
-
-		// IE11: prefixed -ms-touch-action is no longer supported and it's recomended to use non-prefixed version
-		// http://msdn.microsoft.com/en-us/library/windows/apps/Hh767313.aspx
-		if (layer.style.touchAction === 'none' || layer.style.touchAction === 'manipulation') {
-			return true;
-		}
-
-		return false;
-	};
-
-
-	/**
-	 * Factory method for creating a FastClick object
-	 *
-	 * @param {Element} layer The layer to listen on
-	 * @param {Object} [options={}] The options to override the defaults
-	 */
-	FastClick.attach = function(layer, options) {
-		return new FastClick(layer, options);
-	};
-
-
-	if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
-
-		// AMD. Register as an anonymous module.
-		define(function() {
-			return FastClick;
-		});
-	} else if (typeof module !== 'undefined' && module.exports) {
-		module.exports = FastClick.attach;
-		module.exports.FastClick = FastClick;
-	} else {
-		window.FastClick = FastClick;
-	}
-}());
+/**
+ * author Christopher Blum
+ *    - based on the idea of Remy Sharp, http://remysharp.com/2009/01/26/element-in-view-event-plugin/
+ *    - forked from http://github.com/zuk/jquery.inview/
+ */
+(function (factory) {
+    if (typeof define == 'function' && define.amd) {
+        // AMD
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // Node, CommonJS
+        module.exports = factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
+
+    var inviewObjects = [], viewportSize, viewportOffset,
+        d = document, w = window, documentElement = d.documentElement, timer;
+
+    $.event.special.inview = {
+        add: function(data) {
+            inviewObjects.push({ data: data, $element: $(this), element: this });
+            // Use setInterval in order to also make sure this captures elements within
+            // "overflow:scroll" elements or elements that appeared in the dom tree due to
+            // dom manipulation and reflow
+            // old: $(window).scroll(checkInView);
+            //
+            // By the way, iOS (iPad, iPhone, ...) seems to not execute, or at least delays
+            // intervals while the user scrolls. Therefore the inview event might fire a bit late there
+            //
+            // Don't waste cycles with an interval until we get at least one element that
+            // has bound to the inview event.
+            if (!timer && inviewObjects.length) {
+                timer = setInterval(checkInView, 250);
+            }
+        },
+
+        remove: function(data) {
+            for (var i=0; i<inviewObjects.length; i++) {
+                var inviewObject = inviewObjects[i];
+                if (inviewObject.element === this && inviewObject.data.guid === data.guid) {
+                    inviewObjects.splice(i, 1);
+                    break;
+                }
+            }
+
+            // Clear interval when we no longer have any elements listening
+            if (!inviewObjects.length) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+    };
+
+    function getViewportSize() {
+        var mode, domObject, size = { height: w.innerHeight, width: w.innerWidth };
+
+        // if this is correct then return it. iPad has compat Mode, so will
+        // go into check clientHeight/clientWidth (which has the wrong value).
+        if (!size.height) {
+            mode = d.compatMode;
+            if (mode || !$.support.boxModel) { // IE, Gecko
+                domObject = mode === 'CSS1Compat' ?
+                    documentElement : // Standards
+                    d.body; // Quirks
+                size = {
+                    height: domObject.clientHeight,
+                    width:  domObject.clientWidth
+                };
+            }
+        }
+
+        return size;
+    }
+
+    function getViewportOffset() {
+        return {
+            top:  w.pageYOffset || documentElement.scrollTop   || d.body.scrollTop,
+            left: w.pageXOffset || documentElement.scrollLeft  || d.body.scrollLeft
+        };
+    }
+
+    function checkInView() {
+        if (!inviewObjects.length) {
+            return;
+        }
+
+        var i = 0, $elements = $.map(inviewObjects, function(inviewObject) {
+            var selector  = inviewObject.data.selector,
+                $element  = inviewObject.$element;
+            return selector ? $element.find(selector) : $element;
+        });
+
+        viewportSize   = viewportSize   || getViewportSize();
+        viewportOffset = viewportOffset || getViewportOffset();
+
+        for (; i<inviewObjects.length; i++) {
+            // Ignore elements that are not in the DOM tree
+            if (!$.contains(documentElement, $elements[i][0])) {
+                continue;
+            }
+
+            var $element      = $($elements[i]),
+                elementSize   = { height: $element[0].offsetHeight, width: $element[0].offsetWidth },
+                elementOffset = $element.offset(),
+                inView        = $element.data('inview');
+
+            // Don't ask me why because I haven't figured out yet:
+            // viewportOffset and viewportSize are sometimes suddenly null in Firefox 5.
+            // Even though it sounds weird:
+            // It seems that the execution of this function is interferred by the onresize/onscroll event
+            // where viewportOffset and viewportSize are unset
+            if (!viewportOffset || !viewportSize) {
+                return;
+            }
+
+            if (elementOffset.top + elementSize.height > viewportOffset.top &&
+                elementOffset.top < viewportOffset.top + viewportSize.height &&
+                elementOffset.left + elementSize.width > viewportOffset.left &&
+                elementOffset.left < viewportOffset.left + viewportSize.width) {
+                if (!inView) {
+                    $element.data('inview', true).trigger('inview', [true]);
+                }
+            } else if (inView) {
+                $element.data('inview', false).trigger('inview', [false]);
+            }
+        }
+    }
+
+    $(w).on("scroll resize scrollstop", function() {
+        viewportSize = viewportOffset = null;
+    });
+
+    // IE < 9 scrolls to focused elements without firing the "scroll" event
+    if (!documentElement.addEventListener && documentElement.attachEvent) {
+        documentElement.attachEvent("onfocusin", function() {
+            viewportOffset = null;
+        });
+    }
+}));
 
 /*!
  * imagesLoaded PACKAGED v4.1.4
@@ -1338,1427 +639,1909 @@
     });
 
 
-/*! jQuery UI - v1.12.1 - 2018-01-18
- * http://jqueryui.com
- * Includes: widget.js, keycode.js, widgets/mouse.js
- * Copyright jQuery Foundation and other contributors; Licensed MIT */
+/*!
+ *         ,/
+ *       ,'/
+ *     ,' /
+ *   ,'  /_____,
+ * .'____    ,'
+ *      /  ,'
+ *     / ,'
+ *    /,'
+ *   /'
+ *
+ * Selectric ϟ v1.13.0 (Aug 22 2017) - http://lcdsantos.github.io/jQuery-Selectric/
+ *
+ * Copyright (c) 2017 Leonardo Santos; MIT License
+ *
+ */
 
-(function( factory ) {
-    if ( typeof define === "function" && define.amd ) {
-
-        // AMD. Register as an anonymous module.
-        define([ "jquery" ], factory );
-    } else {
-
-        // Browser globals
-        factory( jQuery );
-    }
-}(function( $ ) {
-
-    $.ui = $.ui || {};
-
-    var version = $.ui.version = "1.12.1";
-
-
-	/*!
-	 * jQuery UI Widget 1.12.1
-	 * http://jqueryui.com
-	 *
-	 * Copyright jQuery Foundation and other contributors
-	 * Released under the MIT license.
-	 * http://jquery.org/license
-	 */
-
-//>>label: Widget
-//>>group: Core
-//>>description: Provides a factory for creating stateful widgets with a common API.
-//>>docs: http://api.jqueryui.com/jQuery.widget/
-//>>demos: http://jqueryui.com/widget/
-
-
-
-    var widgetUuid = 0;
-    var widgetSlice = Array.prototype.slice;
-
-    $.cleanData = ( function( orig ) {
-        return function( elems ) {
-            var events, elem, i;
-            for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
-                try {
-
-                    // Only trigger remove when necessary to save time
-                    events = $._data( elem, "events" );
-                    if ( events && events.remove ) {
-                        $( elem ).triggerHandler( "remove" );
-                    }
-
-                    // Http://bugs.jquery.com/ticket/8235
-                } catch ( e ) {}
-            }
-            orig( elems );
-        };
-    } )( $.cleanData );
-
-    $.widget = function( name, base, prototype ) {
-        var existingConstructor, constructor, basePrototype;
-
-        // ProxiedPrototype allows the provided prototype to remain unmodified
-        // so that it can be used as a mixin for multiple widgets (#8876)
-        var proxiedPrototype = {};
-
-        var namespace = name.split( "." )[ 0 ];
-        name = name.split( "." )[ 1 ];
-        var fullName = namespace + "-" + name;
-
-        if ( !prototype ) {
-            prototype = base;
-            base = $.Widget;
-        }
-
-        if ( $.isArray( prototype ) ) {
-            prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
-        }
-
-        // Create selector for plugin
-        $.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
-            return !!$.data( elem, fullName );
-        };
-
-        $[ namespace ] = $[ namespace ] || {};
-        existingConstructor = $[ namespace ][ name ];
-        constructor = $[ namespace ][ name ] = function( options, element ) {
-
-            // Allow instantiation without "new" keyword
-            if ( !this._createWidget ) {
-                return new constructor( options, element );
-            }
-
-            // Allow instantiation without initializing for simple inheritance
-            // must use "new" keyword (the code above always passes args)
-            if ( arguments.length ) {
-                this._createWidget( options, element );
-            }
-        };
-
-        // Extend with the existing constructor to carry over any static properties
-        $.extend( constructor, existingConstructor, {
-            version: prototype.version,
-
-            // Copy the object used to create the prototype in case we need to
-            // redefine the widget later
-            _proto: $.extend( {}, prototype ),
-
-            // Track widgets that inherit from this widget in case this widget is
-            // redefined after a widget inherits from it
-            _childConstructors: []
-        } );
-
-        basePrototype = new base();
-
-        // We need to make the options hash a property directly on the new instance
-        // otherwise we'll modify the options hash on the prototype that we're
-        // inheriting from
-        basePrototype.options = $.widget.extend( {}, basePrototype.options );
-        $.each( prototype, function( prop, value ) {
-            if ( !$.isFunction( value ) ) {
-                proxiedPrototype[ prop ] = value;
-                return;
-            }
-            proxiedPrototype[ prop ] = ( function() {
-                function _super() {
-                    return base.prototype[ prop ].apply( this, arguments );
-                }
-
-                function _superApply( args ) {
-                    return base.prototype[ prop ].apply( this, args );
-                }
-
-                return function() {
-                    var __super = this._super;
-                    var __superApply = this._superApply;
-                    var returnValue;
-
-                    this._super = _super;
-                    this._superApply = _superApply;
-
-                    returnValue = value.apply( this, arguments );
-
-                    this._super = __super;
-                    this._superApply = __superApply;
-
-                    return returnValue;
-                };
-            } )();
-        } );
-        constructor.prototype = $.widget.extend( basePrototype, {
-
-            // TODO: remove support for widgetEventPrefix
-            // always use the name + a colon as the prefix, e.g., draggable:start
-            // don't prefix for widgets that aren't DOM-based
-            widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
-        }, proxiedPrototype, {
-            constructor: constructor,
-            namespace: namespace,
-            widgetName: name,
-            widgetFullName: fullName
-        } );
-
-        // If this widget is being redefined then we need to find all widgets that
-        // are inheriting from it and redefine all of them so that they inherit from
-        // the new version of this widget. We're essentially trying to replace one
-        // level in the prototype chain.
-        if ( existingConstructor ) {
-            $.each( existingConstructor._childConstructors, function( i, child ) {
-                var childPrototype = child.prototype;
-
-                // Redefine the child widget using the same prototype that was
-                // originally used, but inherit from the new version of the base
-                $.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
-                    child._proto );
-            } );
-
-            // Remove the list of existing child constructors from the old constructor
-            // so the old child constructors can be garbage collected
-            delete existingConstructor._childConstructors;
+(function(factory) {
+  /* global define */
+  /* istanbul ignore next */
+  if ( typeof define === 'function' && define.amd ) {
+    define(['jquery'], factory);
+  } else if ( typeof module === 'object' && module.exports ) {
+    // Node/CommonJS
+    module.exports = function( root, jQuery ) {
+      if ( jQuery === undefined ) {
+        if ( typeof window !== 'undefined' ) {
+          jQuery = require('jquery');
         } else {
-            base._childConstructors.push( constructor );
+          jQuery = require('jquery')(root);
+        }
+      }
+      factory(jQuery);
+      return jQuery;
+    };
+  } else {
+    // Browser globals
+    factory(jQuery);
+  }
+}(function($) {
+  'use strict';
+
+  var $doc = $(document);
+  var $win = $(window);
+
+  var pluginName = 'selectric';
+  var classList = 'Input Items Open Disabled TempShow HideSelect Wrapper Focus Hover Responsive Above Below Scroll Group GroupLabel';
+  var eventNamespaceSuffix = '.sl';
+
+  var chars = ['a', 'e', 'i', 'o', 'u', 'n', 'c', 'y'];
+  var diacritics = [
+    /[\xE0-\xE5]/g, // a
+    /[\xE8-\xEB]/g, // e
+    /[\xEC-\xEF]/g, // i
+    /[\xF2-\xF6]/g, // o
+    /[\xF9-\xFC]/g, // u
+    /[\xF1]/g,      // n
+    /[\xE7]/g,      // c
+    /[\xFD-\xFF]/g  // y
+  ];
+
+  /**
+   * Create an instance of Selectric
+   *
+   * @constructor
+   * @param {Node} element - The &lt;select&gt; element
+   * @param {object}  opts - Options
+   */
+  var Selectric = function(element, opts) {
+    var _this = this;
+
+    _this.element = element;
+    _this.$element = $(element);
+
+    _this.state = {
+      multiple       : !!_this.$element.attr('multiple'),
+      enabled        : false,
+      opened         : false,
+      currValue      : -1,
+      selectedIdx    : -1,
+      highlightedIdx : -1
+    };
+
+    _this.eventTriggers = {
+      open    : _this.open,
+      close   : _this.close,
+      destroy : _this.destroy,
+      refresh : _this.refresh,
+      init    : _this.init
+    };
+
+    _this.init(opts);
+  };
+
+  Selectric.prototype = {
+    utils: {
+      /**
+       * Detect mobile browser
+       *
+       * @return {boolean}
+       */
+      isMobile: function() {
+        return /android|ip(hone|od|ad)/i.test(navigator.userAgent);
+      },
+
+      /**
+       * Escape especial characters in string (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions)
+       *
+       * @param  {string} str - The string to be escaped
+       * @return {string}       The string with the special characters escaped
+       */
+      escapeRegExp: function(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+      },
+
+      /**
+       * Replace diacritics
+       *
+       * @param  {string} str - The string to replace the diacritics
+       * @return {string}       The string with diacritics replaced with ascii characters
+       */
+      replaceDiacritics: function(str) {
+        var k = diacritics.length;
+
+        while (k--) {
+          str = str.toLowerCase().replace(diacritics[k], chars[k]);
         }
 
-        $.widget.bridge( name, constructor );
+        return str;
+      },
 
-        return constructor;
-    };
+      /**
+       * Format string
+       * https://gist.github.com/atesgoral/984375
+       *
+       * @param  {string} f - String to be formated
+       * @return {string}     String formated
+       */
+      format: function(f) {
+        var a = arguments; // store outer arguments
+        return ('' + f) // force format specifier to String
+          .replace( // replace tokens in format specifier
+            /\{(?:(\d+)|(\w+))\}/g, // match {token} references
+            function(
+              s, // the matched string (ignored)
+              i, // an argument index
+              p // a property name
+            ) {
+              return p && a[1] // if property name and first argument exist
+                ? a[1][p] // return property from first argument
+                : a[i]; // assume argument index and return i-th argument
+            });
+      },
 
-    $.widget.extend = function( target ) {
-        var input = widgetSlice.call( arguments, 1 );
-        var inputIndex = 0;
-        var inputLength = input.length;
-        var key;
-        var value;
-
-        for ( ; inputIndex < inputLength; inputIndex++ ) {
-            for ( key in input[ inputIndex ] ) {
-                value = input[ inputIndex ][ key ];
-                if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
-
-                    // Clone objects
-                    if ( $.isPlainObject( value ) ) {
-                        target[ key ] = $.isPlainObject( target[ key ] ) ?
-                            $.widget.extend( {}, target[ key ], value ) :
-
-                            // Don't extend strings, arrays, etc. with objects
-                            $.widget.extend( {}, value );
-
-                        // Copy everything else by reference
-                    } else {
-                        target[ key ] = value;
-                    }
-                }
-            }
+      /**
+       * Get the next enabled item in the options list.
+       *
+       * @param  {object} selectItems - The options object.
+       * @param  {number}    selected - Index of the currently selected option.
+       * @return {object}               The next enabled item.
+       */
+      nextEnabledItem: function(selectItems, selected) {
+        while ( selectItems[ selected = (selected + 1) % selectItems.length ].disabled ) {
+          // empty
         }
-        return target;
-    };
-
-    $.widget.bridge = function( name, object ) {
-        var fullName = object.prototype.widgetFullName || name;
-        $.fn[ name ] = function( options ) {
-            var isMethodCall = typeof options === "string";
-            var args = widgetSlice.call( arguments, 1 );
-            var returnValue = this;
-
-            if ( isMethodCall ) {
-
-                // If this is an empty collection, we need to have the instance method
-                // return undefined instead of the jQuery instance
-                if ( !this.length && options === "instance" ) {
-                    returnValue = undefined;
-                } else {
-                    this.each( function() {
-                        var methodValue;
-                        var instance = $.data( this, fullName );
-
-                        if ( options === "instance" ) {
-                            returnValue = instance;
-                            return false;
-                        }
-
-                        if ( !instance ) {
-                            return $.error( "cannot call methods on " + name +
-                                " prior to initialization; " +
-                                "attempted to call method '" + options + "'" );
-                        }
-
-                        if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
-                            return $.error( "no such method '" + options + "' for " + name +
-                                " widget instance" );
-                        }
-
-                        methodValue = instance[ options ].apply( instance, args );
-
-                        if ( methodValue !== instance && methodValue !== undefined ) {
-                            returnValue = methodValue && methodValue.jquery ?
-                                returnValue.pushStack( methodValue.get() ) :
-                                methodValue;
-                            return false;
-                        }
-                    } );
-                }
-            } else {
-
-                // Allow multiple hashes to be passed on init
-                if ( args.length ) {
-                    options = $.widget.extend.apply( null, [ options ].concat( args ) );
-                }
-
-                this.each( function() {
-                    var instance = $.data( this, fullName );
-                    if ( instance ) {
-                        instance.option( options || {} );
-                        if ( instance._init ) {
-                            instance._init();
-                        }
-                    } else {
-                        $.data( this, fullName, new object( options, this ) );
-                    }
-                } );
-            }
-
-            return returnValue;
-        };
-    };
-
-    $.Widget = function( /* options, element */ ) {};
-    $.Widget._childConstructors = [];
-
-    $.Widget.prototype = {
-        widgetName: "widget",
-        widgetEventPrefix: "",
-        defaultElement: "<div>",
-
-        options: {
-            classes: {},
-            disabled: false,
-
-            // Callbacks
-            create: null
-        },
-
-        _createWidget: function( options, element ) {
-            element = $( element || this.defaultElement || this )[ 0 ];
-            this.element = $( element );
-            this.uuid = widgetUuid++;
-            this.eventNamespace = "." + this.widgetName + this.uuid;
-
-            this.bindings = $();
-            this.hoverable = $();
-            this.focusable = $();
-            this.classesElementLookup = {};
-
-            if ( element !== this ) {
-                $.data( element, this.widgetFullName, this );
-                this._on( true, this.element, {
-                    remove: function( event ) {
-                        if ( event.target === element ) {
-                            this.destroy();
-                        }
-                    }
-                } );
-                this.document = $( element.style ?
-
-                    // Element within the document
-                    element.ownerDocument :
-
-                    // Element is window or document
-                    element.document || element );
-                this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
-            }
-
-            this.options = $.widget.extend( {},
-                this.options,
-                this._getCreateOptions(),
-                options );
-
-            this._create();
-
-            if ( this.options.disabled ) {
-                this._setOptionDisabled( this.options.disabled );
-            }
-
-            this._trigger( "create", null, this._getCreateEventData() );
-            this._init();
-        },
-
-        _getCreateOptions: function() {
-            return {};
-        },
-
-        _getCreateEventData: $.noop,
-
-        _create: $.noop,
-
-        _init: $.noop,
-
-        destroy: function() {
-            var that = this;
-
-            this._destroy();
-            $.each( this.classesElementLookup, function( key, value ) {
-                that._removeClass( value, key );
-            } );
-
-            // We can probably remove the unbind calls in 2.0
-            // all event bindings should go through this._on()
-            this.element
-                .off( this.eventNamespace )
-                .removeData( this.widgetFullName );
-            this.widget()
-                .off( this.eventNamespace )
-                .removeAttr( "aria-disabled" );
-
-            // Clean up events and states
-            this.bindings.off( this.eventNamespace );
-        },
-
-        _destroy: $.noop,
-
-        widget: function() {
-            return this.element;
-        },
-
-        option: function( key, value ) {
-            var options = key;
-            var parts;
-            var curOption;
-            var i;
-
-            if ( arguments.length === 0 ) {
-
-                // Don't return a reference to the internal hash
-                return $.widget.extend( {}, this.options );
-            }
-
-            if ( typeof key === "string" ) {
-
-                // Handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
-                options = {};
-                parts = key.split( "." );
-                key = parts.shift();
-                if ( parts.length ) {
-                    curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
-                    for ( i = 0; i < parts.length - 1; i++ ) {
-                        curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
-                        curOption = curOption[ parts[ i ] ];
-                    }
-                    key = parts.pop();
-                    if ( arguments.length === 1 ) {
-                        return curOption[ key ] === undefined ? null : curOption[ key ];
-                    }
-                    curOption[ key ] = value;
-                } else {
-                    if ( arguments.length === 1 ) {
-                        return this.options[ key ] === undefined ? null : this.options[ key ];
-                    }
-                    options[ key ] = value;
-                }
-            }
-
-            this._setOptions( options );
-
-            return this;
-        },
-
-        _setOptions: function( options ) {
-            var key;
-
-            for ( key in options ) {
-                this._setOption( key, options[ key ] );
-            }
-
-            return this;
-        },
-
-        _setOption: function( key, value ) {
-            if ( key === "classes" ) {
-                this._setOptionClasses( value );
-            }
-
-            this.options[ key ] = value;
-
-            if ( key === "disabled" ) {
-                this._setOptionDisabled( value );
-            }
-
-            return this;
-        },
-
-        _setOptionClasses: function( value ) {
-            var classKey, elements, currentElements;
-
-            for ( classKey in value ) {
-                currentElements = this.classesElementLookup[ classKey ];
-                if ( value[ classKey ] === this.options.classes[ classKey ] ||
-                    !currentElements ||
-                    !currentElements.length ) {
-                    continue;
-                }
-
-                // We are doing this to create a new jQuery object because the _removeClass() call
-                // on the next line is going to destroy the reference to the current elements being
-                // tracked. We need to save a copy of this collection so that we can add the new classes
-                // below.
-                elements = $( currentElements.get() );
-                this._removeClass( currentElements, classKey );
-
-                // We don't use _addClass() here, because that uses this.options.classes
-                // for generating the string of classes. We want to use the value passed in from
-                // _setOption(), this is the new value of the classes option which was passed to
-                // _setOption(). We pass this value directly to _classes().
-                elements.addClass( this._classes( {
-                    element: elements,
-                    keys: classKey,
-                    classes: value,
-                    add: true
-                } ) );
-            }
-        },
-
-        _setOptionDisabled: function( value ) {
-            this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
-
-            // If the widget is becoming disabled, then nothing is interactive
-            if ( value ) {
-                this._removeClass( this.hoverable, null, "ui-state-hover" );
-                this._removeClass( this.focusable, null, "ui-state-focus" );
-            }
-        },
-
-        enable: function() {
-            return this._setOptions( { disabled: false } );
-        },
-
-        disable: function() {
-            return this._setOptions( { disabled: true } );
-        },
-
-        _classes: function( options ) {
-            var full = [];
-            var that = this;
-
-            options = $.extend( {
-                element: this.element,
-                classes: this.options.classes || {}
-            }, options );
-
-            function processClassString( classes, checkOption ) {
-                var current, i;
-                for ( i = 0; i < classes.length; i++ ) {
-                    current = that.classesElementLookup[ classes[ i ] ] || $();
-                    if ( options.add ) {
-                        current = $( $.unique( current.get().concat( options.element.get() ) ) );
-                    } else {
-                        current = $( current.not( options.element ).get() );
-                    }
-                    that.classesElementLookup[ classes[ i ] ] = current;
-                    full.push( classes[ i ] );
-                    if ( checkOption && options.classes[ classes[ i ] ] ) {
-                        full.push( options.classes[ classes[ i ] ] );
-                    }
-                }
-            }
-
-            this._on( options.element, {
-                "remove": "_untrackClassesElement"
-            } );
-
-            if ( options.keys ) {
-                processClassString( options.keys.match( /\S+/g ) || [], true );
-            }
-            if ( options.extra ) {
-                processClassString( options.extra.match( /\S+/g ) || [] );
-            }
-
-            return full.join( " " );
-        },
-
-        _untrackClassesElement: function( event ) {
-            var that = this;
-            $.each( that.classesElementLookup, function( key, value ) {
-                if ( $.inArray( event.target, value ) !== -1 ) {
-                    that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
-                }
-            } );
-        },
-
-        _removeClass: function( element, keys, extra ) {
-            return this._toggleClass( element, keys, extra, false );
-        },
-
-        _addClass: function( element, keys, extra ) {
-            return this._toggleClass( element, keys, extra, true );
-        },
-
-        _toggleClass: function( element, keys, extra, add ) {
-            add = ( typeof add === "boolean" ) ? add : extra;
-            var shift = ( typeof element === "string" || element === null ),
-                options = {
-                    extra: shift ? keys : extra,
-                    keys: shift ? element : keys,
-                    element: shift ? this.element : element,
-                    add: add
-                };
-            options.element.toggleClass( this._classes( options ), add );
-            return this;
-        },
-
-        _on: function( suppressDisabledCheck, element, handlers ) {
-            var delegateElement;
-            var instance = this;
-
-            // No suppressDisabledCheck flag, shuffle arguments
-            if ( typeof suppressDisabledCheck !== "boolean" ) {
-                handlers = element;
-                element = suppressDisabledCheck;
-                suppressDisabledCheck = false;
-            }
-
-            // No element argument, shuffle and use this.element
-            if ( !handlers ) {
-                handlers = element;
-                element = this.element;
-                delegateElement = this.widget();
-            } else {
-                element = delegateElement = $( element );
-                this.bindings = this.bindings.add( element );
-            }
-
-            $.each( handlers, function( event, handler ) {
-                function handlerProxy() {
-
-                    // Allow widgets to customize the disabled handling
-                    // - disabled as an array instead of boolean
-                    // - disabled class as method for disabling individual parts
-                    if ( !suppressDisabledCheck &&
-                        ( instance.options.disabled === true ||
-                        $( this ).hasClass( "ui-state-disabled" ) ) ) {
-                        return;
-                    }
-                    return ( typeof handler === "string" ? instance[ handler ] : handler )
-                        .apply( instance, arguments );
-                }
-
-                // Copy the guid so direct unbinding works
-                if ( typeof handler !== "string" ) {
-                    handlerProxy.guid = handler.guid =
-                        handler.guid || handlerProxy.guid || $.guid++;
-                }
-
-                var match = event.match( /^([\w:-]*)\s*(.*)$/ );
-                var eventName = match[ 1 ] + instance.eventNamespace;
-                var selector = match[ 2 ];
-
-                if ( selector ) {
-                    delegateElement.on( eventName, selector, handlerProxy );
-                } else {
-                    element.on( eventName, handlerProxy );
-                }
-            } );
-        },
-
-        _off: function( element, eventName ) {
-            eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
-                this.eventNamespace;
-            element.off( eventName ).off( eventName );
-
-            // Clear the stack to avoid memory leaks (#10056)
-            this.bindings = $( this.bindings.not( element ).get() );
-            this.focusable = $( this.focusable.not( element ).get() );
-            this.hoverable = $( this.hoverable.not( element ).get() );
-        },
-
-        _delay: function( handler, delay ) {
-            function handlerProxy() {
-                return ( typeof handler === "string" ? instance[ handler ] : handler )
-                    .apply( instance, arguments );
-            }
-            var instance = this;
-            return setTimeout( handlerProxy, delay || 0 );
-        },
-
-        _hoverable: function( element ) {
-            this.hoverable = this.hoverable.add( element );
-            this._on( element, {
-                mouseenter: function( event ) {
-                    this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
-                },
-                mouseleave: function( event ) {
-                    this._removeClass( $( event.currentTarget ), null, "ui-state-hover" );
-                }
-            } );
-        },
-
-        _focusable: function( element ) {
-            this.focusable = this.focusable.add( element );
-            this._on( element, {
-                focusin: function( event ) {
-                    this._addClass( $( event.currentTarget ), null, "ui-state-focus" );
-                },
-                focusout: function( event ) {
-                    this._removeClass( $( event.currentTarget ), null, "ui-state-focus" );
-                }
-            } );
-        },
-
-        _trigger: function( type, event, data ) {
-            var prop, orig;
-            var callback = this.options[ type ];
-
-            data = data || {};
-            event = $.Event( event );
-            event.type = ( type === this.widgetEventPrefix ?
-                type :
-                this.widgetEventPrefix + type ).toLowerCase();
-
-            // The original event may come from any element
-            // so we need to reset the target on the new event
-            event.target = this.element[ 0 ];
-
-            // Copy original event properties over to the new event
-            orig = event.originalEvent;
-            if ( orig ) {
-                for ( prop in orig ) {
-                    if ( !( prop in event ) ) {
-                        event[ prop ] = orig[ prop ];
-                    }
-                }
-            }
-
-            this.element.trigger( event, data );
-            return !( $.isFunction( callback ) &&
-            callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
-            event.isDefaultPrevented() );
+        return selected;
+      },
+
+      /**
+       * Get the previous enabled item in the options list.
+       *
+       * @param  {object} selectItems - The options object.
+       * @param  {number}    selected - Index of the currently selected option.
+       * @return {object}               The previous enabled item.
+       */
+      previousEnabledItem: function(selectItems, selected) {
+        while ( selectItems[ selected = (selected > 0 ? selected : selectItems.length) - 1 ].disabled ) {
+          // empty
         }
-    };
+        return selected;
+      },
 
-    $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
-        $.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
-            if ( typeof options === "string" ) {
-                options = { effect: options };
-            }
+      /**
+       * Transform camelCase string to dash-case.
+       *
+       * @param  {string} str - The camelCased string.
+       * @return {string}       The string transformed to dash-case.
+       */
+      toDash: function(str) {
+        return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+      },
 
-            var hasOptions;
-            var effectName = !options ?
-                method :
-                options === true || typeof options === "number" ?
-                    defaultEffect :
-                    options.effect || defaultEffect;
+      /**
+       * Calls the events registered with function name.
+       *
+       * @param {string}    fn - The name of the function.
+       * @param {number} scope - Scope that should be set on the function.
+       */
+      triggerCallback: function(fn, scope) {
+        var elm = scope.element;
+        var func = scope.options['on' + fn];
+        var args = [elm].concat([].slice.call(arguments).slice(1));
 
-            options = options || {};
-            if ( typeof options === "number" ) {
-                options = { duration: options };
-            }
+        if ( $.isFunction(func) ) {
+          func.apply(elm, args);
+        }
 
-            hasOptions = !$.isEmptyObject( options );
-            options.complete = callback;
+        $(elm).trigger(pluginName + '-' + this.toDash(fn), args);
+      },
 
-            if ( options.delay ) {
-                element.delay( options.delay );
-            }
+      /**
+       * Transform array list to concatenated string and remove empty values
+       * @param  {array} arr - Class list
+       * @return {string}      Concatenated string
+       */
+      arrayToClassname: function(arr) {
+        var newArr = $.grep(arr, function(item) {
+          return !!item;
+        });
 
-            if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
-                element[ method ]( options );
-            } else if ( effectName !== method && element[ effectName ] ) {
-                element[ effectName ]( options.duration, options.easing, callback );
-            } else {
-                element.queue( function( next ) {
-                    $( this )[ method ]();
-                    if ( callback ) {
-                        callback.call( element[ 0 ] );
-                    }
-                    next();
-                } );
-            }
-        };
-    } );
+        return $.trim(newArr.join(' '));
+      }
+    },
 
-    var widget = $.widget;
+    /** Initializes */
+    init: function(opts) {
+      var _this = this;
 
+      // Set options
+      _this.options = $.extend(true, {}, $.fn[pluginName].defaults, _this.options, opts);
 
-	/*!
-	 * jQuery UI Keycode 1.12.1
-	 * http://jqueryui.com
-	 *
-	 * Copyright jQuery Foundation and other contributors
-	 * Released under the MIT license.
-	 * http://jquery.org/license
-	 */
+      _this.utils.triggerCallback('BeforeInit', _this);
 
-//>>label: Keycode
-//>>group: Core
-//>>description: Provide keycodes as keynames
-//>>docs: http://api.jqueryui.com/jQuery.ui.keyCode/
+      // Preserve data
+      _this.destroy(true);
 
+      // Disable on mobile browsers
+      if ( _this.options.disableOnMobile && _this.utils.isMobile() ) {
+        _this.disableOnMobile = true;
+        return;
+      }
 
-    var keycode = $.ui.keyCode = {
-        BACKSPACE: 8,
-        COMMA: 188,
-        DELETE: 46,
-        DOWN: 40,
-        END: 35,
-        ENTER: 13,
-        ESCAPE: 27,
-        HOME: 36,
-        LEFT: 37,
-        PAGE_DOWN: 34,
-        PAGE_UP: 33,
-        PERIOD: 190,
-        RIGHT: 39,
-        SPACE: 32,
-        TAB: 9,
-        UP: 38
-    };
+      // Get classes
+      _this.classes = _this.getClassNames();
 
+      // Create elements
+      var input              = $('<input/>', { 'class': _this.classes.input, 'readonly': _this.utils.isMobile() });
+      var items              = $('<div/>',   { 'class': _this.classes.items, 'tabindex': -1 });
+      var itemsScroll        = $('<div/>',   { 'class': _this.classes.scroll });
+      var wrapper            = $('<div/>',   { 'class': _this.classes.prefix, 'html': _this.options.arrowButtonMarkup });
+      var label              = $('<span/>',  { 'class': 'label' });
+      var outerWrapper       = _this.$element.wrap('<div/>').parent().append(wrapper.prepend(label), items, input);
+      var hideSelectWrapper  = $('<div/>',   { 'class': _this.classes.hideselect });
 
+      _this.elements = {
+        input        : input,
+        items        : items,
+        itemsScroll  : itemsScroll,
+        wrapper      : wrapper,
+        label        : label,
+        outerWrapper : outerWrapper
+      };
 
+      if ( _this.options.nativeOnMobile && _this.utils.isMobile() ) {
+        _this.elements.input = undefined;
+        hideSelectWrapper.addClass(_this.classes.prefix + '-is-native');
 
-// This file is deprecated
-    var ie = $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
+        _this.$element.on('change', function() {
+          _this.refresh();
+        });
+      }
 
-	/*!
-	 * jQuery UI Mouse 1.12.1
-	 * http://jqueryui.com
-	 *
-	 * Copyright jQuery Foundation and other contributors
-	 * Released under the MIT license.
-	 * http://jquery.org/license
-	 */
+      _this.$element
+        .on(_this.eventTriggers)
+        .wrap(hideSelectWrapper);
 
-//>>label: Mouse
-//>>group: Widgets
-//>>description: Abstracts mouse-based interactions to assist in creating certain widgets.
-//>>docs: http://api.jqueryui.com/mouse/
+      _this.originalTabindex = _this.$element.prop('tabindex');
+      _this.$element.prop('tabindex', -1);
 
+      _this.populate();
+      _this.activate();
 
+      _this.utils.triggerCallback('Init', _this);
+    },
 
-    var mouseHandled = false;
-    $( document ).on( "mouseup", function() {
-        mouseHandled = false;
-    } );
+    /** Activates the plugin */
+    activate: function() {
+      var _this = this;
+      var hiddenChildren = _this.elements.items.closest(':visible').children(':hidden').addClass(_this.classes.tempshow);
+      var originalWidth = _this.$element.width();
 
-    var widgetsMouse = $.widget( "ui.mouse", {
-        version: "1.12.1",
-        options: {
-            cancel: "input, textarea, button, select, option",
-            distance: 1,
-            delay: 0
-        },
-        _mouseInit: function() {
-            var that = this;
+      hiddenChildren.removeClass(_this.classes.tempshow);
 
-            this.element
-                .on( "mousedown." + this.widgetName, function( event ) {
-                    return that._mouseDown( event );
-                } )
-                .on( "click." + this.widgetName, function( event ) {
-                    if ( true === $.data( event.target, that.widgetName + ".preventClickEvent" ) ) {
-                        $.removeData( event.target, that.widgetName + ".preventClickEvent" );
-                        event.stopImmediatePropagation();
-                        return false;
-                    }
-                } );
+      _this.utils.triggerCallback('BeforeActivate', _this);
 
-            this.started = false;
-        },
+      _this.elements.outerWrapper.prop('class',
+        _this.utils.arrayToClassname([
+          _this.classes.wrapper,
+          _this.$element.prop('class').replace(/\S+/g, _this.classes.prefix + '-$&'),
+          _this.options.responsive ? _this.classes.responsive : ''
+        ])
+      );
 
-        // TODO: make sure destroying one instance of mouse doesn't mess with
-        // other instances of mouse
-        _mouseDestroy: function() {
-            this.element.off( "." + this.widgetName );
-            if ( this._mouseMoveDelegate ) {
-                this.document
-                    .off( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-                    .off( "mouseup." + this.widgetName, this._mouseUpDelegate );
-            }
-        },
+      if ( _this.options.inheritOriginalWidth && originalWidth > 0 ) {
+        _this.elements.outerWrapper.width(originalWidth);
+      }
 
-        _mouseDown: function( event ) {
+      _this.unbindEvents();
 
-            // don't let more than one widget handle mouseStart
-            if ( mouseHandled ) {
-                return;
-            }
+      if ( !_this.$element.prop('disabled') ) {
+        _this.state.enabled = true;
 
-            this._mouseMoved = false;
+        // Not disabled, so... Removing disabled class
+        _this.elements.outerWrapper.removeClass(_this.classes.disabled);
 
-            // We may have missed mouseup (out of window)
-            ( this._mouseStarted && this._mouseUp( event ) );
+        // Remove styles from items box
+        // Fix incorrect height when refreshed is triggered with fewer options
+        _this.$li = _this.elements.items.removeAttr('style').find('li');
 
-            this._mouseDownEvent = event;
+        _this.bindEvents();
+      } else {
+        _this.elements.outerWrapper.addClass(_this.classes.disabled);
 
-            var that = this,
-                btnIsLeft = ( event.which === 1 ),
+        if ( _this.elements.input ) {
+          _this.elements.input.prop('disabled', true);
+        }
+      }
 
-                // event.target.nodeName works around a bug in IE 8 with
-                // disabled inputs (#7620)
-                elIsCancel = ( typeof this.options.cancel === "string" && event.target.nodeName ?
-                    $( event.target ).closest( this.options.cancel ).length : false );
-            if ( !btnIsLeft || elIsCancel || !this._mouseCapture( event ) ) {
-                return true;
-            }
+      _this.utils.triggerCallback('Activate', _this);
+    },
 
-            this.mouseDelayMet = !this.options.delay;
-            if ( !this.mouseDelayMet ) {
-                this._mouseDelayTimer = setTimeout( function() {
-                    that.mouseDelayMet = true;
-                }, this.options.delay );
-            }
+    /**
+     * Generate classNames for elements
+     *
+     * @return {object} Classes object
+     */
+    getClassNames: function() {
+      var _this = this;
+      var customClass = _this.options.customClass;
+      var classesObj = {};
 
-            if ( this._mouseDistanceMet( event ) && this._mouseDelayMet( event ) ) {
-                this._mouseStarted = ( this._mouseStart( event ) !== false );
-                if ( !this._mouseStarted ) {
-                    event.preventDefault();
-                    return true;
-                }
-            }
+      $.each(classList.split(' '), function(i, currClass) {
+        var c = customClass.prefix + currClass;
+        classesObj[currClass.toLowerCase()] = customClass.camelCase ? c : _this.utils.toDash(c);
+      });
 
-            // Click event may never have fired (Gecko & Opera)
-            if ( true === $.data( event.target, this.widgetName + ".preventClickEvent" ) ) {
-                $.removeData( event.target, this.widgetName + ".preventClickEvent" );
-            }
+      classesObj.prefix = customClass.prefix;
 
-            // These delegates are required to keep context
-            this._mouseMoveDelegate = function( event ) {
-                return that._mouseMove( event );
-            };
-            this._mouseUpDelegate = function( event ) {
-                return that._mouseUp( event );
+      return classesObj;
+    },
+
+    /** Set the label text */
+    setLabel: function() {
+      var _this = this;
+      var labelBuilder = _this.options.labelBuilder;
+
+      if ( _this.state.multiple ) {
+        // Make sure currentValues is an array
+        var currentValues = $.isArray(_this.state.currValue) ? _this.state.currValue : [_this.state.currValue];
+        // I'm not happy with this, but currentValues can be an empty
+        // array and we need to fallback to the default option.
+        currentValues = currentValues.length === 0 ? [0] : currentValues;
+
+        var labelMarkup = $.map(currentValues, function(value) {
+          return $.grep(_this.lookupItems, function(item) {
+            return item.index === value;
+          })[0]; // we don't want nested arrays here
+        });
+
+        labelMarkup = $.grep(labelMarkup, function(item) {
+          // Hide default (please choose) if more then one element were selected.
+          // If no option value were given value is set to option text by default
+          if ( labelMarkup.length > 1 || labelMarkup.length === 0 ) {
+            return $.trim(item.value) !== '';
+          }
+          return item;
+        });
+
+        labelMarkup = $.map(labelMarkup, function(item) {
+          return $.isFunction(labelBuilder)
+            ? labelBuilder(item)
+            : _this.utils.format(labelBuilder, item);
+        });
+
+        // Limit the amount of selected values shown in label
+        if ( _this.options.multiple.maxLabelEntries ) {
+          if ( labelMarkup.length >= _this.options.multiple.maxLabelEntries + 1 ) {
+            labelMarkup = labelMarkup.slice(0, _this.options.multiple.maxLabelEntries);
+            labelMarkup.push(
+              $.isFunction(labelBuilder)
+                ? labelBuilder({ text: '...' })
+                : _this.utils.format(labelBuilder, { text: '...' }));
+          } else {
+            labelMarkup.slice(labelMarkup.length - 1);
+          }
+        }
+        _this.elements.label.html(labelMarkup.join(_this.options.multiple.separator));
+
+      } else {
+        var currItem = _this.lookupItems[_this.state.currValue];
+
+        _this.elements.label.html(
+          $.isFunction(labelBuilder)
+            ? labelBuilder(currItem)
+            : _this.utils.format(labelBuilder, currItem)
+        );
+      }
+    },
+
+    /** Get and save the available options */
+    populate: function() {
+      var _this = this;
+      var $options = _this.$element.children();
+      var $justOptions = _this.$element.find('option');
+      var $selected = $justOptions.filter(':selected');
+      var selectedIndex = $justOptions.index($selected);
+      var currIndex = 0;
+      var emptyValue = (_this.state.multiple ? [] : 0);
+
+      if ( $selected.length > 1 && _this.state.multiple ) {
+        selectedIndex = [];
+        $selected.each(function() {
+          selectedIndex.push($(this).index());
+        });
+      }
+
+      _this.state.currValue = (~selectedIndex ? selectedIndex : emptyValue);
+      _this.state.selectedIdx = _this.state.currValue;
+      _this.state.highlightedIdx = _this.state.currValue;
+      _this.items = [];
+      _this.lookupItems = [];
+
+      if ( $options.length ) {
+        // Build options markup
+        $options.each(function(i) {
+          var $elm = $(this);
+
+          if ( $elm.is('optgroup') ) {
+
+            var optionsGroup = {
+              element       : $elm,
+              label         : $elm.prop('label'),
+              groupDisabled : $elm.prop('disabled'),
+              items         : []
             };
 
-            this.document
-                .on( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-                .on( "mouseup." + this.widgetName, this._mouseUpDelegate );
+            $elm.children().each(function(i) {
+              var $elm = $(this);
 
-            event.preventDefault();
+              optionsGroup.items[i] = _this.getItemData(currIndex, $elm, optionsGroup.groupDisabled || $elm.prop('disabled'));
 
-            mouseHandled = true;
-            return true;
-        },
+              _this.lookupItems[currIndex] = optionsGroup.items[i];
 
-        _mouseMove: function( event ) {
+              currIndex++;
+            });
 
-            // Only check for mouseups outside the document if you've moved inside the document
-            // at least once. This prevents the firing of mouseup in the case of IE<9, which will
-            // fire a mousemove event if content is placed under the cursor. See #7778
-            // Support: IE <9
-            if ( this._mouseMoved ) {
+            _this.items[i] = optionsGroup;
 
-                // IE mouseup check - mouseup happened when mouse was out of window
-                if ( $.ui.ie && ( !document.documentMode || document.documentMode < 9 ) &&
-                    !event.button ) {
-                    return this._mouseUp( event );
+          } else {
 
-                    // Iframe mouseup check - mouseup occurred in another document
-                } else if ( !event.which ) {
+            _this.items[i] = _this.getItemData(currIndex, $elm, $elm.prop('disabled'));
 
-                    // Support: Safari <=8 - 9
-                    // Safari sets which to 0 if you press any of the following keys
-                    // during a drag (#14461)
-                    if ( event.originalEvent.altKey || event.originalEvent.ctrlKey ||
-                        event.originalEvent.metaKey || event.originalEvent.shiftKey ) {
-                        this.ignoreMissingWhich = true;
-                    } else if ( !this.ignoreMissingWhich ) {
-                        return this._mouseUp( event );
-                    }
+            _this.lookupItems[currIndex] = _this.items[i];
+
+            currIndex++;
+
+          }
+        });
+
+        _this.setLabel();
+        _this.elements.items.append( _this.elements.itemsScroll.html( _this.getItemsMarkup(_this.items) ) );
+      }
+    },
+
+    /**
+     * Generate items object data
+     * @param  {integer} index      - Current item index
+     * @param  {node}    $elm       - Current element node
+     * @param  {boolean} isDisabled - Current element disabled state
+     * @return {object}               Item object
+     */
+    getItemData: function(index, $elm, isDisabled) {
+      var _this = this;
+
+      return {
+        index     : index,
+        element   : $elm,
+        value     : $elm.val(),
+        className : $elm.prop('class'),
+        text      : $elm.html(),
+        slug      : $.trim(_this.utils.replaceDiacritics($elm.html())),
+        alt       : $elm.attr('data-alt'),
+        selected  : $elm.prop('selected'),
+        disabled  : isDisabled
+      };
+    },
+
+    /**
+     * Generate options markup
+     *
+     * @param  {object} items - Object containing all available options
+     * @return {string}         HTML for the options box
+     */
+    getItemsMarkup: function(items) {
+      var _this = this;
+      var markup = '<ul>';
+
+      if ( $.isFunction(_this.options.listBuilder) && _this.options.listBuilder ) {
+        items = _this.options.listBuilder(items);
+      }
+
+      $.each(items, function(i, elm) {
+        if ( elm.label !== undefined ) {
+
+          markup += _this.utils.format('<ul class="{1}"><li class="{2}">{3}</li>',
+            _this.utils.arrayToClassname([
+              _this.classes.group,
+              elm.groupDisabled ? 'disabled' : '',
+              elm.element.prop('class')
+            ]),
+            _this.classes.grouplabel,
+            elm.element.prop('label')
+          );
+
+          $.each(elm.items, function(i, elm) {
+            markup += _this.getItemMarkup(elm.index, elm);
+          });
+
+          markup += '</ul>';
+
+        } else {
+
+          markup += _this.getItemMarkup(elm.index, elm);
+
+        }
+      });
+
+      return markup + '</ul>';
+    },
+
+    /**
+     * Generate every option markup
+     *
+     * @param  {number} index    - Index of current item
+     * @param  {object} itemData - Current item
+     * @return {string}            HTML for the option
+     */
+    getItemMarkup: function(index, itemData) {
+      var _this = this;
+      var itemBuilder = _this.options.optionsItemBuilder;
+      // limit access to item data to provide a simple interface
+      // to most relevant options.
+      var filteredItemData = {
+        value: itemData.value,
+        text : itemData.text,
+        slug : itemData.slug,
+        index: itemData.index
+      };
+
+      return _this.utils.format('<li data-index="{1}" class="{2}">{3}</li>',
+        index,
+        _this.utils.arrayToClassname([
+          itemData.className,
+          index === _this.items.length - 1  ? 'last'     : '',
+          itemData.disabled                 ? 'disabled' : '',
+          itemData.selected                 ? 'selected' : ''
+        ]),
+        $.isFunction(itemBuilder)
+          ? _this.utils.format(itemBuilder(itemData, this.$element, index), itemData)
+          : _this.utils.format(itemBuilder, filteredItemData)
+      );
+    },
+
+    /** Remove events on the elements */
+    unbindEvents: function() {
+      var _this = this;
+
+      _this.elements.wrapper
+        .add(_this.$element)
+        .add(_this.elements.outerWrapper)
+        .add(_this.elements.input)
+        .off(eventNamespaceSuffix);
+    },
+
+    /** Bind events on the elements */
+    bindEvents: function() {
+      var _this = this;
+
+      _this.elements.outerWrapper.on('mouseenter' + eventNamespaceSuffix + ' mouseleave' + eventNamespaceSuffix, function(e) {
+        $(this).toggleClass(_this.classes.hover, e.type === 'mouseenter');
+
+        // Delay close effect when openOnHover is true
+        if ( _this.options.openOnHover ) {
+          clearTimeout(_this.closeTimer);
+
+          if ( e.type === 'mouseleave' ) {
+            _this.closeTimer = setTimeout($.proxy(_this.close, _this), _this.options.hoverIntentTimeout);
+          } else {
+            _this.open();
+          }
+        }
+      });
+
+      // Toggle open/close
+      _this.elements.wrapper.on('click' + eventNamespaceSuffix, function(e) {
+        _this.state.opened ? _this.close() : _this.open(e);
+      });
+
+      // Translate original element focus event to dummy input.
+      // Disabled on mobile devices because the default option list isn't
+      // shown due the fact that hidden input gets focused
+      if ( !(_this.options.nativeOnMobile && _this.utils.isMobile()) ) {
+        _this.$element.on('focus' + eventNamespaceSuffix, function() {
+          _this.elements.input.focus();
+        });
+
+        _this.elements.input
+          .prop({ tabindex: _this.originalTabindex, disabled: false })
+          .on('keydown' + eventNamespaceSuffix, $.proxy(_this.handleKeys, _this))
+          .on('focusin' + eventNamespaceSuffix, function(e) {
+            _this.elements.outerWrapper.addClass(_this.classes.focus);
+
+            // Prevent the flicker when focusing out and back again in the browser window
+            _this.elements.input.one('blur', function() {
+              _this.elements.input.blur();
+            });
+
+            if ( _this.options.openOnFocus && !_this.state.opened ) {
+              _this.open(e);
+            }
+          })
+          .on('focusout' + eventNamespaceSuffix, function() {
+            _this.elements.outerWrapper.removeClass(_this.classes.focus);
+          })
+          .on('input propertychange', function() {
+            var val = _this.elements.input.val();
+            var searchRegExp = new RegExp('^' + _this.utils.escapeRegExp(val), 'i');
+
+            // Clear search
+            clearTimeout(_this.resetStr);
+            _this.resetStr = setTimeout(function() {
+              _this.elements.input.val('');
+            }, _this.options.keySearchTimeout);
+
+            if ( val.length ) {
+              // Search in select options
+              $.each(_this.items, function(i, elm) {
+                if (elm.disabled) {
+                  return;
                 }
-            }
-
-            if ( event.which || event.button ) {
-                this._mouseMoved = true;
-            }
-
-            if ( this._mouseStarted ) {
-                this._mouseDrag( event );
-                return event.preventDefault();
-            }
-
-            if ( this._mouseDistanceMet( event ) && this._mouseDelayMet( event ) ) {
-                this._mouseStarted =
-                    ( this._mouseStart( this._mouseDownEvent, event ) !== false );
-                ( this._mouseStarted ? this._mouseDrag( event ) : this._mouseUp( event ) );
-            }
-
-            return !this._mouseStarted;
-        },
-
-        _mouseUp: function( event ) {
-            this.document
-                .off( "mousemove." + this.widgetName, this._mouseMoveDelegate )
-                .off( "mouseup." + this.widgetName, this._mouseUpDelegate );
-
-            if ( this._mouseStarted ) {
-                this._mouseStarted = false;
-
-                if ( event.target === this._mouseDownEvent.target ) {
-                    $.data( event.target, this.widgetName + ".preventClickEvent", true );
+                if (searchRegExp.test(elm.text) || searchRegExp.test(elm.slug)) {
+                  _this.highlight(i);
+                  return;
                 }
-
-                this._mouseStop( event );
+                if (!elm.alt) {
+                  return;
+                }
+                var altItems = elm.alt.split('|');
+                for (var ai = 0; ai < altItems.length; ai++) {
+                  if (!altItems[ai]) {
+                    break;
+                  }
+                  if (searchRegExp.test(altItems[ai].trim())) {
+                    _this.highlight(i);
+                    return;
+                  }
+                }
+              });
             }
+          });
+      }
 
-            if ( this._mouseDelayTimer ) {
-                clearTimeout( this._mouseDelayTimer );
-                delete this._mouseDelayTimer;
+      _this.$li.on({
+        // Prevent <input> blur on Chrome
+        mousedown: function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        },
+        click: function() {
+          _this.select($(this).data('index'));
+
+          // Chrome doesn't close options box if select is wrapped with a label
+          // We need to 'return false' to avoid that
+          return false;
+        }
+      });
+    },
+
+    /**
+     * Behavior when keyboard keys is pressed
+     *
+     * @param {object} e - Event object
+     */
+    handleKeys: function(e) {
+      var _this = this;
+      var key = e.which;
+      var keys = _this.options.keys;
+
+      var isPrevKey = $.inArray(key, keys.previous) > -1;
+      var isNextKey = $.inArray(key, keys.next) > -1;
+      var isSelectKey = $.inArray(key, keys.select) > -1;
+      var isOpenKey = $.inArray(key, keys.open) > -1;
+      var idx = _this.state.highlightedIdx;
+      var isFirstOrLastItem = (isPrevKey && idx === 0) || (isNextKey && (idx + 1) === _this.items.length);
+      var goToItem = 0;
+
+      // Enter / Space
+      if ( key === 13 || key === 32 ) {
+        e.preventDefault();
+      }
+
+      // If it's a directional key
+      if ( isPrevKey || isNextKey ) {
+        if ( !_this.options.allowWrap && isFirstOrLastItem ) {
+          return;
+        }
+
+        if ( isPrevKey ) {
+          goToItem = _this.utils.previousEnabledItem(_this.lookupItems, idx);
+        }
+
+        if ( isNextKey ) {
+          goToItem = _this.utils.nextEnabledItem(_this.lookupItems, idx);
+        }
+
+        _this.highlight(goToItem);
+      }
+
+      // Tab / Enter / ESC
+      if ( isSelectKey && _this.state.opened ) {
+        _this.select(idx);
+
+        if ( !_this.state.multiple || !_this.options.multiple.keepMenuOpen ) {
+          _this.close();
+        }
+
+        return;
+      }
+
+      // Space / Enter / Left / Up / Right / Down
+      if ( isOpenKey && !_this.state.opened ) {
+        _this.open();
+      }
+    },
+
+    /** Update the items object */
+    refresh: function() {
+      var _this = this;
+
+      _this.populate();
+      _this.activate();
+      _this.utils.triggerCallback('Refresh', _this);
+    },
+
+    /** Set options box width/height */
+    setOptionsDimensions: function() {
+      var _this = this;
+
+      // Calculate options box height
+      // Set a temporary class on the hidden parent of the element
+      var hiddenChildren = _this.elements.items.closest(':visible').children(':hidden').addClass(_this.classes.tempshow);
+      var maxHeight = _this.options.maxHeight;
+      var itemsWidth = _this.elements.items.outerWidth();
+      var wrapperWidth = _this.elements.wrapper.outerWidth() - (itemsWidth - _this.elements.items.width());
+
+      // Set the dimensions, minimum is wrapper width, expand for long items if option is true
+      if ( !_this.options.expandToItemText || wrapperWidth > itemsWidth ) {
+        _this.finalWidth = wrapperWidth;
+      } else {
+        // Make sure the scrollbar width is included
+        _this.elements.items.css('overflow', 'scroll');
+
+        // Set a really long width for _this.elements.outerWrapper
+        _this.elements.outerWrapper.width(9e4);
+        _this.finalWidth = _this.elements.items.width();
+        // Set scroll bar to auto
+        _this.elements.items.css('overflow', '');
+        _this.elements.outerWrapper.width('');
+      }
+
+      _this.elements.items.width(_this.finalWidth).height() > maxHeight && _this.elements.items.height(maxHeight);
+
+      // Remove the temporary class
+      hiddenChildren.removeClass(_this.classes.tempshow);
+    },
+
+    /** Detect if the options box is inside the window */
+    isInViewport: function() {
+      var _this = this;
+
+      if (_this.options.forceRenderAbove === true) {
+        _this.elements.outerWrapper.addClass(_this.classes.above);
+      } else if (_this.options.forceRenderBelow === true) {
+        _this.elements.outerWrapper.addClass(_this.classes.below);
+      } else {
+        var scrollTop = $win.scrollTop();
+        var winHeight = $win.height();
+        var uiPosX = _this.elements.outerWrapper.offset().top;
+        var uiHeight = _this.elements.outerWrapper.outerHeight();
+
+        var fitsDown = (uiPosX + uiHeight + _this.itemsHeight) <= (scrollTop + winHeight);
+        var fitsAbove = (uiPosX - _this.itemsHeight) > scrollTop;
+
+        // If it does not fit below, only render it
+        // above it fit's there.
+        // It's acceptable that the user needs to
+        // scroll the viewport to see the cut off UI
+        var renderAbove = !fitsDown && fitsAbove;
+        var renderBelow = !renderAbove;
+
+        _this.elements.outerWrapper.toggleClass(_this.classes.above, renderAbove);
+        _this.elements.outerWrapper.toggleClass(_this.classes.below, renderBelow);
+      }
+    },
+
+    /**
+     * Detect if currently selected option is visible and scroll the options box to show it
+     *
+     * @param {Number|Array} index - Index of the selected items
+     */
+    detectItemVisibility: function(index) {
+      var _this = this;
+      var $filteredLi = _this.$li.filter('[data-index]');
+
+      if ( _this.state.multiple ) {
+        // If index is an array, we can assume a multiple select and we
+        // want to scroll to the uppermost selected item!
+        // Math.min.apply(Math, index) returns the lowest entry in an Array.
+        index = ($.isArray(index) && index.length === 0) ? 0 : index;
+        index = $.isArray(index) ? Math.min.apply(Math, index) : index;
+      }
+
+      var liHeight = $filteredLi.eq(index).outerHeight();
+      var liTop = $filteredLi[index].offsetTop;
+      var itemsScrollTop = _this.elements.itemsScroll.scrollTop();
+      var scrollT = liTop + liHeight * 2;
+
+      _this.elements.itemsScroll.scrollTop(
+        scrollT > itemsScrollTop + _this.itemsHeight ? scrollT - _this.itemsHeight :
+          liTop - liHeight < itemsScrollTop ? liTop - liHeight :
+            itemsScrollTop
+      );
+    },
+
+    /**
+     * Open the select options box
+     *
+     * @param {Event} e - Event
+     */
+    open: function(e) {
+      var _this = this;
+
+      if ( _this.options.nativeOnMobile && _this.utils.isMobile()) {
+        return false;
+      }
+
+      _this.utils.triggerCallback('BeforeOpen', _this);
+
+      if ( e ) {
+        e.preventDefault();
+        if (_this.options.stopPropagation) {
+          e.stopPropagation();
+        }
+      }
+
+      if ( _this.state.enabled ) {
+        _this.setOptionsDimensions();
+
+        // Find any other opened instances of select and close it
+        $('.' + _this.classes.hideselect, '.' + _this.classes.open).children()[pluginName]('close');
+
+        _this.state.opened = true;
+        _this.itemsHeight = _this.elements.items.outerHeight();
+        _this.itemsInnerHeight = _this.elements.items.height();
+
+        // Toggle options box visibility
+        _this.elements.outerWrapper.addClass(_this.classes.open);
+
+        // Give dummy input focus
+        _this.elements.input.val('');
+        if ( e && e.type !== 'focusin' ) {
+          _this.elements.input.focus();
+        }
+
+        // Delayed binds events on Document to make label clicks work
+        setTimeout(function() {
+          $doc
+            .on('click' + eventNamespaceSuffix, $.proxy(_this.close, _this))
+            .on('scroll' + eventNamespaceSuffix, $.proxy(_this.isInViewport, _this));
+        }, 1);
+
+        _this.isInViewport();
+
+        // Prevent window scroll when using mouse wheel inside items box
+        if ( _this.options.preventWindowScroll ) {
+          /* istanbul ignore next */
+          $doc.on('mousewheel' + eventNamespaceSuffix + ' DOMMouseScroll' + eventNamespaceSuffix, '.' + _this.classes.scroll, function(e) {
+            var orgEvent = e.originalEvent;
+            var scrollTop = $(this).scrollTop();
+            var deltaY = 0;
+
+            if ( 'detail'      in orgEvent ) { deltaY = orgEvent.detail * -1; }
+            if ( 'wheelDelta'  in orgEvent ) { deltaY = orgEvent.wheelDelta;  }
+            if ( 'wheelDeltaY' in orgEvent ) { deltaY = orgEvent.wheelDeltaY; }
+            if ( 'deltaY'      in orgEvent ) { deltaY = orgEvent.deltaY * -1; }
+
+            if ( scrollTop === (this.scrollHeight - _this.itemsInnerHeight) && deltaY < 0 || scrollTop === 0 && deltaY > 0 ) {
+              e.preventDefault();
             }
+          });
+        }
 
-            this.ignoreMissingWhich = false;
-            mouseHandled = false;
-            event.preventDefault();
-        },
+        _this.detectItemVisibility(_this.state.selectedIdx);
 
-        _mouseDistanceMet: function( event ) {
-            return ( Math.max(
-                    Math.abs( this._mouseDownEvent.pageX - event.pageX ),
-                    Math.abs( this._mouseDownEvent.pageY - event.pageY )
-                ) >= this.options.distance
-            );
-        },
+        _this.highlight(_this.state.multiple ? -1 : _this.state.selectedIdx);
 
-        _mouseDelayMet: function( /* event */ ) {
-            return this.mouseDelayMet;
-        },
+        _this.utils.triggerCallback('Open', _this);
+      }
+    },
 
-        // These are placeholder methods, to be overriden by extending plugin
-        _mouseStart: function( /* event */ ) {},
-        _mouseDrag: function( /* event */ ) {},
-        _mouseStop: function( /* event */ ) {},
-        _mouseCapture: function( /* event */ ) { return true; }
-    } );
+    /** Close the select options box */
+    close: function() {
+      var _this = this;
 
+      _this.utils.triggerCallback('BeforeClose', _this);
 
+      // Remove custom events on document
+      $doc.off(eventNamespaceSuffix);
 
+      // Remove visible class to hide options box
+      _this.elements.outerWrapper.removeClass(_this.classes.open);
 
+      _this.state.opened = false;
+
+      _this.utils.triggerCallback('Close', _this);
+    },
+
+    /** Select current option and change the label */
+    change: function() {
+      var _this = this;
+
+      _this.utils.triggerCallback('BeforeChange', _this);
+
+      if ( _this.state.multiple ) {
+        // Reset old selected
+        $.each(_this.lookupItems, function(idx) {
+          _this.lookupItems[idx].selected = false;
+          _this.$element.find('option').prop('selected', false);
+        });
+
+        // Set new selected
+        $.each(_this.state.selectedIdx, function(idx, value) {
+          _this.lookupItems[value].selected = true;
+          _this.$element.find('option').eq(value).prop('selected', true);
+        });
+
+        _this.state.currValue = _this.state.selectedIdx;
+
+        _this.setLabel();
+
+        _this.utils.triggerCallback('Change', _this);
+      } else if ( _this.state.currValue !== _this.state.selectedIdx ) {
+        // Apply changed value to original select
+        _this.$element
+          .prop('selectedIndex', _this.state.currValue = _this.state.selectedIdx)
+          .data('value', _this.lookupItems[_this.state.selectedIdx].text);
+
+        // Change label text
+        _this.setLabel();
+
+        _this.utils.triggerCallback('Change', _this);
+      }
+    },
+
+    /**
+     * Highlight option
+     * @param {number} index - Index of the options that will be highlighted
+     */
+    highlight: function(index) {
+      var _this = this;
+      var $filteredLi = _this.$li.filter('[data-index]').removeClass('highlighted');
+
+      _this.utils.triggerCallback('BeforeHighlight', _this);
+
+      // Parameter index is required and should not be a disabled item
+      if ( index === undefined || index === -1 || _this.lookupItems[index].disabled ) {
+        return;
+      }
+
+      $filteredLi
+        .eq(_this.state.highlightedIdx = index)
+        .addClass('highlighted');
+
+      _this.detectItemVisibility(index);
+
+      _this.utils.triggerCallback('Highlight', _this);
+    },
+
+    /**
+     * Select option
+     *
+     * @param {number} index - Index of the option that will be selected
+     */
+    select: function(index) {
+      var _this = this;
+      var $filteredLi = _this.$li.filter('[data-index]');
+
+      _this.utils.triggerCallback('BeforeSelect', _this, index);
+
+      // Parameter index is required and should not be a disabled item
+      if ( index === undefined || index === -1 || _this.lookupItems[index].disabled ) {
+        return;
+      }
+
+      if ( _this.state.multiple ) {
+        // Make sure selectedIdx is an array
+        _this.state.selectedIdx = $.isArray(_this.state.selectedIdx) ? _this.state.selectedIdx : [_this.state.selectedIdx];
+
+        var hasSelectedIndex = $.inArray(index, _this.state.selectedIdx);
+        if ( hasSelectedIndex !== -1 ) {
+          _this.state.selectedIdx.splice(hasSelectedIndex, 1);
+        } else {
+          _this.state.selectedIdx.push(index);
+        }
+
+        $filteredLi
+          .removeClass('selected')
+          .filter(function(index) {
+            return $.inArray(index, _this.state.selectedIdx) !== -1;
+          })
+          .addClass('selected');
+      } else {
+        $filteredLi
+          .removeClass('selected')
+          .eq(_this.state.selectedIdx = index)
+          .addClass('selected');
+      }
+
+      if ( !_this.state.multiple || !_this.options.multiple.keepMenuOpen ) {
+        _this.close();
+      }
+
+      _this.change();
+
+      _this.utils.triggerCallback('Select', _this, index);
+    },
+
+    /**
+     * Unbind and remove
+     *
+     * @param {boolean} preserveData - Check if the data on the element should be removed too
+     */
+    destroy: function(preserveData) {
+      var _this = this;
+
+      if ( _this.state && _this.state.enabled ) {
+        _this.elements.items.add(_this.elements.wrapper).add(_this.elements.input).remove();
+
+        if ( !preserveData ) {
+          _this.$element.removeData(pluginName).removeData('value');
+        }
+
+        _this.$element.prop('tabindex', _this.originalTabindex).off(eventNamespaceSuffix).off(_this.eventTriggers).unwrap().unwrap();
+
+        _this.state.enabled = false;
+      }
+    }
+  };
+
+  // A really lightweight plugin wrapper around the constructor,
+  // preventing against multiple instantiations
+  $.fn[pluginName] = function(args) {
+    return this.each(function() {
+      var data = $.data(this, pluginName);
+
+      if ( data && !data.disableOnMobile ) {
+        (typeof args === 'string' && data[args]) ? data[args]() : data.init(args);
+      } else {
+        $.data(this, pluginName, new Selectric(this, args));
+      }
+    });
+  };
+
+  /**
+   * Default plugin options
+   *
+   * @type {object}
+   */
+  $.fn[pluginName].defaults = {
+    onChange             : function(elm) { $(elm).change(); },
+    maxHeight            : 300,
+    keySearchTimeout     : 500,
+    arrowButtonMarkup    : '<b class="button">&#x25be;</b>',
+    disableOnMobile      : false,
+    nativeOnMobile       : true,
+    openOnFocus          : true,
+    openOnHover          : false,
+    hoverIntentTimeout   : 500,
+    expandToItemText     : false,
+    responsive           : false,
+    preventWindowScroll  : true,
+    inheritOriginalWidth : false,
+    allowWrap            : true,
+    forceRenderAbove     : false,
+    forceRenderBelow     : false,
+    stopPropagation      : true,
+    optionsItemBuilder   : '{text}', // function(itemData, element, index)
+    labelBuilder         : '{text}', // function(currItem)
+    listBuilder          : false,    // function(items)
+    keys                 : {
+      previous : [37, 38],                 // Left / Up
+      next     : [39, 40],                 // Right / Down
+      select   : [9, 13, 27],              // Tab / Enter / Escape
+      open     : [13, 32, 37, 38, 39, 40], // Enter / Space / Left / Up / Right / Down
+      close    : [9, 27]                   // Tab / Escape
+    },
+    customClass          : {
+      prefix: pluginName,
+      camelCase: false
+    },
+    multiple              : {
+      separator: ', ',
+      keepMenuOpen: true,
+      maxLabelEntries: false
+    }
+  };
 }));
-///////////////////////////////////////////////////////
-///                    INIT JS                      ///
-///////////////////////////////////////////////////////
 
-$(document).ready(function() {
+/**
+ * Base JS
+ *
+ * @author Tobias Wöstmann
+ */
+
+let baseVars;
+
+let baseClass;
+
+const base = {
+
+    /**
+     * declarate global base vars
+     * */
+    vars: {
+
+        $windowRoot:                $('html, body'),
+
+        /**
+         * declarate vars for the module loader
+         * */
+        $modulesRoot:               $('body'),
+        modules:                    {},
+        modulesTrigger:             'data-js',
+
+        /**
+         * automatically updated window width and height vars
+         * */
+        windowWidth:                0,
+        windowHeight:               0,
+
+        /**
+         * automatically updated document width and height vars
+         * */
+        documentWidth:              0,
+        documentHeight:             0,
+
+        /**
+         * path to external js ressources from webroot
+         * */
+        vendorBasePath:             '/js/libs/',
+
+        /**
+         * grid and mediaquerys from the styles.css
+         * */
+        grid:                       0,
+        mediaquerys:                [],
+
+        /**
+         * list of attributtes for helper functions
+         * */
+        helperAttributes: {
+
+            scrollToTrigger:        '*[data-auto-scrolltop]',
+            autoSubmitTrigger:      '*[data-auto-submit]',
+            autoLinkTrigger:        '*[data-auto-link]'
+
+        }
+
+    },
+
+    init () {
+
+        /**
+         * set var for the vars object
+         * */
+        baseVars = this.vars;
+
+        /**
+         * set var for the base class
+         * */
+        baseClass = new Base();
+
+        /**
+         * set the mediaquery array
+         * */
+        this.mediaquerys.set();
+
+        /**
+         * set the grid int
+         * */
+        this.grid.set();
+
+        /**
+         * set the documents measures
+         * */
+        this.measurement.set();
+
+        /**
+         * trigger resize for the documents measures
+         * */
+        this.measurement.trigger();
+
+        /**
+         * load all inital modules
+         * */
+        this.modules.init();
+
+        /**
+         * wait for finish the resize to Trigger event
+         * */
+        this.slowResize.trigger();
+
+        /**
+         * init helper functions
+         * */
+        this.helper.init();
+
+    },
+
+    mediaquerys: {
+
+        set ()  {
+
+            /**
+             * get the mediaquerys from the base class
+             * */
+            baseVars.mediaquerys = baseClass.mediaquerys;
+        }
+
+    },
+
+    grid: {
+
+        set () {
+
+            /**
+             * get the grid from the base class
+             * */
+            baseVars.grid = baseClass.grid;
+        }
+
+    },
+
+    measurement: {
+
+        set () {
+
+            /**
+             * get the documents measures from the base class
+             * */
+            baseVars.windowWidth = baseClass.windowWidth;
+            baseVars.windowHeight = baseClass.windowHeight;
+            baseVars.documentWidth = baseClass.documentWidth;
+            baseVars.documentHeight = baseClass.documentHeight;
+
+        },
+
+        trigger () {
+
+            /**
+             * trigger windows resize
+             * */
+            $( window ).resize(function() {
+
+                /**
+                 * set the documents measures
+                 * */
+                base.measurement.set();
+
+            });
+
+        },
+
+    },
+
+    modules: {
+
+        init () {
+
+            /**
+             * get all modules to load
+             * */
+            base.modules.get();
+
+            /**
+             * set all modules to load
+             * */
+            base.modules.set();
+
+        },
+
+        get () {
+
+            /**
+             * save the module object in a baseVar instance
+             * */
+            baseVars.modules = baseClass.getModules();
+
+        },
+
+        set () {
+
+            /**
+             * set all modules in the modules baseVar instance
+             * */
+            Base.setModules(baseVars.modules);
+
+        }
+
+    },
+
+    slowResize: {
+
+        trigger () {
+
+            /**
+             * set timer for waiting
+             * */
+            let resizeFinishTimer;
+
+            $(window).on("resize",() => {
+
+                /**
+                 * reset the timer everytime
+                 * */
+                if (resizeFinishTimer) { clearTimeout(resizeFinishTimer) }
+
+                /**
+                 * trigger the slowResize when its finish
+                 * */
+                resizeFinishTimer = setTimeout(() => { $(document).trigger("resized") }, 20);
+
+            });
+
+        }
+
+    },
+
+    /**
+     * Helper functions
+     * */
+
+    helper: {
+
+        /**
+         * init all helper functions
+         * */
+        init () {
+
+            base.helper.autoScrollTop();
+
+            base.helper.autoSubmit();
+
+            base.helper.autoLink();
+        },
+
+        /**
+         * helper for a smooth scroll animation to the top postion
+         * */
+        autoScrollTop () {
+
+            $(baseVars.helperAttributes.scrollToTrigger).on("click", (event) => {
+
+                event.preventDefault();
+
+                baseClass.scrollTo();
+
+            });
+
+        },
+
+        /**
+         * helper for a automatic form submit when a triggered input are changing
+         * */
+        autoSubmit () {
+
+            $(baseVars.helperAttributes.autoSubmitTrigger).on("change", (event) => {
+
+                $(event.currentTarget).closest("form").submit();
+
+            });
+
+        },
+
+        /**
+         * helper for a automatic forwarding when a triggered input are changing
+         * */
+        autoLink () {
+
+            $(baseVars.helperAttributes.autoLinkTrigger).on("change", (event) => {
+
+                window.location = $(event.currentTarget).attr("data-auto-link");
+
+            });
+
+        }
+
+    }
+    
+};
+/**
+ * BaseTemp JS Framework
+ *
+ * ES6 JS Framework with dynamic function initialisation
+ * @version 2.0
+ * @author Tobias Wöstmann
+ * @link https://github.com/vampics/baseTemp/
+ */
+
+/**
+ * loading framework after document is ready
+ * */
+
+$(() => {
 
     ui.init();
 
 });
 
-$(window).on("load", function() {
+/**
+ * set load trigger for functions in document ready
+ * */
+
+$(window).on("load",() => {
 
     $(document).trigger("DOMLoaded");
 
 });
 
+/**
+ * declarate ui object with all base js
+ * */
 
-///////////////////////////////////////////////////////
-///               INIT ALL MODULES                  ///
-///////////////////////////////////////////////////////
+const ui = {
 
-var ui = {
-
-    init: function() {
+    init: () => {
 
         base.init();
-        header.init();
+
+    }
+};
+
+/**
+ * declarate modules object with all js it requires on active page
+ * */
+
+const modules = {
+
+};
+
+/**
+ * BaseTemp JS Framework - Base Class
+ *
+ * @author Tobias Wöstmann
+ */
+
+class Base {
+
+    constructor () {
+
+        /**
+         * Root jquery object to find all module trigger
+         */
+        this.$modulesRoot           = $('body');
+
+        /**
+         * phrase to find and trigger the module
+         * loader in the $modulesRoot
+         */
+        this.modulesTrigger         = 'data-js';
+
+        /**
+         * highest postion for scroll to the top
+         */
+        this.scrollTopPosition      = '0px';
+
+        /**
+         * smooth scroll animation speed
+         */
+        this.scrollAnimationSpeed   = 300;
+
+    }
+
+    /**
+     * Find all modules in the $ object.
+     * Return a object with all modules they should load.
+     *
+     * @return object
+     */
+    getModules($root = this.$modulesRoot) {
+
+        let modulesStorage = {};
+        let modulesTrigger = this.modulesTrigger;
+
+        $root.find('*['+ modulesTrigger +']').each((index, module) => {
+
+            let selectedmodule = $(module).attr(modulesTrigger);
+
+            if (typeof selectedmodule !== 'undefined') {
+
+                if (typeof modulesStorage[selectedmodule] === 'undefined') {
+
+                    modulesStorage[selectedmodule] = selectedmodule;
+                }
+
+            }
+
+        });
+
+        return modulesStorage;
+
+    }
+
+    /**
+     * Get lal modules to load and start the init function of it
+     * Throw console info when a module not found in js
+     *
+     */
+    static setModules(modulesStorage) {
+
+        for(let key in modulesStorage) {
+
+            if (modulesStorage.hasOwnProperty(key)) {
+
+                if (typeof modules[modulesStorage[key]] !== 'undefined') {
+
+                    modules[modulesStorage[key]].init();
+
+                } else {
+
+                    console.info('Module "' + modulesStorage[key] + '" not found');
+
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Get window width with chrome fix
+     *
+     * @return int
+     */
+    get windowWidth() {
+        return parseInt(window.outerWidth) === 0 ? $(window).width() : window.outerWidth;
+    }
+
+    /**
+     * Get window height with chrome fix
+     *
+     * @return int
+     */
+    get windowHeight() {
+        return parseInt(window.outerHeight) === 0 ?$(window).height() : window.outerHeight;
+    }
+
+    /**
+     * Get document width
+     *
+     * @return int
+     */
+    get documentWidth() {
+        return $( document ).width();
+    }
+
+    /**
+     * Get document height
+     *
+     * @return int
+     */
+    get documentHeight() {
+        return $( document ).height();
+    }
+
+    /**
+     * Associative mediaquery array extracted from the hidden before element of the body
+     *
+     * @return array
+     */
+
+    get mediaquerys() {
+
+        let mediaquerys = [];
+
+        /**
+         * get the string of mediaquerys, substring it and split it to loop all results
+         */
+
+        $.each(window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -1).substring(1).split(","), ( index, mediaquery ) => {
+
+            /**
+             * split the single mediaquery to set a associative array
+             */
+            mediaquery = mediaquery.split(":");
+
+            /**
+             * add to array only if doesnt exist
+             */
+            if (mediaquery.length > 1) {
+                mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
+            }
+
+        });
+
+        return mediaquerys;
+
+    }
+
+    /**
+     * Grid count extracted from the hidden after element of the body
+     *
+     * @return int
+     */
+
+    get grid() {
+
+        return parseInt(window.getComputedStyle(document.body, ":after").getPropertyValue('content').replace(/"/g, ''));
+
+    }
+
+    /**
+     * Smooth scroll-to function.
+     *
+     */
+    scrollTo(scrollTopPosition = this.scrollTopPosition) {
+
+        /**
+         * Stop Scroll Event when user is scrolling
+         *
+         */
+        $(baseVars.$windowRoot).on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", () => {
+
+            $(baseVars.$windowRoot).stop();
+
+        });
+
+        /**
+         * Animate a smotth scroll to defined postion
+         *
+         */
+        $(baseVars.$windowRoot).animate({ scrollTop: scrollTopPosition }, this.scrollAnimationSpeed, 'swing', () => {
+
+            $(baseVars.$windowRoot).off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
+
+        });
 
     }
 
 }
-///////////////////////////////////////////////////////
-///                   MODULES JS                    ///
-///////////////////////////////////////////////////////
+/**
+ * Accordion Module
+ *
+ * @author Tobias Wöstmann
+ */
 
-var modules = {
+let acc;
 
-};
-///////////////////////////////////////////////////////
-///                 ACCORDION JS                    ///
-///////////////////////////////////////////////////////
+let accVars;
 
 modules.accordion = {
 
-    init: function() {
-        var me = this;
-        var accordions = $('*[data-js=accordion]');
+    vars: {
+        moduleQuery:                    '*[data-js=accordion]',
+        moduleTriggerQuery:             '*[data-accordion-trigger]',
+        moduleContentQuery:             '*[data-accordion-content]',
+        moduleAnimationSpeed:            300,
+        moduleActiveClass:              'active',
+        $accordions:                     {}
+    },
 
-        accordions.on("click", "> a", function(event){
+    init () {
 
-            me.eventHandler(me,event,$(this),accordions);
+        /**
+         * save module shorthand
+         * */
+        acc = this;
+
+        /**
+         * save shorthand for the accordion vars
+         * */
+        accVars = this.vars;
+
+        /**
+         * set on click event trigger
+         * */
+        this.eventTrigger();
+
+    },
+
+    eventTrigger () {
+
+        /**
+         * bind click event to moduleTriggerQuery in moduleQuery
+         * */
+        $(document).on("click", accVars.moduleQuery + ' ' + accVars.moduleTriggerQuery, (event) => {
+
+            this.eventHandler(event, event.currentTarget);
 
         });
 
     },
 
-    eventHandler: function(me,event,link,accordions) {
+    eventHandler (event, accordionQuery) {
 
         event.preventDefault();
 
-        var isActive = link.parent().hasClass("active");
+        /**
+         * save all accordions on active site
+         * */
+        accVars.$accordions = $(accVars.moduleQuery);
 
-        me.close(accordions);
+        /**
+         * save event accordion
+         * */
+        let $accordion = $(accordionQuery).closest(accVars.moduleQuery);
 
-        if (!isActive) {
-            me.open(link);
+        /**
+         * class status
+         * */
+        let accordionHasClass = $accordion.hasClass(accVars.moduleActiveClass);
+
+        /**
+         * close all accordions
+         * */
+        this.close();
+
+        /**
+         * check if the event accordion
+         * is open/active
+         * */
+        if (!accordionHasClass) {
+
+            this.open($accordion);
+
         }
 
     },
 
-    open: function(link) {
+    open ($accordion) {
 
-        link.parent().addClass("active").find(">div").slideDown(300);
+        /**
+         * add the active class and
+         * slide down the content with an animation
+         * */
+        $accordion.addClass(accVars.moduleActiveClass).find(accVars.moduleContentQuery).slideDown(accVars.moduleAnimationSpeed);
 
     },
 
-    close: function(accordions) {
+    close () {
 
-        accordions.each(function(){
+        /**
+         * cycle all accordions
+         * */
+        accVars.$accordions.each( (index, accordionQuery) => {
 
-            $(this).removeClass("active").find(">div").slideUp(300);
+            /**
+             * remove the active class and
+             * slide up the content with an animation
+             * */
+            $(accordionQuery).removeClass(accVars.moduleActiveClass).find(accVars.moduleContentQuery).slideUp(accVars.moduleAnimationSpeed);
 
         });
 
     }
 
 };
-
-
-///////////////////////////////////////////////////////
-///                 BASE JS                         ///
-///////////////////////////////////////////////////////
-
-var base = {
-
-    ///////////////////////////////////////////////////////
-    ///               INIT BASE MODULES                 ///
-    ///////////////////////////////////////////////////////
-    init: function() {
-
-        this.getAllMediaQuerys();
-        this.getGrid();
-        this.getSizes();
-        this.loadModules.locate($("body"));
-        this.recalculate.triggerResize();
-        this.autosubmit();
-        this.autolink();
-        this.fastclick();
-        this.fastclickFix();
-        this.scrollToTop();
-
-    },
-
-    vars: {
-        windowRoot: $('html, body'),
-
-        windowWidth: 0,
-        windowHeight: 0,
-
-        documentWidth: 0,
-        documentHeight: 0,
-
-        vendorBasePath: '/js/libs/',
-
-        isTouchDevice: (window.navigator.msMaxTouchPoints || ('ontouchstart' in document.documentElement)),
-        grid: '',
-        mediaquerys: []
-
-    },
-
-    ///////////////////////////////////////////////////////
-    ///        INIT ALL MODULES NEEDED ON PAGE          ///
-    ///////////////////////////////////////////////////////
-    loadModules: {
-        locate: function(main) {
-            var allModulesToLoad = {};
-            main.find('*[data-js]').each(function() {
-                var selectedmodule = $(this).data('js');
-                if (typeof selectedmodule !== 'undefined') {
-                    if (typeof allModulesToLoad[selectedmodule] === 'undefined') {
-                        allModulesToLoad[selectedmodule] = selectedmodule;
-                    }
-                }
-            });
-            base.loadModules.startModules(allModulesToLoad);
-
-        },
-
-        startModules: function(allModulesToLoad) {
-            for(var key in allModulesToLoad) {
-                if (allModulesToLoad.hasOwnProperty(key)) {
-                    if (typeof modules[allModulesToLoad[key]] !== 'undefined') {
-                        modules[allModulesToLoad[key]].init();
-                    } else {
-                        console.log('Module "' + allModulesToLoad[key] + '" not found');
-                    }
-                }
-            }
-        }
-    },
-
-    getSizes: function() {
-
-        base.recalculate.windowWidth();
-        base.recalculate.windowHeight();
-        base.recalculate.documentWidth();
-        base.recalculate.documentHeight();
-
-    },
-
-    ///////////////////////////////////////////////////////
-    ///      CALCULATE NEW VARS AFTER INTERACTION       ///
-    ///////////////////////////////////////////////////////
-
-    recalculate: {
-        triggerResize: function() {
-            $( window ).resize(function() {
-                base.recalculate.windowWidth();
-                base.recalculate.windowHeight();
-                base.recalculate.documentWidth();
-                base.recalculate.documentHeight();
-            });
-        },
-
-        windowWidth: function() {
-
-            var windowWidth = window.outerWidth;
-
-            if (parseInt(windowWidth) == 0) {
-                windowWidth = $(window).width();
-            }
-
-            base.vars.windowWidth = windowWidth;
-        },
-
-        windowHeight: function() {
-            var windowHeight = window.outerHeight;
-
-            if (parseInt(windowHeight) == 0) {
-                windowHeight = $(window).height();
-            }
-
-            base.vars.windowHeight = windowHeight;
-        },
-
-        documentWidth: function() {
-            base.vars.documentWidth = $( document ).width();
-        },
-
-        documentHeight: function() {
-            base.vars.documentHeight = $( document ).height();
-        }
-
-    },
-
-    getAllMediaQuerys: function() {
-
-        var unsortedmediaquerystring = window.getComputedStyle(document.body, ":before").getPropertyValue('content').slice(0, -1).substring(1).split(",");
-
-        $.each(unsortedmediaquerystring, function( index, mediaquery ) {
-
-            mediaquery = mediaquery.split(":");
-
-            if (mediaquery.length > 1) {
-                base.vars.mediaquerys[mediaquery[0]] = mediaquery[1].slice(0, -2);
-            }
-
-        });
-
-    },
-
-    getGrid: function() {
-
-        base.vars.grid = window.getComputedStyle(document.body, ":after").getPropertyValue('content');
-
-    },
-
-    ///////////////////////////////////////////////////////
-    ///        CENTRAL SMOOTH SCROLLTO FUNCTION         ///
-    ///////////////////////////////////////////////////////
-
-    scrollTo: function(finishScrollPos) {
-
-        var page = base.vars.windowRoot;
-
-        page.on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){
-            page.stop();
-        });
-
-        page.animate({ scrollTop: finishScrollPos }, 500, 'swing', function(){
-            page.off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove");
-        });
-
-    },
-
-    scrollToTop: function() {
-
-        $("a.toTop").click(function( event ) {
-
-            event.preventDefault();
-
-            base.scrollTo("0px");
-
-        });
-
-    },
-
-    ///////////////////////////////////////////////////////
-    ///                INIT FASTCLICK                   ///
-    ///////////////////////////////////////////////////////
-
-    fastclick: function() {
-        $(function() {
-            FastClick.attach(document.body);
-        });
-    },
-
-    fastclickFix: function() {
-
-        $('label').on("click",function(event) {
-
-            if (event.target.nodeName != "A") {
-
-                var input = $(this).find("input");
-
-                if (input.attr("type") == "radio") {
-
-                    event.stopPropagation();
-                    event.preventDefault();
-
-                    input.prop("checked", true);
-                    input.trigger("change");
-
-                } else if (input.attr("type") == "checkbox") {
-
-                    event.stopPropagation();
-                    event.preventDefault();
-
-                    if (input.prop('checked') === false) {
-
-                        input.prop('checked', true);
-
-                    } else {
-
-                        input.prop('checked', false);
-
-                    }
-
-                    input.trigger("change");
-
-                }
-
-            }
-
-        });
-
-    },
-
-    ///////////////////////////////////////////////////////
-    ///          AUTOSUBMIT FORM WHEN CHANGE            ///
-    ///////////////////////////////////////////////////////
-
-    autosubmit: function() {
-        $('*[data-auto-submit]').change(function() {
-            $(this).closest("form").submit();
-        });
-    },
-
-    autolink: function() {
-        $('*[data-auto-link]').change(function() {
-            window.location = $(this).attr("data-auto-link");
-        });
-    },
-
-
-};
-
-
-///////////////////////////////////////////////////////
-///               EQUAL HEIGHT JS                   ///
-///////////////////////////////////////////////////////
-
-var eh;
-var ehGlobals;
+/**
+ * Equalheight Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let eh;
+
+let ehVars;
 
 modules.equalheight = {
 
-    globals: {
-        parentElement:      '*[data-js=equalheight]',
-        childElements:      '*[data-equalheight-element]',
-        waitOnResizeTimer:   10,
-        desktopMediaQuery:   'mw',
+    vars: {
+        moduleQuery:                    '*[data-js=equalheight]',
+        moduleChildNodeQuery:           '*[data-equalheight-element]',
+        fallbackDesktopMediaquery:      'mw',
 
-        optionMobileAttr:    'data-equalheight-option-mobile',
-        optionRowAttr:       'data-equalheight-option-row'
+        optionBreakpointAttr:           'data-equalheight-option-breakpoint',
+        optionMobileAttr:               'data-equalheight-option-mobile',
+        optionRowAttr:                  'data-equalheight-option-row'
     },
 
-    init: function() {
+    init () {
 
+        /**
+         * save module shorthand
+         * */
         eh = this;
-        ehGlobals = this.globals;
 
-        // Start EH Script normally
-        eh.findAllParentNodes();
+        /**
+         * save shorthand for the equalheight vars
+         * */
+        ehVars = this.vars;
 
-        // Start EH Script when DOM ist complete loaded
-        $(document).on("DOMLoaded", function(){
-            eh.findAllParentNodes();
-        });
+        /**
+         * start script inital
+         * */
+        this.find.parentNodes();
 
-        // Start EH Script when Resizing is finished
-        var waitOnResize;
-        $(window).on("resize", function(){
-
-            clearTimeout(waitOnResize);
-
-            waitOnResize = setTimeout(function(){
-                eh.findAllParentNodes();
-            }, ehGlobals.waitOnResizeTimer);
-
+        /**
+         * trigger when its complete loaded and when its finished to resize
+         * */
+        $(document).on("DOMLoaded resized", () => {
+            this.find.parentNodes();
         });
 
     },
 
-    findAllParentNodes: function(){
+    find: {
 
-        $(ehGlobals.parentElement).each(function(){
+        parentNodes () {
 
-            // Save instance
-            var module             = $(this);
+            $(ehVars.moduleQuery).each((index, moduleQuery) => {
 
-            // Get all childs of the module to set eh
-            var moduleChildNodes = eh.findAllChildNodes(module);
+                /**
+                 * Save instance
+                 */
+                let $module = $(moduleQuery);
 
-            // Set options - return false when mobile option false and mobile viewport active
-            return eh.setOptions(module,moduleChildNodes);
+                /**
+                 * Get all childs of the module to set eh
+                 */
+                let $moduleChildNodes = this.childNodes($module);
 
-        });
+                /**
+                 * Set options - return false when mobile option false and mobile viewport active
+                 */
+                return eh.setOptions($module,$moduleChildNodes);
+
+            });
+
+        },
+
+        childNodes ($module) {
+
+            /**
+             * Find and return all child nodes with attribute as jquery object
+             */
+            return $module.find(ehVars.moduleChildNodeQuery);
+
+        },
 
     },
 
-    setOptions: function(module,moduleChildNodes) {
+    setOptions ($module,$moduleChildNodes) {
 
-        // Get options
-        var moduleOptionMobile = (module.attr(ehGlobals.optionMobileAttr) === "true");
-        var moduleOptionRow    = (module.attr(ehGlobals.optionRowAttr) === "true");
+        /**
+         * Get all options from the parent attribute
+         */
+        let moduleOptionBreakpoint      = ($module.attr(ehVars.optionBreakpointAttr) || ehVars.fallbackDesktopMediaquery);
+        let moduleOptionMobile          = ($module.attr(ehVars.optionMobileAttr) === "true");
+        let moduleOptionRow             = ($module.attr(ehVars.optionRowAttr) === "true");
 
-        // When mobile option false, reset elements & stop script.
-        if (!moduleOptionMobile && base.vars.mediaquerys[ehGlobals.desktopMediaQuery] > base.vars.windowWidth) {
-            eh.resetChildNodes(moduleChildNodes);
+        /**
+         * Check if mobile option is true, otherwise stop the script.
+         * Compare mobile indicator with the module option breakpoint
+         */
+        if (!moduleOptionMobile && baseVars.mediaquerys[moduleOptionBreakpoint] > baseVars.windowWidth) {
+
+            this.resetNodes($moduleChildNodes);
+
             return false;
         }
 
-        // When row option true ... calculate rows.
+        /**
+         * When row option true ... calculate rows.
+         */
         if (moduleOptionRow){
 
-            eh.splitNodesPerRow(moduleChildNodes);
+            this.splitNodesPerRow($moduleChildNodes);
 
         }else{
 
-            // set equal height without rows
-            eh.setChildNodesToEqualHeight(moduleChildNodes);
+            /**
+             * set equal height without rows
+             */
+            this.setEqualHeight($moduleChildNodes);
 
         }
 
@@ -2766,53 +2549,84 @@ modules.equalheight = {
 
     },
 
-    findAllChildNodes: function(module){
-        return module.find(ehGlobals.childElements);
-    },
+    splitNodesPerRow: function($equalHeightElements){
 
-    splitNodesPerRow: function(nodes){
+        /**
+         * declarate row/rows array and inital row postion
+         */
+        let rows            = [];
+        let row             = [];
+        let rowPostion      = 0;
 
-        var rows = [];
-        var row = [];
-        var rowValue = 0;
+        /**
+         * give each element same height
+         * to build correct rows
+         */
+        $equalHeightElements.css("height","2px");
 
-        nodes.css("height","2px");
+        /**
+         * cycle all equal height elements to split the rows
+         */
+        $equalHeightElements.each((index, equalHeightElementQuery) => {
 
-        // cycle each element
-        nodes.each(function(){
+            /**
+             * check if the element top postion
+             * not like the previous
+             */
+            if ($(equalHeightElementQuery).offset().top !== rowPostion) {
 
-            // if element top postion not like the previous
-            if ($(this).offset().top != rowValue) {
+                /**
+                 * set the new row position
+                 */
+                rowPostion = $(equalHeightElementQuery).offset().top;
 
-                //set new row offset postion
-                rowValue = $(this).offset().top;
-
-                //if row not empty
+                /**
+                 * check if active row not empty
+                 */
                 if (row.length > 0) {
 
-                    //push row in array
+                    /**
+                     * then push it as new row in rows
+                     * and start new row
+                     */
                     rows.push(row);
                     row = [];
                 }
+
             }
 
-            //push element in row
-            row.push(this);
+            /**
+             * push the equalHeightElement in the row
+             */
+            row.push(equalHeightElementQuery);
 
         });
 
-
-        nodes.css("height","auto");
-
-        //only when row not empty, push last row in array
+        /**
+         * only when row not empty, push
+         * the last row in array
+         */
         if (row.length > 0) {
             rows.push(row);
         }
 
-        $.each(rows, function( index, rowArray ) {
+        /**
+         * reset all nodes
+         */
+        this.resetNodes($equalHeightElements);
 
-            // set equal height with rows
-            eh.setChildNodesToEqualHeight($($.map(rowArray, function(element){return $.makeArray(element);})));
+
+        /**
+         * cycle all rows
+         */
+        $.each(rows, (index, rowArray) => {
+
+            /**
+             * make all equalheight elements in
+             * row to array and set the equal height
+             * function
+             */
+            this.setEqualHeight( $($.map(rowArray, $equalHeightElementsInRow => $.makeArray($equalHeightElementsInRow))));
 
         });
 
@@ -2820,659 +2634,1124 @@ modules.equalheight = {
 
     },
 
-    setChildNodesToEqualHeight: function(nodes) {
+    setEqualHeight: function($equalHeightElements) {
 
-        // start each cycle with 0
-        var highestHeight = 0;
+        /**
+         * reset each module cycle with height 0
+         */
+        let highestHeight = 0;
 
-        // reset all elements
-        eh.resetChildNodes(nodes);
+        /**
+         * reset all nodes
+         */
+        this.resetNodes($equalHeightElements);
 
-        // cycle all elements to get the highest box
-        nodes.each(function(){
+        /**
+         * cycle all child nodes to get the highest box
+         */
+        $equalHeightElements.each((index, equalHeightElementQuery) => {
 
-            // if highestHeight lower than the current box height, overide highestHeight
-            if (highestHeight < Math.ceil($(this).outerHeight())) {
+            /**
+             * if highestHeight lower than the current box
+             * height and overide highestHeight
+             */
+            if (highestHeight < Math.ceil($(equalHeightElementQuery).outerHeight())) {
 
-                highestHeight = Math.ceil($(this).outerHeight());
+                highestHeight = Math.ceil($(equalHeightElementQuery).outerHeight());
 
             }
 
         });
 
-        //set height to all boxes
-        nodes.css("height",highestHeight);
+        /**
+         * set the highest height
+         * to all nodes
+         */
+        $equalHeightElements.css("height", highestHeight);
 
     },
 
-    resetChildNodes: function(nodes) {
-        nodes.css("height","auto");
+    resetNodes ($equalHeightElement) {
+        $equalHeightElement.css("height","auto");
     }
+
 };
+/**
+ * Formvalidation Module
+ *
+ * @author Tobias Wöstmann
+ */
 
+let fv;
 
-///////////////////////////////////////////////////////
-///               FORMVALIDATION JS                ///
-///////////////////////////////////////////////////////
+let fvVars;
 
-var fv;
-var fvGlobals;
-var fvActions;
-var fvValidations;
-var fvCases;
-var fvErrors;
+let fvValidate;
+
+let fvAction;
+
+let fvErrors;
 
 modules.formvalidation = {
 
-    globals: {
+    vars: {
+        moduleQuery:                    '*[data-js=formvalidation]',
 
-        state: [],
+        errorClass:                     'error',
+        errorMessageAttribute:          "data-lang-message",
+        errorMessageQuery:              ".status.error",
+        errorMessageClass:              "status error",
+        errorMessage:                   "Bitte prüfen Sie Ihre Eingaben!",
+        errorElementToInsertBeforeQuery:".element",
 
-        allDataJsElement: '*[data-js=formvalidation]',
-        errorClass: 'error',
-        errorMessageAttribute: "data-lang-message",
-        errorMessage: "Bitte prüfen Sie Ihre Eingaben!",
-        errorElementToInsertBefore: ".element",
+        validateEmptyFieldAttribute:    'data-validation-required',
+        validateZipFieldAttribute:      'data-validation-zip',
+        validateEmailFieldAttribute:    'data-validation-email',
+        validateLengthAttribute:        'data-validation-length',
 
-        ClassValidateEmptyField: 'required',
-        ClassValidateEmptyCheckbox: 'required',
-        ClassValidateZipField: 'validateZip',
-        ClassValidateEmailField: 'validateEmail',
-        ClassValidateLength: 'validateLength',
-        ClassValidateMatch: 'validateMatch',
-        ClassValidateMatchPart: 'validateMatchPart',
+        textinputQuery:                 "input[type=text], input[type=date], input[type=email], input[type=password], input[type=number], input[type=search], input[type=time], input[type=url], input[type=tel]",
+        textareaQuery:                  "textarea",
+        selectboxQuery:                 "*[data-js=selectbox]",
+        checkboxQuery:                  ".checkbox input",
+        radioboxQuery:                  ".radiobox input",
 
-        thisActiveElement: '',
-        submit: true,
-        scrollTo: 9000000,
-        errors: [],
+        selectBoxSelectedAttribute:     "data-selectbox-selected",
 
-        textinputTrigger: "input[type=text], input[type=date], input[type=email], input[type=password], input[type=number], input[type=search], input[type=time], input[type=url], input[type=tel]",
-        textareaTrigger: "textarea",
-        selectboxTrigger: ".selectbox select",
-        checkboxTrigger: ".checkbox input",
-        radioboxTrigger: ".radiobox input"
+        /**
+         * module storage vars
+         * */
+        state:                          [],
+        thisActiveElement:              '',
+        scrollTo:                       9000000,
+        errors:                         [],
+
     },
 
-    ///////////////////////////////////////////////////////
-    ///           INIT FORMVALIDATION MODULES           ///
-    ///////////////////////////////////////////////////////
+    init () {
 
-    init: function() {
-
+        /**
+         * save module shorthand
+         * */
         fv = this;
-        fvGlobals = this.globals;
-        fvActions = this.setActions;
-        fvValidations = this.setValidations;
-        fvCases = this.setValidationCases;
-        fvErrors = this.globals.errors;
 
+        /**
+         * save shorthand for the formvalidation vars
+         * */
+        fvVars = this.vars;
+
+        /**
+         * save shorthand for the formvalidation validations
+         * */
+        fvValidate = this.validate;
+
+        /**
+         * save shorthand for the formvalidation actions
+         * */
+        fvAction = this.action;
+
+        /**
+         * save shorthand for the formvalidation error array
+         * */
+        fvErrors = fvVars.errors;
+
+        /**
+         * bind submit event
+         * */
         this.bindSubmit();
 
     },
 
+    bindSubmit () {
 
-    bindSubmit: function() {
+        /**
+         * trigger submit event of the form
+         * */
 
+        $(fvVars.moduleQuery).on('submit', (event) => {
 
-        $(fvGlobals.allDataJsElement).submit(function() {
+            /**
+             * set active form
+             * */
+            fvVars.thisActiveForm = $(event.currentTarget);
 
-            fvGlobals.submit = true;
-            fvGlobals.thisActiveForm = $(this);
+            /**
+             * reset all errors
+             * */
+            fvAction.resetErrors();
 
-            fvActions.resetErrors();
-
-            fvGlobals.submit = fvActions.checkFormSubmit(fvCases.textinput(), fvCases.textarea(), fvCases.selectboxes(), fvCases.checkboxes(), fvCases.radioboxes());
-
-            return fvGlobals.submit;
+            /**
+             * check the form
+             * */
+            return this.action.checkFormSubmit();
 
         });
 
     },
 
-    setValidationCases: {
+    typecases: {
 
-        textinput: function () {
+        textinput () {
 
-            var textinputReturn = true;
+            let checkingPassed = true;
 
-            fvGlobals.thisActiveForm.find(fvGlobals.textinputTrigger).each(function() {
+            /**
+             * cycle all queryed text input form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.textinputQuery).each( (index, inputQuery) => {
 
-                var checkingElement = $(this);
-                checkingElement.removeClass(fvGlobals.errorClass);
+                /**
+                 * assign input element
+                 * */
+                let $checkingInput = $(inputQuery);
 
-                if(checkingElement.is(':visible')) {
+                /**
+                 * remove error class
+                 * */
+                $checkingInput.removeClass(fvVars.errorClass);
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyField)) {
-                        if (!fvValidations.validateEmptyField(checkingElement.val())) {
-                            textinputReturn = fvActions.setErrorHandling(checkingElement);
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingInput.is(':visible')) {
+
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
                         }
+
                     }
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateZipField)) {
-                        if (!fvValidations.validateZipField(checkingElement.val())) {
-                            textinputReturn = fvActions.setErrorHandling(checkingElement);
+                    /**
+                     * check if the input are a german zip code
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateZipFieldAttribute)) {
+
+                        if (!fvValidate.zipField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
                         }
+
                     }
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateEmailField)) {
-                        if (!fvValidations.validateEmailField(checkingElement.val())) {
-                            textinputReturn = fvActions.setErrorHandling(checkingElement);
+                    /**
+                     * check if the input are a e-mail
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateEmailFieldAttribute)) {
+
+                        if (!fvValidate.emailField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
                         }
+
                     }
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateLength)) {
-                        if (!fvValidations.validateLength(checkingElement.val(),checkingElement.attr('data-min'))) {
-                            textinputReturn = fvActions.setErrorHandling(checkingElement);
+                    /**
+                     * check if the input has a minimal length
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateLengthAttribute)) {
+
+                        if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
                         }
-                    }
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateMatch) || checkingElement.hasClass(fvGlobals.ClassValidateMatchPart)) {
-
-                        checkingElement =  fvGlobals.thisActiveForm.find('.' + fvGlobals.ClassValidateMatch);
-                        var checkingElementMatching =  fvGlobals.thisActiveForm.find('.' + fvGlobals.ClassValidateMatchPart);
-
-                        if (!fvValidations.validateMatch(checkingElement.val(),checkingElementMatching.val())) {
-                            textinputReturn = fvActions.setErrorHandling(checkingElement);
-                            fvActions.setErrorHandling(checkingElementMatching);
-                        }
                     }
 
                 }
 
             });
 
-            return textinputReturn;
+            return checkingPassed;
 
         },
 
-        textarea: function () {
+        textarea () {
 
-            var textareaReturn = true;
+            let checkingPassed = true;
 
-            fvGlobals.thisActiveForm.find(fvGlobals.textareaTrigger).each(function() {
+            /**
+             * cycle all queryed textarea form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.textareaQuery).each( (index, inputQuery) => {
 
-                var checkingElement = $(this);
-                checkingElement.removeClass(fvGlobals.errorClass);
+                /**
+                 * assign input element
+                 * */
+                let $checkingInput = $(inputQuery);
 
-                if(checkingElement.is(':visible')) {
+                /**
+                 * remove error class
+                 * */
+                $checkingInput.removeClass(fvVars.errorClass);
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyField)) {
-                        if (!fvValidations.validateEmptyField(checkingElement.val())) {
-                            textareaReturn = fvActions.setErrorHandling(checkingElement);
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingInput.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyField($checkingInput.val())) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
                         }
+
+                    }
+
+                    /**
+                     * check if the input has a minimal length
+                     * */
+                    if ($checkingInput.hasClass(fvVars.validateLengthAttribute)) {
+
+                        if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingInput);
+
+                        }
+
                     }
 
                 }
 
             });
 
-            return textareaReturn;
+            return checkingPassed;
 
         },
 
-        selectboxes: function () {
+        selectbox () {
 
-            var selectboxesReturn = true;
+            let checkingPassed = true;
 
-            fvGlobals.thisActiveForm.find(fvGlobals.selectboxTrigger).each(function() {
+            /**
+             * cycle all queryed select elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.selectboxQuery).each( (index, inputQuery) => {
 
-                var checkingElement = $(this);
-                checkingElement.closest("div").removeClass(fvGlobals.errorClass);
+                /**
+                 * assign select element
+                 * */
+                let $checkingComponent = $(inputQuery);
 
-                if(checkingElement.closest("div").is(':visible')) {
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyCheckbox)) {
-                        if (!fvValidations.validateEmptySelectbox(checkingElement.parent().find(".selectboxit-btn"))) {
-                            selectboxesReturn = fvActions.setErrorHandling(checkingElement.closest("div"));
+                /**
+                 * remove error class
+                 * */
+                $checkingComponent.removeClass(fvVars.errorClass);
+
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingComponent.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkingComponent.find("select").is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptySelectbox($checkingComponent)) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingComponent);
+
                         }
+
                     }
 
                 }
 
             });
 
-            return selectboxesReturn;
+            return checkingPassed;
 
         },
 
-        checkboxes: function () {
+        checkbox () {
 
-            var checkboxesReturn = true;
+            let checkingPassed = true;
 
-            fvGlobals.thisActiveForm.find(fvGlobals.checkboxTrigger).each(function() {
+            /**
+             * cycle all queryed text input form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.checkboxQuery).each( (index, inputQuery) => {
 
-                var checkingElement = $(this);
-                checkingElement.parent().removeClass(fvGlobals.errorClass);
+                /**
+                 * assign input element
+                 * */
+                let $checkingComponent = $(inputQuery).parent().parent();
+                let $checkinginput = $(inputQuery);
 
-                if(checkingElement.parent().is(':visible')) {
+                /**
+                 * remove error class
+                 * */
+                $checkingComponent.removeClass(fvVars.errorClass);
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyCheckbox)) {
-                        if (!fvValidations.validateEmptyCheckbox(checkingElement)) {
-                            checkboxesReturn = fvActions.setErrorHandling(checkingElement.parent());
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingComponent.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyCheckbox($checkinginput)) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingComponent);
+
                         }
+
                     }
 
                 }
 
             });
 
-            return checkboxesReturn;
+            return checkingPassed;
 
         },
 
-        radioboxes: function () {
+        radiobox () {
 
-            var radioboxesReturn = true;
+            let checkingPassed = true;
 
-            fvGlobals.thisActiveForm.find(fvGlobals.radioboxTrigger).each(function() {
+            /**
+             * cycle all queryed text input form elements
+             * */
+            fvVars.thisActiveForm.find(fvVars.radioboxQuery).each( (index, inputQuery) => {
 
-                var checkingElement = $(this);
-                checkingElement.parent().parent().removeClass(fvGlobals.errorClass);
+                /**
+                 * assign input element
+                 * */
+                let $checkingComponent = $(inputQuery).parent().parent();
+                let $checkinginput = $(inputQuery);
 
-                if(checkingElement.parent().parent().is(':visible')) {
+                /**
+                 * remove error class
+                 * */
+                $checkingComponent.removeClass(fvVars.errorClass);
 
-                    if (checkingElement.hasClass(fvGlobals.ClassValidateEmptyCheckbox)) {
-                        if (!fvValidations.validateEmptyRadiobox(checkingElement)) {
-                            radioboxesReturn = fvActions.setErrorHandling(checkingElement.parent().parent());
+                /**
+                 * check if it the element is visible
+                 * */
+                if($checkingComponent.is(':visible')) {
+
+                    /**
+                     * check if the input are empty
+                     * */
+                    if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+
+                        if (!fvValidate.emptyRadiobox($checkinginput)) {
+
+                            /**
+                             * if not passed, throw error
+                             * */
+                            checkingPassed = fvAction.setError($checkingComponent);
+
                         }
+
                     }
 
                 }
 
             });
 
-            return radioboxesReturn;
+            return checkingPassed;
 
-        }
+        },
 
     },
 
-    setActions: {
+    action: {
 
-        checkFormSubmit: function (textinputCheck, textareaCheck, selectboxesCheck, checkboxesCheck, radioboxesCheck) {
+        checkFormSubmit () {
 
-            var tempSubmit = true;
+            let checkingPassed = true;
 
-            if (textinputCheck === false || textareaCheck === false || selectboxesCheck === false || checkboxesCheck === false || radioboxesCheck === false) {
+            /**
+             * cycle all typecases to test all
+             * form elements
+             * */
+            $.each(fv.typecases, (key, typecase) => {
 
-                tempSubmit = false;
+                /**
+                 * if the test fails set passed to false
+                 * */
+                if (!typecase()) {
+                    checkingPassed = false;
+                }
 
-                base.scrollTo(fvGlobals.scrollTo + "px");
-                fvActions.displayErrors();
+            });
+
+            /**
+             * if the test fails display errors and scroll
+             * to postion of first cuased error
+             * */
+            if (!checkingPassed) {
+
+                baseClass.scrollTo(fvVars.scrollTo + "px");
+
+                fvAction.displayErrors();
 
             }
 
-            return tempSubmit;
+            return checkingPassed;
 
         },
 
-        setErrorHandling: function (checkingElement) {
+        setError ($checkedFormElement) {
 
-            checkingElement.addClass(fvGlobals.errorClass);
+            /**
+             * add error styling to the element
+             * */
+            $checkedFormElement.addClass(fvVars.errorClass);
 
-            fvActions.windowScrollToCalculation(parseInt(checkingElement.offset().top));
+            /**
+             * set scroll postion
+             * */
+            fvAction.windowScrollToCalculation(parseInt($checkedFormElement.offset().top));
 
-            var errorMessage = checkingElement.attr(fvGlobals.errorMessageAttribute);
+            /**
+             * load optional error message
+             * */
+            let errorMessage = $checkedFormElement.attr(fvVars.errorMessageAttribute);
 
+            /**
+             * check if individual error
+             * message exist
+             * */
             if (errorMessage === undefined || errorMessage === null) {
-                errorMessage = fvGlobals.errorMessage;
+                errorMessage = fvVars.errorMessage;
             }
 
+            /**
+             * push error message in array
+             * when it didnt exist
+             * */
             if (fvErrors.indexOf("- " + errorMessage) === -1){
                 fvErrors.push("- " + errorMessage);
             }
 
+            /**
+             * return false to prevent submit
+             * */
             return false;
         },
 
-        windowScrollToCalculation: function (top) {
+        windowScrollToCalculation (errorElementTopPosition) {
 
-            var siteCenter = parseInt(base.vars.windowHeight) / 2;
+            /**
+             * get the vertical center fo the site
+             * */
+            let siteCenter = parseInt(baseVars.windowHeight) / 2;
 
-            if (fvGlobals.scrollTo > top) {
-                if (top < siteCenter) {
-                    top = 0;
+            /**
+             * get position off the highest element that caused a error.
+             * check saved scroll positon > the postion of the error element
+             * and set it to 0 when the the element is in the highest viewport
+             * */
+            if (fvVars.scrollTo > errorElementTopPosition) {
+
+                if (errorElementTopPosition < siteCenter) {
+
+                    errorElementTopPosition = 0;
+
                 }else{
-                    top = top - siteCenter;
+
+                    errorElementTopPosition = errorElementTopPosition - siteCenter;
                 }
 
-                fvGlobals.scrollTo = top;
+                /**
+                 * overide scroll top postion
+                 * */
+                fvVars.scrollTo = errorElementTopPosition;
             }
 
         },
 
-        resetErrors: function () {
+        resetErrors () {
 
-            $(".status.error").remove();
+            /**
+             * remove the error message box
+             * */
+            $(fvVars.errorMessageQuery).remove();
+
+            /**
+             * clear error array
+             * */
             fvErrors = [];
 
         },
 
-        displayErrors: function () {
+        displayErrors () {
 
-            var errorBox = "<div class='status error'>";
-            $.each( fvErrors, function( key, value ) {
+            /**
+             * build error box with all
+             * saved error messages from the
+             * fvErrors error
+             * */
+            let errorBox = `<div class="${fvVars.errorMessageClass}">`;
 
-                errorBox += "<p>" + value + "<br></p>";
+            $.each( fvErrors, (key, errorMessage) => {
+
+                errorBox += `<p>${ errorMessage }<br></p>`;
 
             });
-            errorBox += "</div>";
-            var gridWrapper =  $(fvGlobals.errorElementToInsertBefore).first();
-            $(errorBox).insertBefore(gridWrapper);
+
+            errorBox += `</div>`;
+
+            /**
+             * get the first element from the
+             * errorElementToInsertBefore query
+             * */
+
+            let $elementToInsert =  $(fvVars.errorElementToInsertBeforeQuery).first();
+
+            /**
+             * insert error in DOM
+             * */
+
+            $(errorBox).insertBefore($elementToInsert);
 
         }
 
     },
 
-    setValidations: {
+    validate: {
 
-        validateEmptyField: function (stValue) {
+        emptyField (stValue) {
 
-            return fvValidations.validateLength(stValue,1);
-
-        },
-
-        validateEmptySelectbox: function (element) {
-
-            return element.hasClass("selected");
+            return fvValidate.length(stValue,1);
 
         },
 
-        validateEmptyCheckbox: function (element) {
+        emptySelectbox ($selectbox) {
 
-            return element.prop('checked');
-
-        },
-
-        validateEmptyRadiobox: function (element) {
-
-            return $("input[name='"+element.attr("name")+"']").is(':checked');
+            return $selectbox.is(`[${fvVars.selectBoxSelectedAttribute}]`);
 
         },
 
-        validateZipField: function (zip) {
+        emptyCheckbox ($checkbox) {
+
+            return $checkbox.prop('checked');
+
+        },
+
+        emptyRadiobox ($radiobox) {
+
+            return $("input[name='" + $radiobox.attr("name") + "']").is(':checked');
+
+        },
+
+        zipField (zip) {
 
             zip = jQuery.trim(zip);
-            var reg = /^[0-9]{4,5}$/;
+            let reg = /^[0-9]{4,5}$/;
             return reg.test(zip);
 
         },
 
-        validateEmailField: function (email) {
-
+        emailField (email) {
             email = jQuery.trim(email);
-            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
             return reg.test(email);
-
         },
 
-        validateLength: function (stValue,length) {
+        length (stValue, length = 1) {
 
             stValue = jQuery.trim( stValue );
             return stValue.length >= length;
 
-        },
-
-        validateMatch: function (stValue1,stValue2) {
-
-            stValue1 = jQuery.trim(stValue1);
-            stValue2 = jQuery.trim(stValue2);
-            return stValue1 == stValue2;
-
         }
 
     }
 
 };
+/**
+ * Modalbox Module
+ *
+ * @author Tobias Wöstmann
+ */
 
-///////////////////////////////////////////////////////
-///                    HEADER JS                    ///
-///////////////////////////////////////////////////////
+let mob;
 
-var header = {
-
-    init: function() {
-
-    }
-
-};
-
-///////////////////////////////////////////////////////
-///                 MODALBOX JS                     ///
-///////////////////////////////////////////////////////
+let mobVars;
 
 modules.modalbox = {
 
-    init: function() {
+    vars: {
+        moduleQuery:                    '*[data-js=modalbox]',
+        modalIdTriggerAttribute:        'data-modalbox',
+        modalIdAttribute:               'data-modalbox-name',
+        rootAppendingQuery:             'body',
+        $activeModalbox:                '',
+        animationSpeed:                 300,
+    },
 
-        var me = this;
-        var modalboxLink = $('*[data-js=modalbox]');
+    init () {
 
-        modalboxLink.on("click", function(event){
+        /**
+         * save module shorthand
+         * */
+        mob = this;
 
-            me.open(me,event,$(this));
+        /**
+         * save shorthand for the modalbox vars
+         * */
+        mobVars = this.vars;
+
+        /**
+         * set on click event trigger
+         * */
+        this.eventTrigger();
+
+    },
+
+    eventTrigger () {
+
+        /**
+         * bind click event to moduleQuery
+         * */
+        $(document).on("click", mobVars.moduleQuery, (event) => {
+
+            this.eventHandler(event, event.currentTarget);
 
         });
 
     },
 
-    open: function(me,event,element) {
+    eventHandler (event, modalboxQuery) {
 
         event.stopPropagation();
+
         event.preventDefault();
 
-        var modalbox = $("[data-modalbox-name='" + element.attr("data-modalbox") +"']");
+        /**
+         * prepare modalbox to open it
+         * */
+        this.build($(modalboxQuery));
 
-        modalbox.css("display","block").animate({opacity: 1},210);
+        /**
+         * open new builded modalbox
+         * */
+        this.open();
 
-        $(document).on("click.modalbox", function(event2) {
-            me.bindClickToClose(me,event2,modalbox);
+    },
+
+    build ($modalboxParent) {
+
+        /**
+         * find modalbox template and clone it
+         * */
+        let $modalboxChild = $("*[" + mobVars.modalIdAttribute + "='" + $modalboxParent.attr(mobVars.modalIdTriggerAttribute) +"']").clone();
+
+        /**
+         * append the cloned $ object to the root element
+         * */
+        $(mobVars.rootAppendingQuery).append($modalboxChild);
+
+        /**
+         * find element in new DOM and save it
+         * */
+        mobVars.$activeModalbox = $(mobVars.rootAppendingQuery).find( "> *[" + mobVars.modalIdAttribute + "]");
+
+    },
+
+    open () {
+
+
+        /**
+         * display the modalbox with animation
+         * */
+        mobVars.$activeModalbox.css("display","block").animate(
+            {
+                opacity: 1
+            },
+            mobVars.animationSpeed
+        );
+
+        /**
+         * set fastclick fix for iOS to remove
+         * the delay
+         * */
+        $("html").css("cursor", "pointer");
+
+        /**
+         * bind the click outside closing
+         * */
+        $(document).on("click.modalbox", (clickEvent) => {
+
+            this.bindClickToClose(clickEvent);
+
         });
 
     },
 
-    bindClickToClose: function (me,event,modalbox) {
+    bindClickToClose (event) {
 
-        if(modalbox.is(":visible")) {
+        /**
+         * check if the modal are visible
+         * */
+        if(mobVars.$activeModalbox.is(":visible")) {
 
-            if ($(event.target).hasClass("modalbox")) {
-                me.close(modalbox);
+            /**
+             * check if the clicked element
+             * in the modalbox layer
+             * */
+            if ($(event.target).closest("*[" + mobVars.modalIdAttribute + "]").length === 0) {
+
+                this.close();
+
             }
 
         }
 
     },
 
-    close: function(modalbox) {
+    close () {
 
+        /**
+         * unset fastclick fix for iOS to remove
+         * the delay
+         * */
+        $("html").css("cursor", "default");
+
+        /**
+         * deactivate the click event
+         * */
         $(document).off("click.modalbox");
 
-        modalbox.animate({opacity: 0},210, function() {
+        /**
+         * hide the modalbox with animation
+         * */
+        mobVars.$activeModalbox.animate(
+            {
+                opacity: 0
+            },
+            mobVars.animationSpeed,
+            () => {
 
-            $(this).css("display","none");
+                mobVars.$activeModalbox.css("display","none");
+                this.destroy();
 
-        });
+            });
+
+    },
+
+    destroy () {
+
+        /**
+         * removed the cloned modalbox
+         * */
+        mobVars.$activeModalbox.remove();
 
     }
 
 };
+/**
+ * Selectbox Module
+ *
+ * @author Tobias Wöstmann
+ */
 
+let sb;
 
-///////////////////////////////////////////////////////
-///                 SELECTBOX JS                    ///
-///////////////////////////////////////////////////////
+let sbVars;
 
 modules.selectbox = {
 
-    init: function() {
+    vars: {
+        moduleQuery:                    '*[data-js=selectbox]',
+        selectboxListQuery:             '.selectric-items',
+        placeholderQuery:               '.disabled.selected',
+        selectedAttribute:              'data-selectbox-selected',
+    },
 
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        sb = this;
+
+        /**
+         * save shorthand for the selectbox vars
+         * */
+        sbVars = this.vars;
+
+        /**
+         * bind a change event for native users
+         * */
+        this.bindChange();
+
+        /**
+         * init selectric libary
+         * */
+        $(sbVars.moduleQuery).find('select').selectric({
+            responsive: true,
+            onInit (selectboxQuery) {
+
+                /**
+                 * outsourced event action for after init event
+                 * */
+                sb.events.onInit(selectboxQuery);
+
+            },
+            onChange (selectboxQuery) {
+
+                /**
+                 * trigger  manually a change on the select box
+                 * */
+                $(selectboxQuery).trigger("change");
+
+            },
+
+        });
+
+    },
+
+    bindChange () {
+
+        $(sbVars.moduleQuery).find('select').on("change", (event) => {
+
+            /**
+             * outsourced event action for change event
+             * */
+            sb.events.onChange(event.currentTarget);
+
+        });
+
+    },
+
+    events: {
+
+        onInit (selectboxQuery) {
+
+            /**
+             * save the active list as var
+             * */
+            let $selectboxList = sb.getSelectboxList(selectboxQuery);
+
+            /**
+             * remove the placeholder list item from
+             * the builded list.
+             * */
+            if ($selectboxList.find(sbVars.placeholderQuery).length > 0) {
+
+                $selectboxList.find(sbVars.placeholderQuery).remove();
+
+            }else{
+
+                /**
+                 * set flag for a validation that an item is selected
+                 * */
+                sb.setSelectedAttribute(selectboxQuery);
+
+            }
+
+        },
+
+        onChange (selectboxQuery) {
+
+            /**
+             * set flag for a validation that an item selected
+             * */
+            sb.setSelectedAttribute(selectboxQuery);
+
+        },
+
+    },
+
+    getSelectboxList (selectboxQuery) {
+
+        /**
+         * return the active list as jquery object
+         * */
+        return $(selectboxQuery).closest(sbVars.moduleQuery).find(sbVars.selectboxListQuery);
+
+    },
+
+    setSelectedAttribute (selectboxQuery) {
+
+        /**
+         * set flag for a validation that an item selected
+         * */
+        $(selectboxQuery).closest(sbVars.moduleQuery).attr(sbVars.selectedAttribute,true);
+
+    }
+
+};
+/**
+ * Slider Module
+ *
+ * @author Tobias Wöstmann
+ */
+
+let sl;
+
+let slVars;
+
+modules.slider = {
+
+    vars: {
+        moduleQuery:                    '*[data-js=slider]',
+        scriptPath:                     base.vars.vendorBasePath + "slider.js",
+
+        options:                        {},
+        optionPrevButton:               '<button type="button" class="slick-prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>',
+        optionNextButton:               '<button type="button" class="slick-next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>'
+    },
+
+    init () {
+
+        /**
+         * save module shorthand
+         * */
+        sl = this;
+
+        /**
+         * save shorthand for the accordion vars
+         * */
+        slVars = this.vars;
+
+        /**
+         * set on click event trigger
+         * */
         this.getLibary();
 
     },
 
-    getLibary: function() {
+    getLibary () {
 
-        var module = this;
+        $.getScript( slVars.scriptPath, () => {
 
-        $.getScript( base.vars.vendorBasePath + "selectbox.js", function() {
-
-            module.startScript();
-
-            module.bindEvent();
-
-        });
-
-    },
-
-    startScript: function() {
-
-        var selectbox = $('.selectbox');
-
-        $.each(selectbox, function() {
-
-            var SelectBoxOptions;
-            var EffectSpeed = 150;
-
-            SelectBoxOptions = {
-                autoWidth: false,
-                showEffect: "slideDown",
-                showEffectSpeed: EffectSpeed,
-                hideEffect: "slideUp",
-                hideEffectSpeed: EffectSpeed
-            };
-
-            if (!$(this).hasClass("showfirstoption")) {
-
-                SelectBoxOptions.showFirstOption = false;
-
-            }
-
-            $(this).find("select").selectBoxIt(SelectBoxOptions);
-
-            if (!$(this).hasClass("showfirstoption")) {
-
-                if ($(this).find(".selectboxit-text").html() != $(this).find("select").find("option:first-child").html()) {
-                    $(this).find(".selectboxit-btn").addClass("selected");
-                }
-
-            } else {
-
-                $(this).find(".selectboxit-btn").addClass("selected");
-
-            }
-
+            /**
+             * Start slider Script inital
+             * */
+            this.getModules();
 
         });
 
     },
 
-    bindEvent: function() {
+    getModules () {
 
-        var selectbox = $('.selectbox');
+        /**
+         * cycle each slider module
+         * */
+        $(slVars.moduleQuery).each((index, moduleQuery) => {
 
-        selectbox.find("select").bind({
-            "changed": function(ev, obj) {
+            /**
+             * save slider module instance options
+             * */
+            this.saveSliderSettings($(moduleQuery));
 
-                $(obj.dropdown).addClass("selected");
+            /**
+             * start slider module instance
+             * */
+            this.startSlider($(moduleQuery));
 
-            }
-        });
-
-    }
-
-};
-
-
-///////////////////////////////////////////////////////
-///                   SLIDER JS                     ///
-///////////////////////////////////////////////////////
-
-var sl;
-var slGlobals;
-
-modules.slider = {
-
-    globals: {
-        parentElement:      '*[data-js=slider]',
-        scriptPath:         base.vars.vendorBasePath + "slider.js",
-
-        options:            {},
-        optionPrevButton:   '<button type="button" class="slick-prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>',
-        optionNextButton:   '<button type="button" class="slick-next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 169.3 94"><polygon points="84.9 78.8 10.3 4.1 3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 "></polygon><polygon points="3.8 11.2 81.7 89.7 88.2 89.7 166 11.2 159.5 4.4 84.9 78.8 10.3 4.1 "></polygon></svg></button>'
-    },
-
-    init: function() {
-
-        sl = this;
-        slGlobals = this.globals;
-
-        // Get the slick slide libary
-        sl.getLibary();
-
-    },
-
-    getLibary: function() {
-
-        $.getScript( slGlobals.scriptPath, function() {
-
-            // Start SL Script normally
-            sl.getModules();
+            /**
+             * trigger slider module events
+             * */
+            this.triggerSliderEvents($(moduleQuery));
 
         });
 
     },
+    
+    saveSliderSettings ($slider) {
 
-    getModules: function() {
+        /**
+         * create option object for slick method
+         * */
+        slVars.options = {};
 
-        // cycle each slider module
-        $(slGlobals.parentElement).each(function(){
+        /**
+         * define standard options
+         * */
+        slVars.options.infinite = true;
+        slVars.options.mobileFirst = true;
+        slVars.options.responsive = [];
 
-            // save slider module instance options
-            sl.saveSliderSettings($(this));
+        /**
+         * define all changeable options via attribute for basic load.
+         * "" defines no viewport for basic loading
+         * */
+        this.getSliderSettings($slider,slVars.options,"");
 
-            // start slider module instance
-            sl.startSlider($(this));
+        /**
+         * loop all mediaquerys
+         * */
+        for (let viewport in base.vars.mediaquerys){
+            if (baseVars.mediaquerys.hasOwnProperty(viewport)) {
 
-            // trigger slider module events
-            sl.triggerSliderEvents($(this));
+                /**
+                 * skip 0px mediaquery
+                 * */
+                if (parseInt(baseVars.mediaquerys[viewport]) > 0) {
 
-        });
+                    /**
+                     * create breakpoint object for mediaquery
+                     * */
+                    let breakpoint = {};
 
-    },
-
-    saveSliderSettings: function(slider) {
-
-        // create option object for slick method
-        slGlobals.options = {};
-
-        // define standard options
-        slGlobals.options.infinite = true;
-        slGlobals.options.mobileFirst = true;
-        slGlobals.options.responsive = [];
-
-        // define all changeable options via attribute for basic load. "" defines no viewport for basic loading
-        sl.getSliderSettings(slider,slGlobals.options,"");
-
-        // loop all mediaquerys
-        for (var viewport in base.vars.mediaquerys){
-            if (base.vars.mediaquerys.hasOwnProperty(viewport)) {
-
-                // skip 0px mediaquery
-                if (parseInt(base.vars.mediaquerys[viewport]) > 0) {
-
-                    // create breakpoint object for mediaquery
-                    var breakpoint = {};
-
-                    // define breakpoint size and create settings object
-                    breakpoint.breakpoint = parseInt(base.vars.mediaquerys[viewport]) - 1;
+                    /**
+                     * define breakpoint size and create settings object
+                     * */
+                    breakpoint.breakpoint = parseInt(baseVars.mediaquerys[viewport]) - 1;
                     breakpoint.settings = {};
 
-                    // define all changeable options via attribute for mediaquery. -viewport defines the medaiquery suffix for attribute
-                    sl.getSliderSettings(slider,breakpoint.settings,"-" + viewport);
+                    /**
+                     *  define all changeable options via attribute for mediaquery.
+                     *  -viewport defines the medaiquery suffix for attribute
+                     * */
+                    this.getSliderSettings($slider,breakpoint.settings,"-" + viewport);
 
-                    // only push in object when breakpoint has options
+                    /**
+                     *  only push in object when breakpoint has options
+                     * */
                     if (!jQuery.isEmptyObject(breakpoint.settings)) {
-                        slGlobals.options.responsive.push(breakpoint);
+                        slVars.options.responsive.push(breakpoint);
                     }
 
                 }
@@ -3481,96 +3760,131 @@ modules.slider = {
 
     },
 
-    getSliderSettings: function(slider,optionLevel,viewport){
+    getSliderSettings ($slider,optionLevel,viewport){
 
-        // html for other previous arrow
-        if (viewport === "" || slider.is("[data-prevArrow" + viewport + "]")) {
-            optionLevel.prevArrow = slider.attr("data-prevArrow" + viewport) || slGlobals.optionPrevButton;
+        /**
+         * html for other previous arrow
+         * */
+        if (viewport === "" || $slider.is("[data-prevArrow" + viewport + "]")) {
+            optionLevel.prevArrow = $slider.attr("data-prevArrow" + viewport) || slVars.optionPrevButton;
         }
 
-        // html for other next arrow
-        if (viewport === "" || slider.is("[data-nextArrow" + viewport + "]")) {
-            optionLevel.nextArrow = slider.attr("data-nextArrow" + viewport) || slGlobals.optionNextButton;
+        /**
+         * html for other next arrow
+         * */
+        if (viewport === "" || $slider.is("[data-nextArrow" + viewport + "]")) {
+            optionLevel.nextArrow = $slider.attr("data-nextArrow" + viewport) || slVars.optionNextButton;
         }
 
-        // set slider sync
-        if (viewport === "" || slider.is("[data-asNavFor" + viewport + "]")) {
-            optionLevel.asNavFor = slider.attr("data-asNavFor" + viewport) || null;
+        /**
+         * html for a conntection to an other slider
+         * */
+        if (viewport === "" || $slider.is("[data-asNavFor" + viewport + "]")) {
+            optionLevel.asNavFor = $slider.attr("data-asNavFor" + viewport) || null;
         }
-
+        /**
+         * Enables variable Width of slides.
+         * */
         // Enables variable Width of slides.
-        if (viewport === "" || slider.is("[data-variableWidth" + viewport + "]")) {
-            optionLevel.variableWidth = (slider.attr("data-variableWidth" + viewport) === "true");
+        if (viewport === "" || $slider.is("[data-variableWidth" + viewport + "]")) {
+            optionLevel.variableWidth = ($slider.attr("data-variableWidth" + viewport) === "true");
         }
 
-        // Enables draggable slides.
-        if (viewport === "" || slider.is("[data-draggable" + viewport + "]")) {
-            optionLevel.draggable = (slider.attr("data-draggable" + viewport) === "true");
+        /**
+         * Enables draggable slides.
+         * */
+        if (viewport === "" || $slider.is("[data-draggable" + viewport + "]")) {
+            optionLevel.draggable = ($slider.attr("data-draggable" + viewport) === "true");
         }
 
-        // set focus on select
-        if (viewport === "" || slider.is("[data-focusOnSelect" + viewport + "]")) {
-            optionLevel.focusOnSelect = slider.attr("data-focusOnSelect" + viewport) === "true";
+        /**
+         * set focus on select
+         * */
+        if (viewport === "" || $slider.is("[data-focusOnSelect" + viewport + "]")) {
+            optionLevel.focusOnSelect = $slider.attr("data-focusOnSelect" + viewport) === "true";
         }
 
-        // set variable width of slides
-        if (viewport === "" || slider.is("[data-fade" + viewport + "]")) {
-            optionLevel.fade = slider.attr("data-fade" + viewport) === "true";
+        /**
+         * change slide animation to fade
+         * */
+        if (viewport === "" || $slider.is("[data-fade" + viewport + "]")) {
+            optionLevel.fade = $slider.attr("data-fade" + viewport) === "true";
         }
 
-        // # of slides to show
-        if (viewport === "" || slider.is("[data-slidesToShow" + viewport + "]")) {
-            optionLevel.slidesToShow = slider.attr("data-slidesToShow" + viewport) || "1";
+        /**
+         *  # of slides to show
+         * */
+        if (viewport === "" || $slider.is("[data-slidesToShow" + viewport + "]")) {
+            optionLevel.slidesToShow = $slider.attr("data-slidesToShow" + viewport) || "1";
         }
 
-        // Enables adaptive height for single slide horizontal carousels.
-        if (viewport === "" || slider.is("[data-adaptiveHeight" + viewport + "]")) {
-            optionLevel.adaptiveHeight = (slider.attr("data-adaptiveHeight" + viewport) === "true");
+        /**
+         * Enables adaptive height for single slide horizontal carousels.
+         * */
+        if (viewport === "" || $slider.is("[data-adaptiveHeight" + viewport + "]")) {
+            optionLevel.adaptiveHeight = ($slider.attr("data-adaptiveHeight" + viewport) === "true");
         }
 
-        // Show dot indicators
-        if (viewport === "" || slider.is("[data-dots" + viewport + "]")) {
-            optionLevel.dots = (slider.attr("data-dots" + viewport) === "true");
+        /**
+         * Show dot indicators
+         * */
+        if (viewport === "" || $slider.is("[data-dots" + viewport + "]")) {
+            optionLevel.dots = ($slider.attr("data-dots" + viewport) === "true");
         }
 
-        // Slide animation speed
-        if (viewport === "" || slider.is("[data-speed" + viewport + "]")) {
-            optionLevel.speed = slider.attr("data-speed" + viewport) || "300";
+        /**
+         * Slide animation speed
+         * */
+        if (viewport === "" || $slider.is("[data-speed" + viewport + "]")) {
+            optionLevel.speed = $slider.attr("data-speed" + viewport) || "300";
         }
 
-        // Enables centered view with partial prev/next slides. Use with odd numbered slidesToShow counts.
-        if (viewport === "" || slider.is("[data-centerMode" + viewport + "]")) {
-            optionLevel.centerMode = (slider.attr("data-centerMode" + viewport) === "true");
+        /**
+         * Enables centered view with partial prev/next slides.
+         * Use with odd numbered slidesToShow counts.
+         * */
+        if (viewport === "" || $slider.is("[data-centerMode" + viewport + "]")) {
+            optionLevel.centerMode = ($slider.attr("data-centerMode" + viewport) === "true");
         }
 
-        // Enables Autoplay
-        if (viewport === "" || slider.is("[data-autoplay" + viewport + "]")) {
-            optionLevel.autoplay = (slider.attr("data-autoplay" + viewport) === "true");
+        /**
+         * Enables Autoplay
+         * */
+        if (viewport === "" || $slider.is("[data-autoplay" + viewport + "]")) {
+            optionLevel.autoplay = ($slider.attr("data-autoplay" + viewport) === "true");
         }
 
-        // Autoplay Speed in milliseconds
-        if (viewport === "" || slider.is("[data-autoplaySpeed" + viewport + "]")) {
-            optionLevel.autoplaySpeed = slider.attr("data-autoplaySpeed" + viewport);
+        /**
+         * Autoplay Speed in milliseconds
+         * */
+        if (viewport === "" || $slider.is("[data-autoplaySpeed" + viewport + "]")) {
+            optionLevel.autoplaySpeed = $slider.attr("data-autoplaySpeed" + viewport);
         }
 
-        // Show prev/next Arrows
-        if (viewport === "" || slider.is("[data-arrows" + viewport + "]")) {
-            optionLevel.arrows = (slider.attr("data-arrows" + viewport) === "true");
+        /**
+         * Show prev/next Arrows
+         * */
+        if (viewport === "" || $slider.is("[data-arrows" + viewport + "]")) {
+            optionLevel.arrows = ($slider.attr("data-arrows" + viewport) === "true");
         }
 
     },
 
-    startSlider: function(slider) {
+    startSlider ($slider) {
 
-        // start libary and set the options
-        slider.slick(slGlobals.options);
+        /**
+         * start libary and set the options
+         * */
+        $slider.slick(slVars.options);
 
     },
 
-    triggerSliderEvents: function(slider) {
+    triggerSliderEvents ($slider) {
 
-        // trigger a event when slider is finished
-        slider.on('init', function(){
+        /**
+         * trigger a event when slider is finished
+         * */
+        $slider.on('init', () => {
 
             $(document).trigger("sliderLoaded");
             $(document).trigger("DOMFinished");
@@ -3579,5 +3893,5 @@ modules.slider = {
 
     }
 
-};
 
+};

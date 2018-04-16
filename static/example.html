@@ -1,7 +1,5 @@
 <!doctype html>
-<!--[if lte IE 9 ]>
-<html class="ie9" lang="de"><![endif]-->
-<!--[if gt IE 9 ]><!--><html lang="de" itemscope itemtype="http://schema.org/Organization"><!--<![endif]-->
+<html lang="de" itemscope itemtype="http://schema.org/Organization">
 <head>
 
     <link rel="dns-prefetch" href="//fonts.googleapis.com/">
@@ -16,7 +14,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="BaseTemp">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <meta name="robots" content="index, follow, noarchive"/>
 
@@ -30,8 +27,8 @@
     <link rel="stylesheet" href="/css/styles.css">
     <link href="//fonts.googleapis.com/css?family=Oswald:400,700" rel="stylesheet">
 
-    <!--[if lte IE 9 ]>
-    <link rel="stylesheet" href="/css/ie9.css">
+    <!--[if lte IE 10 ]>
+    <link rel="stylesheet" href="/css/ie10.css">
     <![endif]-->
 
     <script src="/js/modernizer.js"></script>
@@ -39,7 +36,7 @@
     <!-- OPEN GRAPH META -->
     <meta property="og:title" content="BaseTemp"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:image" content="http://www.basetemp.com/ apple-touch-icon.png"/>
+    <meta property="og:image" content="http://www.basetemp.com/ /touch-icon-192.png"/>
     <meta property="og:description" content="Lorem Ipsum BaseTemp, Lorem Ipsum BaseTemp, Lorem Ipsum BaseTemp, "/>
     <meta property="og:url" content="http://www.basetemp.com/"/>
 
@@ -48,7 +45,7 @@
     <meta name="twitter:site" content="http://www.basetemp.com/" />
     <meta name="twitter:title" content="BaseTemp" />
     <meta name="twitter:description" content="Lorem Ipsum BaseTemp, Lorem Ipsum BaseTemp, Lorem Ipsum BaseTemp, " />
-    <meta name="twitter:image" content="http://www.basetemp.com/ apple-touch-icon.png"/>
+    <meta name="twitter:image" content="http://www.basetemp.com/ /touch-icon-192.png"/>
 
     <!-- APPLE ICONS BARS -->
     <link rel="apple-touch-icon" href="/touch-icon-60.png">
@@ -69,14 +66,7 @@
 
 </head>
 
-<body class="index">
-
-    <header>
-
-        <img style="width: 150%; -webkit-filter: blur(4px); filter: blur(4px);" src="/images/wave.svg">
-
-
-    </header>
+<body class="example">
 
     <main class="gridWrap">
 
@@ -92,7 +82,7 @@
             <hr>
 
             <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores <a href="#">et ea rebum</a>. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores <a href="#" data-auto-scrolltop>et ea rebum</a>. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
             </p>
 
             <ul>
@@ -112,26 +102,23 @@
 
         <div class="w12">
 
-            <div class="selectbox showfirstoption" data-js="selectbox">
-                <label>
-                    <select name="selectbox">
-                        <option>Herr</option>
-                        <option>Frau</option>
-                    </select>
-                </label>
+            <div class="selectbox" data-js="selectbox">
+                <select name="selectbox" data-validation-required title="Anrede">
+                    <option disabled selected>Bitte wählen</option>
+                    <option>Herr</option>
+                    <option>Frau</option>
+                </select>
             </div>
 
         </div>
 
         <div class="w12 mw6">
 
-            <label>
-                <input type="text" class="required" title="example">
-            </label>
+            <input type="text" data-validation-required title="example">
 
-            <input type="text" class="required" title="example">
+            <input type="text" data-validation-required title="example">
 
-            <input type="text" class="required" title="example">
+            <input type="text" title="example">
 
        </div>
 
@@ -164,7 +151,7 @@
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" class="required" name="checkbox">
+                        <input type="checkbox" data-validation-required name="checkbox">
                         <span>Das ist ein Checkbox Feld</span>
                     </label>
                 </div>
@@ -187,7 +174,7 @@
 
         <div class="w12">
 
-            <textarea title="textarea"></textarea>
+            <textarea title="textarea" data-validation-required></textarea>
 
         </div>
 
@@ -260,8 +247,8 @@
             <hr>
 
             <div data-js="accordion">
-                <a href="javascript:void(0);">Klick me</a>
-                <div>
+                <a href="javascript:void(0);" data-accordion-trigger>Klick me</a>
+                <div data-accordion-content>
                    <p>
                        Lorem ilor sit amet.
                    </p>
@@ -277,11 +264,9 @@
 
             <div class="modalbox" data-modalbox-name="modalbox1">
 
-                <div>
-                    <figure>
-                        <img src="http://placehold.it/1280x768">
-                    </figure>
-                </div>
+                <figure>
+                    <img src="http://placehold.it/1280x768">
+                </figure>
 
             </div>
 
