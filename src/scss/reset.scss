@@ -53,6 +53,9 @@ html {
 
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
 }
 
 
@@ -87,7 +90,7 @@ input, button, textarea {
   &[disabled] {
     cursor: default;
   }
-  @include border-radius(0);
+  border-radius: 0;
   &:focus, &:active {
     outline: none;
   }

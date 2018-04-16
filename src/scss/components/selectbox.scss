@@ -2,103 +2,211 @@
 /*           SELECTBOX . STYLES OF OWN SELECTBOX            */
 /* -------------------------------------------------------- */
 
-.selectbox {
+.selectric-wrapper {
   position: relative;
-  width: 100%;
   cursor: pointer;
   margin: 5px 0;
+}
 
-  .selectboxit-btn {
+.selectric-responsive {
+  width: 100%;
+}
+
+.selectric {
+  border: 1px solid $color-lightgrey;
+  border-radius: 0;
+  background: $color-white;
+  position: relative;
+  overflow: hidden;
+
+  .label {
     display: block;
-    width: 100%;
-    padding: 6px 6px;
-    border: 1px solid $color-grey;
-    text-align: left;
-    cursor: pointer;
-    @include border-radius(3px);
-    @include transition(all 0.2s ease);
-    @include user-select();
-
-    &:hover, &:focus {
-      background: $color-lightgrey;
-    }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 6px 6px;
+    color: $font-color;
+    @include none-select();
   }
 
-  &.error .selectboxit-btn{
-    border: 1px solid $color-ui-red;
-  }
-
-  .selectboxit-arrow-container {
+  .button {
+    display: block;
     position: absolute;
-    right: 15px;
-    top: 13px;
-    font-weight: bold;
+    right: 10px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
     color: $color-black;
-    @include transition(all 0.3s ease);
-
-    .selectboxit-default-arrow {
-      display: block;
-      height: 9px;
-      width: 17px;
-      background: url("/images/arrow-down-big.svg");
-      background-size: 17px auto ;
+    background: transparent;
+    text-align: center;
+    font-size: 0;
+    @include transform-translate(0,-50%);
+    &:after {
+      content: " ";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      width: 0;
+      height: 0;
+      border: 4px solid transparent;
+      border-top-color: #BBB;
+      border-bottom: none;
     }
-
-  }
-  .selectboxit-open  .selectboxit-arrow-container {
-    -moz-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
   }
 
-  .selectboxit-list {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    height: auto;
-    min-width: 100%;
-    z-index: $zLevel5;
-    background: $color-white;
-    border: 1px solid $color-grey;
-    border-top: none;
+}
+
+.selectric-focus .selectric {
+  border-color: $color-grey;
+}
+
+.selectric-hover .selectric {
+  border-color: $color-grey;
+}
+
+.selectric-open {
+  z-index: $zLevel7;
+}
+
+.selectric-open .selectric {
+  border-color: $color-grey;
+}
+
+.selectric-open .selectric-items {
+  display: block;
+}
+
+.selectric-disabled {
+  opacity: 0.5;
+  cursor: default;
+  @include none-select();
+}
+
+.selectric-hide-select {
+  position: relative;
+  overflow: hidden;
+  width: 0;
+  height: 0;
+}
+
+.selectric-hide-select select {
+  position: absolute;
+  left: -100%;
+}
+
+.selectric-hide-select.selectric-is-native {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.selectric-hide-select.selectric-is-native select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  border: none;
+  z-index: 1;
+  box-sizing: border-box;
+  opacity: 0;
+}
+
+.selectric-input {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  outline: none !important;
+  border: none !important;
+  background: none !important;
+}
+
+.selectric-temp-show {
+  position: absolute !important;
+  visibility: hidden !important;
+  display: block !important;
+}
+
+/* Items box */
+
+.selectric-items {
+  display: none;
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  background: $color-white;
+  border: 1px solid $color-grey;
+  z-index: -1;
+  box-shadow: 0 0 10px -6px;
+
+  .selectric-scroll {
+    height: 100%;
+    overflow: auto;
+  }
+
+  ul, li {
+    list-style: none;
     padding: 0;
-    @include user-select();
+    margin: 0;
+  }
+
+  li {
+    display: block;
+    padding: 6px;
+    cursor: pointer;
+    &.selected {
+      background: #E0E0E0;
+    }
+    &.highlighted {
+      background: #D0D0D0;
+    }
+    &:hover {
+      background: #D5D5D5;
+    }
+  }
+
+  .disabled {
+    opacity: 0.5;
+    cursor: default !important;
+    background: none !important;
+    color: #666 !important;
+    @include none-select();
+  }
+
+  .selectric-group {
+
+    .selectric-group-label {
+      font-weight: bold;
+      padding-left: 10px;
+      cursor: default;
+      @include none-select();
+      background: none;
+    }
+
+    &.disabled li {
+      opacity: 1;
+    }
+
     li {
-      list-style: none;
-      padding-left: 0;
-      margin-left: 0;
-      &:after {
-        display: none;
-      }
-      a {
-        display: block;
-        padding: 2px 5px;
-        color: $font-color;
-      }
+      padding-left: 25px;
     }
-    .selectboxit-focus {
-      background: $color-lightgrey;
-    }
+
   }
 
-  &.native{
-    select {
-      @extend .selectboxit-btn;
-      padding: 3px 6px;
-    }
-  }
+}
 
-  .selectboxit-container {
-    select {
-      width: 100% !important;
-      height: auto!important;
-      bottom: 0!important;
-      right: 0!important;
-    }
-  }
-
-
+.selectric-above .selectric-items {
+  top: auto;
+  bottom: 100%;
 }

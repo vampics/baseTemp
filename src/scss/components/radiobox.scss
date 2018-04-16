@@ -5,12 +5,12 @@
 .radiobox {
   @extend .checkbox;
   span {
-    @include border-radius(50%);
+    border-radius: 50%;
     &:before {
-      @include border-radius(50%);
+      border-radius: 50%;
     }
     &:after {
-      @include border-radius(50%);
+      border-radius: 50%;
     }
   }
 

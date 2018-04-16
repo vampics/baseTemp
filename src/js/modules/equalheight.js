@@ -1,87 +1,120 @@
-///////////////////////////////////////////////////////
-///               EQUAL HEIGHT JS                   ///
-///////////////////////////////////////////////////////
+/**
+ * Equalheight Module
+ *
+ * @author Tobias Wöstmann
+ */
 
-var eh;
-var ehGlobals;
+let eh;
+
+let ehVars;
 
 modules.equalheight = {
 
-    globals: {
-        parentElement:      '*[data-js=equalheight]',
-        childElements:      '*[data-equalheight-element]',
-        waitOnResizeTimer:   10,
-        desktopMediaQuery:   'mw',
+    vars: {
+        moduleQuery:                    '*[data-js=equalheight]',
+        moduleChildNodeQuery:           '*[data-equalheight-element]',
+        fallbackDesktopMediaquery:      'mw',
 
-        optionMobileAttr:    'data-equalheight-option-mobile',
-        optionRowAttr:       'data-equalheight-option-row'
+        optionBreakpointAttr:           'data-equalheight-option-breakpoint',
+        optionMobileAttr:               'data-equalheight-option-mobile',
+        optionRowAttr:                  'data-equalheight-option-row'
     },
 
-    init: function() {
+    init () {
 
+        /**
+         * save module shorthand
+         * */
         eh = this;
-        ehGlobals = this.globals;
 
-        // Start EH Script normally
-        eh.findAllParentNodes();
+        /**
+         * save shorthand for the equalheight vars
+         * */
+        ehVars = this.vars;
 
-        // Start EH Script when DOM ist complete loaded
-        $(document).on("DOMLoaded", function(){
-            eh.findAllParentNodes();
-        });
+        /**
+         * start script inital
+         * */
+        this.find.parentNodes();
 
-        // Start EH Script when Resizing is finished
-        var waitOnResize;
-        $(window).on("resize", function(){
-
-            clearTimeout(waitOnResize);
-
-            waitOnResize = setTimeout(function(){
-                eh.findAllParentNodes();
-            }, ehGlobals.waitOnResizeTimer);
-
+        /**
+         * trigger when its complete loaded and when its finished to resize
+         * */
+        $(document).on("DOMLoaded resized", () => {
+            this.find.parentNodes();
         });
 
     },
 
-    findAllParentNodes: function(){
+    find: {
 
-        $(ehGlobals.parentElement).each(function(){
+        parentNodes () {
 
-            // Save instance
-            var module             = $(this);
+            $(ehVars.moduleQuery).each((index, moduleQuery) => {
 
-            // Get all childs of the module to set eh
-            var moduleChildNodes = eh.findAllChildNodes(module);
+                /**
+                 * Save instance
+                 */
+                let $module = $(moduleQuery);
 
-            // Set options - return false when mobile option false and mobile viewport active
-            return eh.setOptions(module,moduleChildNodes);
+                /**
+                 * Get all childs of the module to set eh
+                 */
+                let $moduleChildNodes = this.childNodes($module);
 
-        });
+                /**
+                 * Set options - return false when mobile option false and mobile viewport active
+                 */
+                return eh.setOptions($module,$moduleChildNodes);
+
+            });
+
+        },
+
+        childNodes ($module) {
+
+            /**
+             * Find and return all child nodes with attribute as jquery object
+             */
+            return $module.find(ehVars.moduleChildNodeQuery);
+
+        },
 
     },
 
-    setOptions: function(module,moduleChildNodes) {
+    setOptions ($module,$moduleChildNodes) {
 
-        // Get options
-        var moduleOptionMobile = (module.attr(ehGlobals.optionMobileAttr) === "true");
-        var moduleOptionRow    = (module.attr(ehGlobals.optionRowAttr) === "true");
+        /**
+         * Get all options from the parent attribute
+         */
+        let moduleOptionBreakpoint      = ($module.attr(ehVars.optionBreakpointAttr) || ehVars.fallbackDesktopMediaquery);
+        let moduleOptionMobile          = ($module.attr(ehVars.optionMobileAttr) === "true");
+        let moduleOptionRow             = ($module.attr(ehVars.optionRowAttr) === "true");
 
-        // When mobile option false, reset elements & stop script.
-        if (!moduleOptionMobile && base.vars.mediaquerys[ehGlobals.desktopMediaQuery] > base.vars.windowWidth) {
-            eh.resetChildNodes(moduleChildNodes);
+        /**
+         * Check if mobile option is true, otherwise stop the script.
+         * Compare mobile indicator with the module option breakpoint
+         */
+        if (!moduleOptionMobile && baseVars.mediaquerys[moduleOptionBreakpoint] > baseVars.windowWidth) {
+
+            this.resetNodes($moduleChildNodes);
+
             return false;
         }
 
-        // When row option true ... calculate rows.
+        /**
+         * When row option true ... calculate rows.
+         */
         if (moduleOptionRow){
 
-            eh.splitNodesPerRow(moduleChildNodes);
+            this.splitNodesPerRow($moduleChildNodes);
 
         }else{
 
-            // set equal height without rows
-            eh.setChildNodesToEqualHeight(moduleChildNodes);
+            /**
+             * set equal height without rows
+             */
+            this.setEqualHeight($moduleChildNodes);
 
         }
 
@@ -89,53 +122,84 @@ modules.equalheight = {
 
     },
 
-    findAllChildNodes: function(module){
-        return module.find(ehGlobals.childElements);
-    },
+    splitNodesPerRow: function($equalHeightElements){
 
-    splitNodesPerRow: function(nodes){
+        /**
+         * declarate row/rows array and inital row postion
+         */
+        let rows            = [];
+        let row             = [];
+        let rowPostion      = 0;
 
-        var rows = [];
-        var row = [];
-        var rowValue = 0;
+        /**
+         * give each element same height
+         * to build correct rows
+         */
+        $equalHeightElements.css("height","2px");
 
-        nodes.css("height","2px");
+        /**
+         * cycle all equal height elements to split the rows
+         */
+        $equalHeightElements.each((index, equalHeightElementQuery) => {
 
-        // cycle each element
-        nodes.each(function(){
+            /**
+             * check if the element top postion
+             * not like the previous
+             */
+            if ($(equalHeightElementQuery).offset().top !== rowPostion) {
 
-            // if element top postion not like the previous
-            if ($(this).offset().top != rowValue) {
+                /**
+                 * set the new row position
+                 */
+                rowPostion = $(equalHeightElementQuery).offset().top;
 
-                //set new row offset postion
-                rowValue = $(this).offset().top;
-
-                //if row not empty
+                /**
+                 * check if active row not empty
+                 */
                 if (row.length > 0) {
 
-                    //push row in array
+                    /**
+                     * then push it as new row in rows
+                     * and start new row
+                     */
                     rows.push(row);
                     row = [];
                 }
+
             }
 
-            //push element in row
-            row.push(this);
+            /**
+             * push the equalHeightElement in the row
+             */
+            row.push(equalHeightElementQuery);
 
         });
 
-
-        nodes.css("height","auto");
-
-        //only when row not empty, push last row in array
+        /**
+         * only when row not empty, push
+         * the last row in array
+         */
         if (row.length > 0) {
             rows.push(row);
         }
 
-        $.each(rows, function( index, rowArray ) {
+        /**
+         * reset all nodes
+         */
+        this.resetNodes($equalHeightElements);
 
-            // set equal height with rows
-            eh.setChildNodesToEqualHeight($($.map(rowArray, function(element){return $.makeArray(element);})));
+
+        /**
+         * cycle all rows
+         */
+        $.each(rows, (index, rowArray) => {
+
+            /**
+             * make all equalheight elements in
+             * row to array and set the equal height
+             * function
+             */
+            this.setEqualHeight( $($.map(rowArray, $equalHeightElementsInRow => $.makeArray($equalHeightElementsInRow))));
 
         });
 
@@ -143,33 +207,45 @@ modules.equalheight = {
 
     },
 
-    setChildNodesToEqualHeight: function(nodes) {
+    setEqualHeight: function($equalHeightElements) {
 
-        // start each cycle with 0
-        var highestHeight = 0;
+        /**
+         * reset each module cycle with height 0
+         */
+        let highestHeight = 0;
 
-        // reset all elements
-        eh.resetChildNodes(nodes);
+        /**
+         * reset all nodes
+         */
+        this.resetNodes($equalHeightElements);
 
-        // cycle all elements to get the highest box
-        nodes.each(function(){
+        /**
+         * cycle all child nodes to get the highest box
+         */
+        $equalHeightElements.each((index, equalHeightElementQuery) => {
 
-            // if highestHeight lower than the current box height, overide highestHeight
-            if (highestHeight < Math.ceil($(this).outerHeight())) {
+            /**
+             * if highestHeight lower than the current box
+             * height and overide highestHeight
+             */
+            if (highestHeight < Math.ceil($(equalHeightElementQuery).outerHeight())) {
 
-                highestHeight = Math.ceil($(this).outerHeight());
+                highestHeight = Math.ceil($(equalHeightElementQuery).outerHeight());
 
             }
 
         });
 
-        //set height to all boxes
-        nodes.css("height",highestHeight);
+        /**
+         * set the highest height
+         * to all nodes
+         */
+        $equalHeightElements.css("height", highestHeight);
 
     },
 
-    resetChildNodes: function(nodes) {
-        nodes.css("height","auto");
+    resetNodes ($equalHeightElement) {
+        $equalHeightElement.css("height","auto");
     }
-};
 
+};
