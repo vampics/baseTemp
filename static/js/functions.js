@@ -2378,7 +2378,7 @@ modules.accordion = {
         /**
          * class status
          * */
-        let accordionHasClass = $accordion.hasClass(accVars.moduleActiveClass)
+        let accordionHasClass = $accordion.hasClass(accVars.moduleActiveClass);
 
         /**
          * close all accordions

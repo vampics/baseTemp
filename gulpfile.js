@@ -172,7 +172,9 @@ gulp.watch([staticHtmlPath + "/*.html", staticJsPath + "*.js", staticCssPath + "
 
 gulp.task('test-js', () => {
     return gulp.src( buildJsPath + '/modules/*.js')
-        .pipe(jshint())
+        .pipe(jshint({
+            esnext: true
+        }))
         .pipe(jshint.reporter('default'));
 });
 
@@ -187,6 +189,7 @@ gulp.task('test-css', () => {
         'box-model': false,
         'adjoining-classes': false,
         'font-sizes': false,
+        'zero-units': true,
         'overqualified-elements': false,
         'important': false,
         'floats': false,

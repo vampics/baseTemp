@@ -13,5 +13,5 @@
   max-width: 95vw;
   max-height: 95vh;
   box-shadow: 0 0 2000px 2000px rgba(0,0,0,0.3);
-  @include transformtranslate(-50%,-50%);
+  @include transform-translate(-50%,-50%);
 }

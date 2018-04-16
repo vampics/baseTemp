@@ -87,7 +87,7 @@ input, button, textarea {
   &[disabled] {
     cursor: default;
   }
-  @include border-radius(0);
+  border-radius: 0;
   &:focus, &:active {
     outline: none;
   }

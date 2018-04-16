@@ -17,7 +17,7 @@
     min-height: 20px;
     padding-top: 2px;
     cursor: pointer;
-    @include user-select();
+    @include none-select();
     &:before {
       display: block;
       position: absolute;
@@ -28,7 +28,7 @@
       border: 1px solid $color-grey;
       cursor: pointer;
       content: "";
-      @include border-radius(3px)
+      border-radius: 3px;
     }
     &:after {
       display: block;
@@ -40,7 +40,7 @@
       cursor: pointer;
       background: transparent;
       content: "";
-      @include border-radius(3px)
+      border-radius: 3px;
     }
   }
 

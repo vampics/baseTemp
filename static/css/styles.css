@@ -54,7 +54,7 @@
 
 /* -------------------------------------------------------- */
 
-/*                FAIHTFULLY STYLE MIXINS                   */
+/*                PLUG AND PLAY STYLE MIXINS                */
 
 /* -------------------------------------------------------- */
 
@@ -360,9 +360,6 @@ textarea {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	-webkit-border-radius: 0;
-	-moz-border-radius: 0;
-	-ms-border-radius: 0;
 	border-radius: 0;
 }
 
@@ -571,10 +568,6 @@ a,
 	color: #008E74;
 	text-decoration: none;
 	cursor: pointer;
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
 	transition: all 0.2s ease;
 }
 
@@ -603,15 +596,8 @@ input[type="submit"],
 	padding: 6px 12px;
 	margin: 0;
 	text-decoration: none;
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
 	transition: all 0.2s ease;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
-	border-radius: 3px;
+	border-radius: 0;
 }
 
 button:hover,
@@ -646,10 +632,6 @@ textarea {
 	border: 1px solid #d9d9d9;
 	padding: 6px 6px;
 	margin: 5px 0;
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
 	transition: all 0.2s ease; /* Error class for baseTemp Formvalidation */
 }
 
@@ -994,8 +976,7 @@ ul li {
 	color: #151515;
 	background: transparent;
 	text-align: center;
-	font: 0/0 a;
-	*font: 20px/38px Lucida Sans Unicode, Arial Unicode MS, Arial;
+	font-size: 0;
 	-webkit-transform: translate(0, -50%);
 	-o-transform: translate(0, -50%);
 	-moz-transform: translate(0, -50%);
@@ -1039,7 +1020,6 @@ ul li {
 }
 
 .selectric-disabled {
-	filter: alpha(opacity=50);
 	opacity: 0.5;
 	cursor: default;
 	-webkit-touch-callout: none;
@@ -1093,7 +1073,6 @@ ul li {
 	height: 1px !important;
 	outline: none !important;
 	border: none !important;
-	*font: 0/0 a !important;
 	background: none !important;
 }
 
@@ -1147,7 +1126,6 @@ ul li {
 }
 
 .selectric-items .disabled {
-	filter: alpha(opacity=50);
 	opacity: 0.5;
 	cursor: default !important;
 	background: none !important;
@@ -1172,7 +1150,6 @@ ul li {
 }
 
 .selectric-items .selectric-group.disabled li {
-	filter: alpha(opacity=100);
 	opacity: 1;
 }
 
@@ -1228,9 +1205,6 @@ ul li {
 	border: 1px solid #989898;
 	cursor: pointer;
 	content: "";
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
 	border-radius: 3px;
 }
 
@@ -1245,9 +1219,6 @@ ul li {
 	cursor: pointer;
 	background: transparent;
 	content: "";
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-ms-border-radius: 3px;
 	border-radius: 3px;
 }
 
@@ -1268,23 +1239,14 @@ ul li {
 /* -------------------------------------------------------- */
 
 .radiobox span {
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
 	border-radius: 50%;
 }
 
 .radiobox span:before {
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
 	border-radius: 50%;
 }
 
 .radiobox span:after {
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
 	border-radius: 50%;
 }
 
@@ -1412,16 +1374,12 @@ ul li {
 .slick-prev svg,
 .slick-next svg {
 	width: 50px;
+	transition: all 0.2s ease;
 	-webkit-transform: rotate(90deg);
 	-o-transform: rotate(90deg);
 	-moz-transform: rotate(90deg);
 	-ms-transform: rotate(90deg);
 	transform: rotate(90deg);
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
-	transition: all 0.2s ease;
 }
 
 .slick-prev svg path,
@@ -1490,14 +1448,7 @@ ul li {
 	font-size: 0;
 	padding: 0;
 	background: #FFF;
-	-webkit-transition: all 0.2s ease;
-	-moz-transition: all 0.2s ease;
-	-ms-transition: all 0.2s ease;
-	-o-transition: all 0.2s ease;
 	transition: all 0.2s ease;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
 	border-radius: 50%;
 	border: none;
 }

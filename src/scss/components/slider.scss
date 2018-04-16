@@ -105,11 +105,11 @@
     background: transparent;
     z-index: $zLevel2;
     padding: 0;
-    @include transformtranslate(0,-50%);
+    @include transform-translate(0,-50%);
     svg {
         width: 50px;
-        @include transformRotate(90deg);
-        @include transition(all 0.2s ease);
+        transition: all $transitionTime ease;
+        @include transform-rotate(90deg);
         path,
         circle,
         rect,
@@ -132,7 +132,7 @@
     left: auto;
     right: 0;
     svg {
-        @include transformRotate(-90deg);
+        @include transform-rotate(-90deg);
     }
 }
 
@@ -141,7 +141,7 @@
     position: absolute;
     left: 50%;
     bottom: 10px;
-    @include transformtranslate(-50%,-50%);
+    @include transform-translate(-50%,-50%);
 
     li {
         display: inline-block;
@@ -156,8 +156,8 @@
             font-size: 0;
             padding: 0;
             background: $color-white;
-            @include transition(all 0.2s ease);
-            @include border-radius(50%);
+            transition: all $transitionTime ease;
+            border-radius: 50%;
             border: none;
 
             &:hover {

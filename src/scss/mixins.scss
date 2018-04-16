@@ -1,0 +1,83 @@
+/* -------------------------------------------------------- */
+/*                PLUG AND PLAY STYLE MIXINS                */
+/* -------------------------------------------------------- */
+
+// TRANSLATE ELEMENT
+@mixin transform-translate($horizontal,$vertical) {
+
+  -webkit-transform: translate($horizontal, $vertical);
+  -o-transform: translate($horizontal, $vertical);
+  -moz-transform: translate($horizontal, $vertical);
+  -ms-transform: translate($horizontal, $vertical);
+  transform: translate($horizontal, $vertical);
+
+}
+
+// ROTATE ELEMENT
+@mixin transform-rotate($angle) {
+
+  -webkit-transform: rotate($angle);
+  -o-transform: rotate($angle);
+  -moz-transform: rotate($angle);
+  -ms-transform: rotate($angle);
+  transform: rotate($angle);
+
+}
+
+// SCALE ELEMENT
+@mixin transform-scale($horizontal,$vertical) {
+
+  -webkit-transform: scale($horizontal,$vertical);
+  -o-transform: scale($horizontal,$vertical);
+  -moz-transform: scale($horizontal,$vertical);
+  -ms-transform: scale($horizontal,$vertical);
+  transform: scale($horizontal,$vertical);
+
+}
+
+// SET HYPHENS MODE
+@mixin hyphens($mode) {
+  -webkit-hyphens: $mode;
+  -moz-hyphens: $mode;
+  -ms-hyphens: $mode;
+  hyphens: $mode;
+}
+
+// SET PlACEHOLDER COLOR
+@mixin set-placeholdercolor($color){
+  &::-webkit-input-placeholder {
+    color:    $color;
+  }
+  &:-moz-placeholder {
+    color:    $color;
+    opacity:  1;
+  }
+  &::-moz-placeholder {
+    color:    $color;
+    opacity:  1;
+  }
+  &:-ms-input-placeholder {
+    color:    $color;
+  }
+}
+
+// NO TEXT-MARKER-SELECTION
+@mixin none-select() {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+// NORMAL CLEARFIX FOR DESTROY FLOATS
+@mixin clearfix {
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
