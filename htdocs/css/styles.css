@@ -1001,6 +1001,10 @@ ul li {
 	border-bottom: none;
 }
 
+.error .selectric {
+	border: 1px solid #C10D00;
+}
+
 .selectric-focus .selectric {
 	border-color: #989898;
 }
@@ -1229,8 +1233,8 @@ ul li {
 	background: #989898;
 }
 
-.checkbox .error span:before,
-.radiobox .error span:before {
+.checkbox.error span:before,
+.error.radiobox span:before {
 	border: 1px solid #C10D00;
 }
 
