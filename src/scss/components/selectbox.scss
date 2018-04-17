@@ -59,6 +59,12 @@
 
 }
 
+.error {
+  .selectric {
+    border: 1px solid $color-ui-red;
+  }
+}
+
 .selectric-focus .selectric {
   border-color: $color-grey;
 }

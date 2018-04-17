@@ -48,7 +48,7 @@
     background: $color-grey;
   }
 
-  .error span:before{
+  &.error span:before{
     border: 1px solid $color-ui-red;
   }
 

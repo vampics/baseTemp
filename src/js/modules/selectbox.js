@@ -15,6 +15,7 @@ modules.selectbox = {
         selectboxListQuery:             '.selectric-items',
         placeholderQuery:               '.disabled.selected',
         selectedAttribute:              'data-selectbox-selected',
+        errorSelectboxClass:            'error',
     },
 
     init () {
@@ -102,6 +103,11 @@ modules.selectbox = {
         },
 
         onChange (selectboxQuery) {
+
+            /**
+             * remove error flag when selectbox are changed
+             * */
+            $(selectboxQuery).closest(sbVars.moduleQuery).removeClass(sbVars.errorSelectboxClass);
 
             /**
              * set flag for a validation that an item selected
