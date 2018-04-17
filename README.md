@@ -125,7 +125,8 @@ modules.selectbox = {
 
 ##### Helper
 
-The framework includes some little helper for optimal codeing.
+The framework includes some little helper for optimal codeing. 
+You can use them in all your own modules.
 
 Variables | What it does
 --- | ---
@@ -137,11 +138,17 @@ Variables | What it does
 `baseVars.mediaquerys` | Get all Mediaquerys from CSS as Array
 `baseVars.grid` | Get the columns of the grid
 
+Some functions for nasty effects. The libarys included in the main functions.js. 
+You dont need to import it.
+
 Functions | What it does
 --- | ---
 `baseClass.scrollTo(<string>)` | Scroll to a postion (as string)
 `$(object).imagesLoaded( () => {})` | Triggers when all images are loaded (include images come from ajax) ([ImagesLoaded Plugin](https://imagesloaded.desandro.com/))
 `$(object).bind('inview', (event, visible, topOrBottomOrBoth) => {})` | Triggers when the binded object scrolls into the visible viewport) ([InView Plugin](https://github.com/zuk/jquery.inview/))
+
+
+We´ve add some own events to prevent a bunch of duplicate code.
 
 Events | Trigger
 --- | ---
@@ -149,11 +156,15 @@ Events | Trigger
 `DOMFinished` | Triggers when DOM complety finished (incl. framework JS functions linke slider or equalheight). Can triggered multiple times.
 `resized` | Triggers when the user stop scrolling to prevent bunch of unnecessary functions executions
 
+
+You can set these attributes on every HTML element. 
+This are plug and play ready functions.
+
 Attribute Functions | What it does
 --- | ---
 `data-auto-scrolltop` | Scroll on Click to the top of the page
 `data-auto-submit` | Submit closest form on change
-`data-auto-scrolltop` | link to target on change (target define the attribute data-auto-link)
+`data-auto-link` | link to target on change (target define the attribute data-auto-link)
 
 ### Edit HTML / Grid
 
