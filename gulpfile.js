@@ -35,6 +35,7 @@ const   gulp        = require('gulp'),
         merge       = require('merge-stream'),
         jshint      = require('gulp-jshint'),
         csslint     = require('gulp-csslint'),
+	    googleWebFonts = require('gulp-google-webfonts'),
         mmq         = require('gulp-merge-media-queries');
 
 
@@ -77,6 +78,21 @@ gulp.task('compile-scss', () => {
         .pipe(gulp.dest(cssPath))
         .pipe(gulp.dest(staticCssPath))
         .pipe(browserSync.stream());
+});
+
+///////////////////////////////////////////////////////
+///   DOWNLOAD THE FONT AND SET IT TO ALL FOLDERS   ///
+///////////////////////////////////////////////////////
+
+const webFontOptions = {
+	fontsDir: '../fonts/'
+};
+
+gulp.task('compile-fonts', () => {
+	return gulp.src(buildCssPath + 'fonts.list')
+		.pipe(googleWebFonts(webFontOptions))
+		.pipe(gulp.dest(staticCssPath))
+		.pipe(gulp.dest(cssPath));
 });
 
 ///////////////////////////////////////////////////////
