@@ -14,3 +14,19 @@
 	unicode-range: U+0-10FFFF;
 }
 
+@font-face {
+	font-family: 'Lato';
+	font-style: normal;
+	font-weight: 700;
+	src: url(../fonts/Lato-normal-700.woff) format('woff');
+	unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+	font-family: 'Lato';
+	font-style: normal;
+	font-weight: 900;
+	src: url(../fonts/Lato-normal-900.woff) format('woff');
+	unicode-range: U+0-10FFFF;
+}
+
