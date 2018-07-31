@@ -3783,7 +3783,7 @@ modules.slider = {
         }
 
         /**
-         * html for a conntection to an other slider
+         * html for a connection to an other slider
          * */
         if (viewport === "" || $slider.is("[data-asNavFor" + viewport + "]")) {
             optionLevel.asNavFor = $slider.attr("data-asNavFor" + viewport) || null;
@@ -3821,7 +3821,7 @@ modules.slider = {
          *  # of slides to show
          * */
         if (viewport === "" || $slider.is("[data-slidesToShow" + viewport + "]")) {
-            optionLevel.slidesToShow = $slider.attr("data-slidesToShow" + viewport) || "1";
+            optionLevel.slidesToShow = parseInt($slider.attr("data-slidesToShow" + viewport)) || 1;
         }
 
         /**
@@ -3873,6 +3873,13 @@ modules.slider = {
         if (viewport === "" || $slider.is("[data-arrows" + viewport + "]")) {
             optionLevel.arrows = ($slider.attr("data-arrows" + viewport) === "true");
         }
+
+		/**
+		 * Vertical slide mode
+		 * */
+		if (viewport === "" || $slider.is("[data-vertical" + viewport + "]")) {
+			optionLevel.vertical = ($slider.attr("data-vertical" + viewport) === "true");
+		}
 
     },
 
