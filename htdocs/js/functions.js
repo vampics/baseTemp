@@ -2694,616 +2694,618 @@ let fvErrors;
 
 modules.formvalidation = {
 
-    vars: {
-        moduleQuery:                    '*[data-js=formvalidation]',
+	vars: {
+		moduleQuery:                    '*[data-js=formvalidation]',
 
-        errorClass:                     'error',
-        errorMessageAttribute:          "data-lang-message",
-        errorMessageQuery:              ".status.error",
-        errorMessageClass:              "status error",
-        errorMessage:                   "Bitte prüfen Sie Ihre Eingaben!",
-        errorElementToInsertBeforeQuery:".element",
-
-        validateEmptyFieldAttribute:    'data-validation-required',
-        validateZipFieldAttribute:      'data-validation-zip',
-        validateEmailFieldAttribute:    'data-validation-email',
-        validateLengthAttribute:        'data-validation-length',
-
-        textinputQuery:                 "input[type=text], input[type=date], input[type=email], input[type=password], input[type=number], input[type=search], input[type=time], input[type=url], input[type=tel]",
-        textareaQuery:                  "textarea",
-        selectboxQuery:                 "*[data-js=selectbox]",
-        checkboxQuery:                  ".checkbox input",
-        radioboxQuery:                  ".radiobox input",
+		errorClass:                     'error',
+		errorMessageAttribute:          "data-lang-message",
+		errorMessageQuery:              ".status.error",
+		errorMessageClass:              "status error",
+		errorMessage:                   "Bitte prüfen Sie Ihre Eingaben!",
+		errorElementToInsertBeforeQuery:".element",
+
+		validateEmptyFieldAttribute:    'data-validation-required',
+		validateZipFieldAttribute:      'data-validation-zip',
+		validateEmailFieldAttribute:    'data-validation-email',
+		validateLengthAttribute:        'data-validation-length',
+
+		textinputQuery:                 "input[type=text], input[type=date], input[type=email], input[type=password], input[type=number], input[type=search], input[type=time], input[type=url], input[type=tel]",
+		textareaQuery:                  "textarea",
+		selectboxQuery:                 "*[data-js=selectbox]",
+		checkboxQuery:                  ".checkbox input",
+		radioboxQuery:                  ".radiobox input",
 
-        selectBoxSelectedAttribute:     "data-selectbox-selected",
+		selectBoxSelectedAttribute:     "data-selectbox-selected",
 
-        /**
-         * module storage vars
-         * */
-        state:                          [],
-        thisActiveElement:              '',
-        scrollTo:                       9000000,
-        errors:                         [],
+		/**
+		 * module storage vars
+		 * */
+		state:                          [],
+		thisActiveElement:              '',
+		scrollTo:                       9000000,
+		errors:                         [],
 
-    },
+	},
 
-    init () {
+	init () {
 
-        /**
-         * save module shorthand
-         * */
-        fv = this;
+		/**
+		 * save module shorthand
+		 * */
+		fv = this;
 
-        /**
-         * save shorthand for the formvalidation vars
-         * */
-        fvVars = this.vars;
+		/**
+		 * save shorthand for the formvalidation vars
+		 * */
+		fvVars = this.vars;
 
-        /**
-         * save shorthand for the formvalidation validations
-         * */
-        fvValidate = this.validate;
+		/**
+		 * save shorthand for the formvalidation validations
+		 * */
+		fvValidate = this.validate;
 
-        /**
-         * save shorthand for the formvalidation actions
-         * */
-        fvAction = this.action;
+		/**
+		 * save shorthand for the formvalidation actions
+		 * */
+		fvAction = this.action;
 
-        /**
-         * save shorthand for the formvalidation error array
-         * */
-        fvErrors = fvVars.errors;
+		/**
+		 * save shorthand for the formvalidation error array
+		 * */
+		fvErrors = fvVars.errors;
 
-        /**
-         * bind submit event
-         * */
-        this.bindSubmit();
+		/**
+		 * bind submit event
+		 * */
+		this.bindSubmit();
 
-    },
+	},
 
-    bindSubmit () {
+	bindSubmit () {
 
-        /**
-         * trigger submit event of the form
-         * */
+		/**
+		 * trigger submit event of the form
+		 * */
 
-        $(fvVars.moduleQuery).on('submit', (event) => {
+		$(fvVars.moduleQuery).on('submit', (event) => {
 
-            /**
-             * set active form
-             * */
-            fvVars.thisActiveForm = $(event.currentTarget);
+			/**
+			 * set active form
+			 * */
+			fvVars.thisActiveForm = $(event.currentTarget);
 
-            /**
-             * reset all errors
-             * */
-            fvAction.resetErrors();
+			/**
+			 * reset all errors
+			 * */
+			fvAction.resetErrors();
 
-            /**
-             * check the form
-             * */
-            return this.action.checkFormSubmit();
+			/**
+			 * check the form
+			 * */
+			return this.action.checkFormSubmit();
 
-        });
+		});
 
-    },
+	},
 
-    typecases: {
+	typecases: {
 
-        textinput () {
+		textinput () {
 
-            let checkingPassed = true;
+			let checkingPassed = true;
 
-            /**
-             * cycle all queryed text input form elements
-             * */
-            fvVars.thisActiveForm.find(fvVars.textinputQuery).each( (index, inputQuery) => {
+			/**
+			 * cycle all queryed text input form elements
+			 * */
+			fvVars.thisActiveForm.find(fvVars.textinputQuery).each( (index, inputQuery) => {
 
-                /**
-                 * assign input element
-                 * */
-                let $checkingInput = $(inputQuery);
+				/**
+				 * assign input element
+				 * */
+				let $checkingInput = $(inputQuery);
 
-                /**
-                 * remove error class
-                 * */
-                $checkingInput.removeClass(fvVars.errorClass);
+				/**
+				 * remove error class
+				 * */
+				$checkingInput.removeClass(fvVars.errorClass);
 
 
-                /**
-                 * check if it the element is visible
-                 * */
-                if($checkingInput.is(':visible')) {
+				/**
+				 * check if it the element is visible
+				 * */
+				if($checkingInput.is(':visible')) {
 
 
-                    /**
-                     * check if the input are empty
-                     * */
-                    if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+					/**
+					 * check if the input are empty
+					 * */
+					if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
 
-                        if (!fvValidate.emptyField($checkingInput.val())) {
+						if (!fvValidate.emptyField($checkingInput.val())) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingInput);
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingInput);
 
-                        }
+						}
 
-                    }
+					}
 
-                    /**
-                     * check if the input are a german zip code
-                     * */
-                    if ($checkingInput.hasClass(fvVars.validateZipFieldAttribute)) {
+					/**
+					 * check if the input are a german zip code
+					 * */
+					if ($checkingInput.is("[" + fvVars.validateZipFieldAttribute + "]")) {
 
-                        if (!fvValidate.zipField($checkingInput.val())) {
+						if (!fvValidate.zipField($checkingInput.val())) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingInput);
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingInput);
 
-                        }
+						}
 
-                    }
+					}
 
-                    /**
-                     * check if the input are a e-mail
-                     * */
-                    if ($checkingInput.hasClass(fvVars.validateEmailFieldAttribute)) {
+					/**
+					 * check if the input are a e-mail
+					 * */
+					if ($checkingInput.is("[" + fvVars.validateEmailFieldAttribute + "]")) {
 
-                        if (!fvValidate.emailField($checkingInput.val())) {
+						console.log(fvValidate.emailField($checkingInput.val()));
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingInput);
+						if (!fvValidate.emailField($checkingInput.val())) {
 
-                        }
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingInput);
 
-                    }
+						}
 
-                    /**
-                     * check if the input has a minimal length
-                     * */
-                    if ($checkingInput.hasClass(fvVars.validateLengthAttribute)) {
+					}
 
-                        if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
+					/**
+					 * check if the input has a minimal length
+					 * */
+					if ($checkingInput.is("[" + fvVars.validateLengthAttribute + "]")) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingInput);
+						if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
 
-                        }
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingInput);
 
-                    }
+						}
 
-                }
+					}
 
-            });
+				}
 
-            return checkingPassed;
+			});
 
-        },
+			return checkingPassed;
 
-        textarea () {
+		},
 
-            let checkingPassed = true;
+		textarea () {
 
-            /**
-             * cycle all queryed textarea form elements
-             * */
-            fvVars.thisActiveForm.find(fvVars.textareaQuery).each( (index, inputQuery) => {
+			let checkingPassed = true;
 
-                /**
-                 * assign input element
-                 * */
-                let $checkingInput = $(inputQuery);
+			/**
+			 * cycle all queryed textarea form elements
+			 * */
+			fvVars.thisActiveForm.find(fvVars.textareaQuery).each( (index, inputQuery) => {
 
-                /**
-                 * remove error class
-                 * */
-                $checkingInput.removeClass(fvVars.errorClass);
+				/**
+				 * assign input element
+				 * */
+				let $checkingInput = $(inputQuery);
 
+				/**
+				 * remove error class
+				 * */
+				$checkingInput.removeClass(fvVars.errorClass);
 
-                /**
-                 * check if it the element is visible
-                 * */
-                if($checkingInput.is(':visible')) {
 
-                    /**
-                     * check if the input are empty
-                     * */
-                    if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+				/**
+				 * check if it the element is visible
+				 * */
+				if($checkingInput.is(':visible')) {
 
-                        if (!fvValidate.emptyField($checkingInput.val())) {
+					/**
+					 * check if the input are empty
+					 * */
+					if ($checkingInput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingInput);
+						if (!fvValidate.emptyField($checkingInput.val())) {
 
-                        }
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingInput);
 
-                    }
+						}
 
-                    /**
-                     * check if the input has a minimal length
-                     * */
-                    if ($checkingInput.hasClass(fvVars.validateLengthAttribute)) {
+					}
 
-                        if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
+					/**
+					 * check if the input has a minimal length
+					 * */
+					if ($checkingInput.is("[" + fvVars.validateLengthAttribute + "]")) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingInput);
+						if (!fvValidate.length($checkingInput.val(),$checkingInput.attr('data-min'))) {
 
-                        }
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingInput);
 
-                    }
+						}
 
-                }
+					}
 
-            });
+				}
 
-            return checkingPassed;
+			});
 
-        },
+			return checkingPassed;
 
-        selectbox () {
+		},
 
-            let checkingPassed = true;
+		selectbox () {
 
-            /**
-             * cycle all queryed select elements
-             * */
-            fvVars.thisActiveForm.find(fvVars.selectboxQuery).each( (index, inputQuery) => {
+			let checkingPassed = true;
 
-                /**
-                 * assign select element
-                 * */
-                let $checkingComponent = $(inputQuery);
+			/**
+			 * cycle all queryed select elements
+			 * */
+			fvVars.thisActiveForm.find(fvVars.selectboxQuery).each( (index, inputQuery) => {
 
-                /**
-                 * remove error class
-                 * */
-                $checkingComponent.removeClass(fvVars.errorClass);
+				/**
+				 * assign select element
+				 * */
+				let $checkingComponent = $(inputQuery);
 
-                /**
-                 * check if it the element is visible
-                 * */
-                if($checkingComponent.is(':visible')) {
+				/**
+				 * remove error class
+				 * */
+				$checkingComponent.removeClass(fvVars.errorClass);
 
-                    /**
-                     * check if the input are empty
-                     * */
-                    if ($checkingComponent.find("select").is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+				/**
+				 * check if it the element is visible
+				 * */
+				if($checkingComponent.is(':visible')) {
 
-                        if (!fvValidate.emptySelectbox($checkingComponent)) {
+					/**
+					 * check if the input are empty
+					 * */
+					if ($checkingComponent.find("select").is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingComponent);
+						if (!fvValidate.emptySelectbox($checkingComponent)) {
 
-                        }
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingComponent);
 
-                    }
+						}
 
-                }
+					}
 
-            });
+				}
 
-            return checkingPassed;
+			});
 
-        },
+			return checkingPassed;
 
-        checkbox () {
+		},
 
-            let checkingPassed = true;
+		checkbox () {
 
-            /**
-             * cycle all queryed text input form elements
-             * */
-            fvVars.thisActiveForm.find(fvVars.checkboxQuery).each( (index, inputQuery) => {
+			let checkingPassed = true;
 
-                /**
-                 * assign input element
-                 * */
-                let $checkingComponent = $(inputQuery).parent().parent();
-                let $checkinginput = $(inputQuery);
+			/**
+			 * cycle all queryed text input form elements
+			 * */
+			fvVars.thisActiveForm.find(fvVars.checkboxQuery).each( (index, inputQuery) => {
 
-                /**
-                 * remove error class
-                 * */
-                $checkingComponent.removeClass(fvVars.errorClass);
+				/**
+				 * assign input element
+				 * */
+				let $checkingComponent = $(inputQuery).parent().parent();
+				let $checkinginput = $(inputQuery);
 
-                /**
-                 * check if it the element is visible
-                 * */
-                if($checkingComponent.is(':visible')) {
+				/**
+				 * remove error class
+				 * */
+				$checkingComponent.removeClass(fvVars.errorClass);
 
-                    /**
-                     * check if the input are empty
-                     * */
-                    if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+				/**
+				 * check if it the element is visible
+				 * */
+				if($checkingComponent.is(':visible')) {
 
-                        if (!fvValidate.emptyCheckbox($checkinginput)) {
+					/**
+					 * check if the input are empty
+					 * */
+					if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingComponent);
+						if (!fvValidate.emptyCheckbox($checkinginput)) {
 
-                        }
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingComponent);
 
-                    }
+						}
 
-                }
+					}
 
-            });
+				}
 
-            return checkingPassed;
+			});
 
-        },
+			return checkingPassed;
 
-        radiobox () {
+		},
 
-            let checkingPassed = true;
+		radiobox () {
 
-            /**
-             * cycle all queryed text input form elements
-             * */
-            fvVars.thisActiveForm.find(fvVars.radioboxQuery).each( (index, inputQuery) => {
+			let checkingPassed = true;
 
-                /**
-                 * assign input element
-                 * */
-                let $checkingComponent = $(inputQuery).parent().parent();
-                let $checkinginput = $(inputQuery);
+			/**
+			 * cycle all queryed text input form elements
+			 * */
+			fvVars.thisActiveForm.find(fvVars.radioboxQuery).each( (index, inputQuery) => {
 
-                /**
-                 * remove error class
-                 * */
-                $checkingComponent.removeClass(fvVars.errorClass);
+				/**
+				 * assign input element
+				 * */
+				let $checkingComponent = $(inputQuery).parent().parent();
+				let $checkinginput = $(inputQuery);
 
-                /**
-                 * check if it the element is visible
-                 * */
-                if($checkingComponent.is(':visible')) {
+				/**
+				 * remove error class
+				 * */
+				$checkingComponent.removeClass(fvVars.errorClass);
 
-                    /**
-                     * check if the input are empty
-                     * */
-                    if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
+				/**
+				 * check if it the element is visible
+				 * */
+				if($checkingComponent.is(':visible')) {
 
-                        if (!fvValidate.emptyRadiobox($checkinginput)) {
+					/**
+					 * check if the input are empty
+					 * */
+					if ($checkinginput.is("[" + fvVars.validateEmptyFieldAttribute + "]")) {
 
-                            /**
-                             * if not passed, throw error
-                             * */
-                            checkingPassed = fvAction.setError($checkingComponent);
+						if (!fvValidate.emptyRadiobox($checkinginput)) {
 
-                        }
+							/**
+							 * if not passed, throw error
+							 * */
+							checkingPassed = fvAction.setError($checkingComponent);
 
-                    }
+						}
 
-                }
+					}
 
-            });
+				}
 
-            return checkingPassed;
+			});
 
-        },
+			return checkingPassed;
 
-    },
+		},
 
-    action: {
+	},
 
-        checkFormSubmit () {
+	action: {
 
-            let checkingPassed = true;
+		checkFormSubmit () {
 
-            /**
-             * cycle all typecases to test all
-             * form elements
-             * */
-            $.each(fv.typecases, (key, typecase) => {
+			let checkingPassed = true;
 
-                /**
-                 * if the test fails set passed to false
-                 * */
-                if (!typecase()) {
-                    checkingPassed = false;
-                }
+			/**
+			 * cycle all typecases to test all
+			 * form elements
+			 * */
+			$.each(fv.typecases, (key, typecase) => {
 
-            });
+				/**
+				 * if the test fails set passed to false
+				 * */
+				if (!typecase()) {
+					checkingPassed = false;
+				}
 
-            /**
-             * if the test fails display errors and scroll
-             * to postion of first cuased error
-             * */
-            if (!checkingPassed) {
+			});
 
-                baseClass.scrollTo(fvVars.scrollTo + "px");
+			/**
+			 * if the test fails display errors and scroll
+			 * to postion of first cuased error
+			 * */
+			if (!checkingPassed) {
 
-                fvAction.displayErrors();
+				baseClass.scrollTo(fvVars.scrollTo + "px");
 
-            }
+				fvAction.displayErrors();
 
-            return checkingPassed;
+			}
 
-        },
+			return checkingPassed;
 
-        setError ($checkedFormElement) {
+		},
 
-            /**
-             * add error styling to the element
-             * */
-            $checkedFormElement.addClass(fvVars.errorClass);
+		setError ($checkedFormElement) {
 
-            /**
-             * set scroll postion
-             * */
-            fvAction.windowScrollToCalculation(parseInt($checkedFormElement.offset().top));
+			/**
+			 * add error styling to the element
+			 * */
+			$checkedFormElement.addClass(fvVars.errorClass);
 
-            /**
-             * load optional error message
-             * */
-            let errorMessage = $checkedFormElement.attr(fvVars.errorMessageAttribute);
+			/**
+			 * set scroll postion
+			 * */
+			fvAction.windowScrollToCalculation(parseInt($checkedFormElement.offset().top));
 
-            /**
-             * check if individual error
-             * message exist
-             * */
-            if (errorMessage === undefined || errorMessage === null) {
-                errorMessage = fvVars.errorMessage;
-            }
+			/**
+			 * load optional error message
+			 * */
+			let errorMessage = $checkedFormElement.attr(fvVars.errorMessageAttribute);
 
-            /**
-             * push error message in array
-             * when it didnt exist
-             * */
-            if (fvErrors.indexOf("- " + errorMessage) === -1){
-                fvErrors.push("- " + errorMessage);
-            }
+			/**
+			 * check if individual error
+			 * message exist
+			 * */
+			if (errorMessage === undefined || errorMessage === null) {
+				errorMessage = fvVars.errorMessage;
+			}
 
-            /**
-             * return false to prevent submit
-             * */
-            return false;
-        },
+			/**
+			 * push error message in array
+			 * when it didnt exist
+			 * */
+			if (fvErrors.indexOf("- " + errorMessage) === -1){
+				fvErrors.push("- " + errorMessage);
+			}
 
-        windowScrollToCalculation (errorElementTopPosition) {
+			/**
+			 * return false to prevent submit
+			 * */
+			return false;
+		},
 
-            /**
-             * get the vertical center fo the site
-             * */
-            let siteCenter = parseInt(baseVars.windowHeight) / 2;
+		windowScrollToCalculation (errorElementTopPosition) {
 
-            /**
-             * get position off the highest element that caused a error.
-             * check saved scroll positon > the postion of the error element
-             * and set it to 0 when the the element is in the highest viewport
-             * */
-            if (fvVars.scrollTo > errorElementTopPosition) {
+			/**
+			 * get the vertical center fo the site
+			 * */
+			let siteCenter = parseInt(baseVars.windowHeight) / 2;
 
-                if (errorElementTopPosition < siteCenter) {
+			/**
+			 * get position off the highest element that caused a error.
+			 * check saved scroll positon > the postion of the error element
+			 * and set it to 0 when the the element is in the highest viewport
+			 * */
+			if (fvVars.scrollTo > errorElementTopPosition) {
 
-                    errorElementTopPosition = 0;
+				if (errorElementTopPosition < siteCenter) {
 
-                }else{
+					errorElementTopPosition = 0;
 
-                    errorElementTopPosition = errorElementTopPosition - siteCenter;
-                }
+				}else{
 
-                /**
-                 * overide scroll top postion
-                 * */
-                fvVars.scrollTo = errorElementTopPosition;
-            }
+					errorElementTopPosition = errorElementTopPosition - siteCenter;
+				}
 
-        },
+				/**
+				 * overide scroll top postion
+				 * */
+				fvVars.scrollTo = errorElementTopPosition;
+			}
 
-        resetErrors () {
+		},
 
-            /**
-             * remove the error message box
-             * */
-            $(fvVars.errorMessageQuery).remove();
+		resetErrors () {
 
-            /**
-             * clear error array
-             * */
-            fvErrors = [];
+			/**
+			 * remove the error message box
+			 * */
+			$(fvVars.errorMessageQuery).remove();
 
-        },
+			/**
+			 * clear error array
+			 * */
+			fvErrors = [];
 
-        displayErrors () {
+		},
 
-            /**
-             * build error box with all
-             * saved error messages from the
-             * fvErrors error
-             * */
-            let errorBox = `<div class="${fvVars.errorMessageClass}">`;
+		displayErrors () {
 
-            $.each( fvErrors, (key, errorMessage) => {
+			/**
+			 * build error box with all
+			 * saved error messages from the
+			 * fvErrors error
+			 * */
+			let errorBox = `<div class="${fvVars.errorMessageClass}">`;
 
-                errorBox += `<p>${ errorMessage }<br></p>`;
+			$.each( fvErrors, (key, errorMessage) => {
 
-            });
+				errorBox += `<p>${ errorMessage }<br></p>`;
 
-            errorBox += `</div>`;
+			});
 
-            /**
-             * get the first element from the
-             * errorElementToInsertBefore query
-             * */
+			errorBox += `</div>`;
 
-            let $elementToInsert =  $(fvVars.errorElementToInsertBeforeQuery).first();
+			/**
+			 * get the first element from the
+			 * errorElementToInsertBefore query
+			 * */
 
-            /**
-             * insert error in DOM
-             * */
+			let $elementToInsert =  $(fvVars.errorElementToInsertBeforeQuery).first();
 
-            $(errorBox).insertBefore($elementToInsert);
+			/**
+			 * insert error in DOM
+			 * */
 
-        }
+			$(errorBox).insertBefore($elementToInsert);
 
-    },
+		}
 
-    validate: {
+	},
 
-        emptyField (stValue) {
+	validate: {
 
-            return fvValidate.length(stValue,1);
+		emptyField (stValue) {
 
-        },
+			return fvValidate.length(stValue,1);
 
-        emptySelectbox ($selectbox) {
+		},
 
-            return $selectbox.is(`[${fvVars.selectBoxSelectedAttribute}]`);
+		emptySelectbox ($selectbox) {
 
-        },
+			return $selectbox.is(`[${fvVars.selectBoxSelectedAttribute}]`);
 
-        emptyCheckbox ($checkbox) {
+		},
 
-            return $checkbox.prop('checked');
+		emptyCheckbox ($checkbox) {
 
-        },
+			return $checkbox.prop('checked');
 
-        emptyRadiobox ($radiobox) {
+		},
 
-            return $("input[name='" + $radiobox.attr("name") + "']").is(':checked');
+		emptyRadiobox ($radiobox) {
 
-        },
+			return $("input[name='" + $radiobox.attr("name") + "']").is(':checked');
 
-        zipField (zip) {
+		},
 
-            zip = jQuery.trim(zip);
-            let reg = /^[0-9]{4,5}$/;
-            return reg.test(zip);
+		zipField (zip) {
 
-        },
+			zip = jQuery.trim(zip);
+			let reg = /^[0-9]{4,5}$/;
+			return reg.test(zip);
 
-        emailField (email) {
-            email = jQuery.trim(email);
-            let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-            return reg.test(email);
-        },
+		},
 
-        length (stValue, length = 1) {
+		emailField (email) {
+			email = jQuery.trim(email);
+			let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+			return reg.test(email);
+		},
 
-            stValue = jQuery.trim( stValue );
-            return stValue.length >= length;
+		length (stValue, length = 1) {
 
-        }
+			stValue = jQuery.trim( stValue );
+			return stValue.length >= length;
 
-    }
+		}
+
+	}
 
 };
 /**
